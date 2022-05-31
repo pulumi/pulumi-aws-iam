@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - v*.*.*
+      - '!v*.*.*-**'
 env:
   PROVIDER: "pulumi-aws-iam"
   # THIS GITHUB_TOKEN IS A REQUIREMENT TO BE ABLE TO WRITE TO GH RELEASES
