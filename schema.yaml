@@ -1,0 +1,1788 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pulumi/pulumi/master/pkg/codegen/schema/pulumi.json
+---
+name: aws-iam
+types:
+    "aws-iam:index:AccountPasswordPolicy":
+        type: object
+        description: Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
+        properties:
+            maxAge:
+                type: integer
+                description: |
+                    The number of days that an user password is valid. If not set or a value of `0` is provided, then
+                    passwords will not expire.
+
+            minimumLength:
+                type: integer
+                description: |
+                    Minimum length to require for user passwords. Defaults to `8` if not set or
+                    the provided value is invalid. Valid values are between 6 and 128.
+
+            allowUsersToChange:
+                type: boolean
+                description: |
+                    Whether to allow users to change their own password.
+
+            hardExpiry:
+                type: boolean
+                description: |
+                    Whether users are prevented from setting a new password after their password has
+                    expired (i.e. require administrator reset).
+
+            reusePrevention:
+                type: integer
+                description: |
+                    The number of previous passwords that users are prevented from reusing. If not set or a
+                    value of `0` is provided, no reuse prevention policy will be used.
+
+            requireLowercaseCharacters:
+                type: boolean
+                description: |
+                    Whether to require lowercase characters for user passwords.
+
+            requireUppercaseCharacters:
+                type: boolean
+                description: |
+                    Whether to require uppercase characters for user passwords.
+
+            requireNumbers:
+                type: boolean
+                description: |
+                    Whether to require numbers for user passwords.
+
+            requireSymbols:
+                type: boolean
+                description: |
+                    Whether to require symbols for user passwords.
+
+        required:
+            - allowUsersToChange
+            - hardExpiry
+            - requireLowercaseCharacters
+            - requireUppercaseCharacters
+            - requireNumbers
+            - requireSymbols
+
+    "aws-iam:index:RoleWithMFA":
+        type: object
+        description: An IAM role that requires MFA.
+        properties:
+            name:
+                type: string
+                description: IAM role with the access.
+                default: admin
+
+            path:
+                type: string
+                description: Path of the IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for the role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for the role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            requiresMfa:
+                type: boolean
+                description: Whether the role requires MFA.
+                default: true
+
+    "aws-iam:index:EKSServiceAccountRole":
+        type: object
+        properties:
+            name:
+                type: string
+                description: IAM role name.
+                default: ""
+
+            namePrefix:
+                type: string
+                description: IAM role name prefix.
+                default: ""
+
+            path:
+                type: string
+                description: Path of admin IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for the role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for the role.
+                default: ""
+
+            description:
+                type: string
+                description: IAM Role description.
+
+    "aws-iam:index:Role":
+        type: object
+        description: An IAM role.
+        properties:
+            name:
+                type: string
+                description: IAM role name.
+                default: ""
+
+            namePrefix:
+                type: string
+                description: IAM role name prefix.
+                default: ""
+
+            path:
+                type: string
+                description: Path of admin IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for the role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for the role.
+                default: ""
+
+    "aws-iam:index:AdminRole":
+        type: object
+        description: The admin role.
+        properties:
+            name:
+                type: string
+                description: IAM role with admin access.
+                default: admin
+
+            path:
+                type: string
+                description: Path of admin IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for admin role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for admin role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+    "aws-iam:index:AdminRoleWithMFA":
+        type: object
+        description: The admin role.
+        properties:
+            name:
+                type: string
+                description: IAM role with admin access.
+
+            path:
+                type: string
+                description: Path of admin IAM role.
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for admin role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for admin role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            requiresMfa:
+                type: boolean
+                description: Whether admin role requires MFA.
+
+    "aws-iam:index:PoweruserRole":
+        type: object
+        description: The poweruser role.
+        properties:
+            name:
+                type: string
+                description: IAM role with poweruser access.
+                default: poweruser
+
+            path:
+                type: string
+                description: Path of poweruser IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for poweruser role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for poweruser role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+    "aws-iam:index:PoweruserRoleWithMFA":
+        type: object
+        description: The poweruser role.
+        properties:
+            name:
+                type: string
+                description: IAM role with poweruser access.
+                default: poweruser
+
+            path:
+                type: string
+                description: Path of poweruser IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for poweruser role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for poweruser role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            requiresMfa:
+                type: boolean
+                description: Whether admin role requires MFA.
+                default: true
+
+    "aws-iam:index:ReadonlyRole":
+        type: object
+        description: The readonly role.
+        properties:
+            name:
+                type: string
+                description: IAM role with readonly access.
+                default: readonly
+
+            path:
+                type: string
+                description: Path of readonly IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for readonly role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for readonly role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+    "aws-iam:index:ReadonlyRoleWithMFA":
+        type: object
+        description: The readonly role.
+        properties:
+            name:
+                type: string
+                description: IAM role with readonly access.
+                default: readonly
+
+            path:
+                type: string
+                description: Path of readonly IAM role.
+                default: "/"
+
+            policyArns:
+                type: array
+                description: List of policy ARNs to use for readonly role.
+                items:
+                    type: string
+
+            permissionsBoundaryArn:
+                type: string
+                description: Permissions boundary ARN to use for readonly role.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            requiresMfa:
+                type: boolean
+                description: Whether admin role requires MFA.
+                default: true
+
+    "aws-iam:index:OIDCProvider":
+        type: object
+        properties:
+            providerArn:
+                type: string
+            namespaceServiceAccounts:
+                type: array
+                items:
+                    type: string
+
+    "aws-iam:index:EKSCertManagerPolicy":
+        type: object
+        description: The Cert Manager IAM policy to attach to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the Cert Manager IAM policy to the role.
+            hostedZoneArns:
+                type: array
+                description: |
+                    Route53 hosted zone ARNs to allow Cert manager to manage records. If not provided,
+                    the default ARN "arn:aws:route53:::hostedzone/*" will be applied.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:EKSClusterAutoscalerPolicy":
+        type: object
+        description: The Cluster Autoscaler IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the Cluster Autoscaler IAM policy to the role.
+            clusterIds:
+                type: array
+                description: List of cluster IDs to appropriately scope permissions within the Cluster Autoscaler IAM policy.
+                items:
+                    type: string
+        required:
+            - attach
+            - clusterIds
+
+    "aws-iam:index:EKSEBSCSIPolicy":
+        type: object
+        description: The EBS CSI IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the EBS CSI IAM policy to the role.
+            kmsCmkIds:
+                type: array
+                description: KMS CMK IDs to allow EBS CSI to manage encrypted volumes.
+                items:
+                    type: string
+        required:
+            - attach
+            - kmsCmkIds
+
+    "aws-iam:index:EKSEFSCSIPolicy":
+        type: object
+        description: The EFS CSI IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the EFS CSI IAM policy to the role.
+        required:
+            - attach
+
+    "aws-iam:index:EKSExternalDNSPolicy":
+        type: object
+        description: The External DNS IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the External DNS IAM policy to the role.
+            hostedZoneArns:
+                type: array
+                description: |
+                    Route53 hosted zone ARNs to allow External DNS to manage records. If not provided,
+                    the default ARN "arn:aws:route53:::hostedzone/*" will be applied.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:EKSExternalSecretsPolicy":
+        type: object
+        description: The External Secrets policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the External Secrets policy to the role.
+            ssmParameterArns:
+                type: array
+                description: |
+                    List of Systems Manager Parameter ARNs that contain secrets to mount using External Secrets. If not provided,
+                    the default ARN "arn:aws:ssm:*:*:parameter/*" will be applied.
+                items:
+                    type: string
+            secretsManagerArns:
+                type: array
+                description: List of Secrets Manager ARNs that contain secrets to mount using External Secrets. If not provided,
+                    the default ARN "arn:aws:secretsmanager:*:*:secret:*" will be applied.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:FSxLustreCSIPolicy":
+        type: object
+        description: The FSx for Lustre CSI Driver IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the FSx for Lustre CSI Driver IAM policy to the role.
+            serviceRoleArns:
+                type: array
+                description: |
+                    Service role ARNs to allow FSx for Lustre CSI create and manage FSX for Lustre service linked roles. If not provided,
+                    the default ARN "arn:aws:iam::*:role/aws-service-role/s3.data-source.lustre.fsx.amazonaws.com/*" will be applied.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:EKSKarpenterControllerPolicy":
+        type: object
+        description: The Karpenter Controller policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the Karpenter Controller policy to the role.
+            clusterId:
+                type: string
+                description: Cluster ID where the Karpenter controller is provisioned/managing.
+                default: "*"
+            tagKey:
+                type: string
+                description: Tag key (`{key = value}`) applied to resources launched by Karpenter through the Karpenter provisioner.
+                default: "karpenter.sh/discovery"
+            ssmParameterArns:
+                type: array
+                description: |
+                    List of SSM Parameter ARNs that contain AMI IDs launched by Karpenter. If not provided,
+                    the default ARN "arn:aws:ssm:*:*:parameter/aws/service/*" will be applied.
+                items:
+                    type: string
+            nodeIamRoleArns:
+                type: array
+                description: |
+                    List of node IAM role ARNs Karpenter can use to launch nodes. If not provided,
+                    the default ARN "*" will be applied.
+                items:
+                    type: string
+            subnetAccountId:
+                type: string
+                description: Account ID of where the subnets Karpenter will utilize resides. Used when subnets are shared from another account.
+        required:
+            - attach
+
+    "aws-iam:index:EKSLoadBalancerPolicy":
+        type: object
+        description: The Load Balancer policy.
+        properties:
+            controller:
+                type: boolean
+                description: Determines whether to attach the Load Balancer Controller policy to the role.
+            targetGroupBindingOnly:
+                type: boolean
+                description: Determines whether to attach the Load Balancer Controller policy for the TargetGroupBinding only.
+
+    "aws-iam:index:EKSAppmeshPolicy":
+        type: object
+        description: The Appmesh policies.
+        properties:
+            controller:
+                type: boolean
+                description: Determines whether to attach the Appmesh Controller policy to the role.
+            envoyProxy:
+                type: boolean
+                description: Determines whether to attach the Appmesh envoy proxy policy to the role.
+
+    "aws-iam:index:EKSAmazonManagedServicePrometheusPolicy":
+        type: object
+        description: The Amazon Managed Service for Prometheus IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the Amazon Managed Service for Prometheus IAM policy to the role.
+            workspaceArns:
+                type: array
+                description: |
+                    List of AMP Workspace ARNs to read and write metrics. If not provided, a default ARN of "*"
+                    will be provided.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:EKSVeleroPolicy":
+        type: object
+        description: The Velero IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the Velero IAM policy to the role.
+            s3BucketArns:
+                type: array
+                description: |
+                    List of S3 Bucket ARNs that Velero needs access to in order to backup and restore cluster resources.
+                    If not provided, a default ARN of "*" will be provided.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:EKSVPNCNIPolicy":
+        type: object
+        description: The VPC CNI IAM policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the VPC CNI IAM policy to the role.
+            enableIpv4:
+                type: boolean
+                description: Determines whether to enable IPv4 permissions for VPC CNI policy.
+            enableIpv6:
+                type: boolean
+                description: Determines whether to enable IPv6 permissions for VPC CNI policy.
+        required:
+            - attach
+
+    "aws-iam:index:EKSNodeTerminationHandlerPolicy":
+        type: object
+        description: The Node Termination Handler policy to the role.
+        properties:
+            attach:
+                type: boolean
+                description: Determines whether to attach the Node Termination Handler policy to the role.
+            sqsQueueArns:
+                type: array
+                description: |
+                    List of SQS ARNs that contain node termination events. If not provided, then a default
+                    ARN of "*" will be provided.
+                items:
+                    type: string
+        required:
+            - attach
+
+    "aws-iam:index:EKSRolePolicies":
+        type: object
+        description: The different policies to attach to the role.
+        properties:
+            certManager:
+                description: The Cert Manager IAM policy.
+                $ref: "#/types/aws-iam:index:EKSCertManagerPolicy"
+
+            clusterAutoScaling:
+                description: The Cluster Autoscaler IAM policy.
+                $ref: "#/types/aws-iam:index:EKSClusterAutoscalerPolicy"
+
+            ebsCsi:
+                description: The EBS CSI IAM policy.
+                $ref: "#/types/aws-iam:index:EKSEBSCSIPolicy"
+
+            efsCsi:
+                description: The EFS CSI IAM policy.
+                $ref: "#/types/aws-iam:index:EKSEFSCSIPolicy"
+
+            externalDns:
+                description: The External DNS IAM policy.
+                $ref: "#/types/aws-iam:index:EKSExternalDNSPolicy"
+
+            externalSecrets:
+                description: The External Secrets policy.
+                $ref: "#/types/aws-iam:index:EKSExternalSecretsPolicy"
+
+            fsxLustreCsi:
+                description: The FSx for Lustre CSI Driver IAM policy.
+                $ref: "#/types/aws-iam:index:FSxLustreCSIPolicy"
+
+            karpenterController:
+                description: The Karpenter Controller policy.
+                $ref: "#/types/aws-iam:index:EKSKarpenterControllerPolicy"
+
+            loadBalancer:
+                description: The Load Balancer policy.
+                $ref: "#/types/aws-iam:index:EKSLoadBalancerPolicy"
+
+            appmesh:
+                description: The Appmesh policies.
+                $ref: "#/types/aws-iam:index:EKSAppmeshPolicy"
+
+            amazonManagedServicePrometheus:
+                description: The Amazon Managed Service for Prometheus IAM policy.
+                $ref: "#/types/aws-iam:index:EKSAmazonManagedServicePrometheusPolicy"
+
+            velero:
+                description: The Velero IAM policy.
+                $ref: "#/types/aws-iam:index:EKSVeleroPolicy"
+
+            vpnCni:
+                description: The VPC CNI IAM policy to the role.
+                $ref: "#/types/aws-iam:index:EKSVPNCNIPolicy"
+
+            nodeTerminationHandler:
+                description: The Node Termination Handler policy to the role.
+                $ref: "#/types/aws-iam:index:EKSNodeTerminationHandlerPolicy"
+
+    "aws-iam:index:UserOutput":
+        type: object
+        description: The IAM user.
+        properties:
+            name:
+                type: string
+                description: The user's name.
+            arn:
+                type: string
+                description: The ARN assigned by AWS for this user.
+            uniqueId:
+                type: string
+                description: The unique ID assigned by AWS.
+            loginProfileKeyFingerprint:
+                type: string
+                description: The fingerprint of the PGP key used to encrypt the password.
+            loginProfileEncryptedPassword:
+                type: string
+                description: The encrypted password, base64 encoded.
+            loginProfilePassword:
+                type: string
+                description: The user password.
+            sshKeySshPublicKeyId:
+                type: string
+                description: The unique identifier for the SSH public key
+            sshKeyFingerprint:
+                type: string
+                description: The unique identifier for the SSH public key.
+
+    "aws-iam:index:AccessKeyOutput":
+        type: object
+        description: The IAM access key.
+        properties:
+            id:
+                type: string
+                description: The access key ID.
+            secret:
+                type: string
+                description: The access key secret.
+            keyFingerprint:
+                type: string
+                description: The fingerprint of the PGP key used to encrypt the secret.
+            encryptedSecret:
+                type: string
+                description: The encrypted secret, base64 encoded.
+            sesSmtpPasswordV4:
+                type: string
+                description: The secret access key converted into an SES SMTP password by applying AWS's Sigv4 conversion algorithm.
+            status:
+                type: string
+                description: Active or Inactive. Keys are initially active, but can be made inactive by other means.
+
+    "aws-iam:index:KeybaseOutput":
+        type: object
+        properties:
+            passwordDecryptCommand:
+                type: string
+                description: Decrypt user password command.
+            passwordPgpMessage:
+                type: string
+                description: Encrypted password
+            secretKeyDecryptCommand:
+                type: string
+                description: Decrypt access secret key command.
+            secretKeyPgpMessage:
+                type: string
+                description: Encrypted access secret key.
+
+resources:
+    "aws-iam:index:User":
+        isComponent: true
+        inputProperties:
+            name:
+                type: string
+                description: Desired name for the IAM user.
+
+            path:
+                type: string
+                description: Desired path for the IAM user.
+                default: "/"
+
+            forceDestroy:
+                type: boolean
+                description: When destroying this user, destroy even if it has non-Pulumi-managed IAM access keys, login profile or MFA devices. Without forceDestroy a user with non-Pulumi-managed access keys and login profile will fail to be destroyed.
+
+            pgpKey:
+                type: string
+                description: Either a base-64 encoded PGP public key, or a keybase username in the form `keybase:username`. Used to encrypt password and access key.
+
+            passwordResetRequired:
+                type: boolean
+                description: Whether the user should be forced to reset the generated password on first login.
+
+            passwordLength:
+                type: integer
+                description: The length of the generated password
+
+            uploadIamUserSshKey:
+                type: boolean
+                description: Whether to upload a public ssh key to the IAM user.
+
+            sshKeyEncoding:
+                type: string
+                description: Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use SSH. To retrieve the public key in PEM format, use PEM.
+                default: "SSH"
+
+            sshPublicKey:
+                type: string
+                description: The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.
+
+            permissionsBoundary:
+                type: string
+                description: The ARN of the policy that is used to set the permissions boundary for the user.
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+        requiredInputs:
+            - name
+
+        properties:
+            userInfo:
+                description: The IAM user.
+                $ref: "#/types/aws-iam:index:UserOutput"
+
+            accessKey:
+                description: The IAM access key.
+                $ref: "#/types/aws-iam:index:AccessKeyOutput"
+
+            pgpKey:
+                type: string
+                description: PGP key used to encrypt sensitive data for this user (if empty - secrets are not encrypted).
+
+            keybase:
+                $ref: "#/types/aws-iam:index:KeybaseOutput"
+
+        required:
+            - userInfo
+            - accessKey
+            - pgpKey
+            - keybase
+
+    "aws-iam:index:RoleForServiceAccountsEks":
+        isComponent: true
+        inputProperties:
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            role:
+                $ref: "#/types/aws-iam:index:EKSServiceAccountRole"
+
+            policyNamePrefix:
+                type: string
+                description: IAM policy name prefix.
+                default: "AmazonEKS_"
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+            oidcProviders:
+                type: object
+                description: Map of OIDC providers.
+                additionalProperties:
+                    $ref: "#/types/aws-iam:index:OIDCProvider"
+
+            assumeRoleConditionTest:
+                type: string
+                description: Name of the IAM condition operator to evaluate when assuming the role.
+                default: "StringEquals"
+
+            policies:
+                $ref: "#/types/aws-iam:index:EKSRolePolicies"
+
+        requiredInputs: []
+
+        properties:
+            role:
+                type: object
+                properties:
+                    arn:
+                        type: string
+                        description: ARN of IAM role.
+
+                    name:
+                        type: string
+                        description: Name of IAM role.
+
+                    path:
+                        type: string
+                        description: Path of IAM role.
+
+                    uniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+        required:
+            - role
+
+    "aws-iam:index:ReadOnlyPolicy":
+        isComponent: true
+        inputProperties:
+            name:
+                type: string
+                description: The name of the policy.
+
+            path:
+                type: string
+                description: The path of the policy in IAM.
+                default: "/"
+
+            description:
+                type: string
+                description: The description of the policy.
+                default: IAM Policy
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            allowedServices:
+                type: array
+                description: List of services to allow Get/List/Describe/View options. Service name should be the same as corresponding service IAM prefix. See what it is for each service here https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html.
+                items:
+                    type: string
+
+            additionalPolicyJson:
+                type: string
+                description: "JSON policy document if you want to add custom actions."
+                default: "{}"
+
+            allowCloudwatchLogsQuery:
+                type: boolean
+                description: Allows StartQuery/StopQuery/FilterLogEvents CloudWatch actions.
+                default: true
+
+            allowPredefinedStsActions:
+                type: boolean
+                description: Allows GetCallerIdentity/GetSessionToken/GetAccessKeyInfo sts actions.
+                default: true
+
+            allowWebConsoleServices:
+                type: boolean
+                description: Allows List/Get/Describe/View actions for services used when browsing AWS console (e.g. resource-groups, tag, health services).
+                default: true
+
+            webConsoleServices:
+                type: array
+                description: List of web console services to allow.
+                items:
+                    type: string
+
+        requiredInputs:
+            - name
+
+        properties:
+            policyJson:
+                type: string
+                description: Policy document as json. Useful if you need document but do not want to create IAM policy itself. For example for SSO Permission Set inline policies.
+
+            id:
+                type: string
+                description: The policy's ID.
+
+            name:
+                type: string
+                description: The name of the policy.
+
+            arn:
+                type: string
+                description: The ARN assigned by AWS to this policy.
+
+            description:
+                type: string
+                description: The description of the policy.
+
+            path:
+                type: string
+                description: The path of the policy in IAM.
+
+            policy:
+                type: string
+                description: The policy document.
+
+        required:
+            - policyJson
+            - id
+            - name
+            - arn
+            - description
+            - path
+            - policy
+
+    "aws-iam:index:GroupWithPolicies":
+        isComponent: true
+        inputProperties:
+            name:
+                type: string
+                description: Name of IAM group.
+                default: ""
+
+            groupUsers:
+                type: array
+                description: List of IAM users to have in an IAM group which can assume the role.
+                items:
+                    type: string
+
+            customGroupPolicyArns:
+                type: array
+                description: List of IAM policies ARNs to attach to IAM group.
+                items:
+                    type: string
+
+            customGroupPolicies:
+                type: array
+                description: List of maps of inline IAM policies to attach to IAM group. Should have `name` and `policy` keys in each element.
+                items:
+                    type: object
+                    additionalProperties:
+                        type: string
+
+            attachIamSelfManagementPolicy:
+                type: boolean
+                description: Whether to attach IAM policy which allows IAM users to manage their credentials and MFA.
+                default: true
+
+            iamSelfManagementPolicyNamePrefix:
+                type: string
+                description: Name prefix for IAM policy to create with IAM self-management permissions.
+                default: "IAMSelfManagement-"
+
+            awsAccountId:
+                type: string
+                description: AWS account id to use inside IAM policies. If empty, current AWS account ID will be used.
+                default: ""
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+        requiredInputs:
+            - name
+            - groupUsers
+
+        properties:
+            awsAccountId:
+                type: string
+                description: IAM AWS account id.
+
+            groupArn:
+                type: string
+                description: IAM group arn.
+
+            groupUsers:
+                type: array
+                description: List of IAM users in IAM group
+                items:
+                    type: string
+
+            groupName:
+                type: string
+                description: IAM group name.
+
+        required:
+            - awsAccountId
+            - groupArn
+            - groupUsers
+            - groupName
+
+    "aws-iam:index:GroupWithAssumableRolesPolicy":
+        isComponent: true
+        inputProperties:
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            name:
+                type: string
+                description: Name of IAM policy and IAM group.
+
+            assumableRoles:
+                type: array
+                description: List of IAM roles ARNs which can be assumed by the group
+                items:
+                    type: string
+
+            groupUsers:
+                type: array
+                description: List of IAM users to have in an IAM group which can assume the role
+                items:
+                    type: string
+        requiredInputs:
+            - name
+            - assumableRoles
+            - groupUsers
+
+        properties:
+            groupUsers:
+                type: array
+                description: List of IAM users in IAM group
+                items:
+                    type: string
+
+            assumableRoles:
+                type: array
+                description: List of IAM roles ARNs which can be assumed by the group
+                items:
+                    type: string
+
+            policyArn:
+                type: string
+                description: Assume role policy ARN of IAM group
+
+            groupName:
+                type: string
+                description: IAM group name.
+
+            groupArn:
+                type: string
+                description: IAM group arn.
+
+        required:
+            - groupUsers
+            - assumableRoles
+            - policyArn
+            - groupName
+            - groupArn
+
+    "aws-iam:index:EKSRole":
+        isComponent: true
+        inputProperties:
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            role:
+                $ref: "#/types/aws-iam:index:Role"
+
+            rolePolicyArns:
+                type: array
+                description: ARNs of any policies to attach to the IAM role.
+                items:
+                    type: string
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+            clusterServiceAccounts:
+                type: object
+                description: "EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details"
+                additionalProperties:
+                    type: array
+                    items:
+                        type: string
+
+            providerUrlSaPairs:
+                type: object
+                description: OIDC provider URL and k8s ServiceAccount pairs. If the assume role policy requires a mix of EKS clusters and other OIDC providers then this can be used
+                additionalProperties:
+                    type: array
+                    items:
+                        type: string
+
+        requiredInputs: []
+
+        properties:
+            arn:
+                type: string
+                description: ARN of IAM role.
+
+            name:
+                type: string
+                description: Name of IAM role.
+
+            path:
+                type: string
+                description: Path of IAM role.
+
+            uniqueId:
+                type: string
+                description: Unique ID of IAM role.
+
+        required:
+            - arn
+            - name
+            - path
+            - uniqueId
+
+    "aws-iam:index:AssumableRoles":
+        isComponent: true
+        inputProperties:
+            trustedRoleArns:
+                type: array
+                description: ARNs of AWS entities who can assume these roles.
+                items:
+                    type: string
+
+            trustedRoleServices:
+                type: array
+                description: AWS Services that can assume these roles.
+                items:
+                    type: string
+
+            mfaAge:
+                type: integer
+                description: Max age of valid MFA (in seconds) for roles which require MFA.
+                default: 86400
+
+            admin:
+                $ref: "#/types/aws-iam:index:AdminRoleWithMFA"
+
+            poweruser:
+                $ref: "#/types/aws-iam:index:PoweruserRoleWithMFA"
+
+            readonly:
+                $ref: "#/types/aws-iam:index:ReadonlyRoleWithMFA"
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+        requiredInputs:
+            - admin
+
+        properties:
+            admin:
+                type: object
+                properties:
+                    roleArn:
+                        type: string
+                        description: ARN of admin IAM role.
+
+                    roleName:
+                        type: string
+                        description: Name of admin IAM role.
+
+                    rolePath:
+                        type: string
+                        description: Path of admin IAM role.
+
+                    roleUniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+
+                    requiresMfa:
+                        type: string
+                        description: Whether readonly IAM role requires MFA.
+
+            poweruser:
+                type: object
+                properties:
+                    roleArn:
+                        type: string
+                        description: ARN of poweruser IAM role.
+
+                    roleName:
+                        type: string
+                        description: Name of poweruser IAM role.
+
+                    rolePath:
+                        type: string
+                        description: Path of poweruser IAM role.
+
+                    roleUniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+
+                    requiresMfa:
+                        type: string
+                        description: Whether readonly IAM role requires MFA.
+
+            readonly:
+                type: object
+                properties:
+                    roleArn:
+                        type: string
+                        description: ARN of readonly IAM role.
+
+                    roleName:
+                        type: string
+                        description: Name of readonly IAM role.
+
+                    rolePath:
+                        type: string
+                        description: Path of readonly IAM role.
+
+                    roleUniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+
+                    requiresMfa:
+                        type: string
+                        description: Whether readonly IAM role requires MFA.
+
+        required:
+            - admin
+
+    "aws-iam:index:AssumableRolesWithSAML":
+        isComponent: true
+        inputProperties:
+            providerIds:
+                type: array
+                description: List of SAML Provider IDs.
+                items:
+                    type: string
+
+            awsSamlEndpoint:
+                type: string
+                description: AWS SAML Endpoint.
+                default: https://signin.aws.amazon.com/saml
+
+            admin:
+                $ref: "#/types/aws-iam:index:AdminRole"
+
+            poweruser:
+                $ref: "#/types/aws-iam:index:PoweruserRole"
+
+            readonly:
+                $ref: "#/types/aws-iam:index:ReadonlyRole"
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+        requiredInputs: []
+
+        properties:
+            admin:
+                type: object
+                properties:
+                    roleArn:
+                        type: string
+                        description: ARN of admin IAM role.
+
+                    roleName:
+                        type: string
+                        description: Name of admin IAM role.
+
+                    rolePath:
+                        type: string
+                        description: Path of admin IAM role.
+
+                    roleUniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+
+            poweruser:
+                type: object
+                properties:
+                    roleArn:
+                        type: string
+                        description: ARN of poweruser IAM role.
+
+                    roleName:
+                        type: string
+                        description: Name of poweruser IAM role.
+
+                    rolePath:
+                        type: string
+                        description: Path of poweruser IAM role.
+
+                    roleUniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+
+            readonly:
+                type: object
+                properties:
+                    roleArn:
+                        type: string
+                        description: ARN of readonly IAM role.
+
+                    roleName:
+                        type: string
+                        description: Name of readonly IAM role.
+
+                    rolePath:
+                        type: string
+                        description: Path of readonly IAM role.
+
+                    roleUniqueId:
+                        type: string
+                        description: Unique ID of IAM role
+
+        required:
+            - admin
+
+    "aws-iam:index:AssumableRole":
+        isComponent: true
+        inputProperties:
+            trustedRoleActions:
+                type: array
+                description: Actions of STS.
+                items:
+                    type: string
+
+            trustedRoleArns:
+                type: array
+                description: ARNs of AWS entities who can assume these roles.
+                items:
+                    type: string
+
+            trustedRoleServices:
+                type: array
+                description: AWS Services that can assume these roles.
+                items:
+                    type: string
+
+            mfaAge:
+                type: integer
+                description: Max age of valid MFA (in seconds) for roles which require MFA.
+                default: 86400
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            role:
+                description: An IAM role that requires MFA.
+                $ref: "#/types/aws-iam:index:RoleWithMFA"
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            customRoleTrustPolicy:
+                type: string
+                description: A custom role trust policy.
+                default: ""
+
+            attachAdminPolicy:
+                type: boolean
+                description: Whether to attach an admin policy to a role.
+                default: false
+
+            attachPoweruserPolicy:
+                type: boolean
+                description: Whether to attach a poweruser policy to a role.
+                default: false
+
+            attachReadonlyPolicy:
+                type: boolean
+                description: Whether to attach a readonly policy to a role.
+                default: false
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+            roleStsExternalIds:
+                type: array
+                description: STS ExternalId condition values to use with a role (when MFA is not required).
+                items:
+                    type: string
+
+        requiredInputs: []
+
+        properties:
+            role:
+                type: object
+                properties:
+                    arn:
+                        type: string
+                        description: ARN of IAM role.
+
+                    name:
+                        type: string
+                        description: Name of IAM role.
+
+                    path:
+                        type: string
+                        description: Path of IAM role.
+
+                    uniqueId:
+                        type: string
+                        description: Unique ID of IAM role.
+
+                    requiresMfa:
+                        type: boolean
+                        description: Whether IAM role requires MFA.
+
+                    stsExternalId:
+                        description: "STS ExternalId condition value to use with a role."
+                        type: string
+
+            instanceProfile:
+                type: object
+                properties:
+                    arn:
+                        type: string
+                        description: ARN of IAM instance profile.
+
+                    name:
+                        description: "Name of IAM instance profile"
+                        type: string
+
+                    id:
+                        description: "IAM Instance profile's ID."
+                        type: string
+
+                    path:
+                        description: "Path of IAM instance profile."
+                        type: string
+
+        required:
+            - role
+            - instanceProfile
+
+    "aws-iam:index:AssumableRoleWithSAML":
+        isComponent: true
+        inputProperties:
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            role:
+                $ref: "#/types/aws-iam:index:Role"
+
+            providerIds:
+                type: array
+                description: List of SAML Provider IDs.
+                items:
+                    type: string
+
+            awsSamlEndpoint:
+                type: string
+                description: AWS SAML Endpoint.
+                default: https://signin.aws.amazon.com/saml
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+        requiredInputs: []
+
+        properties:
+            roleArn:
+                type: string
+                description: ARN of IAM role.
+
+            roleName:
+                type: string
+                description: Name of IAM role.
+
+            rolePath:
+                type: string
+                description: Path of IAM role.
+
+            roleUniqueId:
+                type: string
+                description: Unique ID of IAM role.
+
+        required:
+            - roleArn
+            - roleName
+            - rolePath
+            - roleUniqueId
+
+    "aws-iam:index:AssumableRoleWithOIDC":
+        isComponent: true
+        inputProperties:
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+            providerUrls:
+                type: array
+                description: List of URLs of the OIDC Providers.
+                items:
+                    type: string
+
+            awsAccountId:
+                type: string
+                description: The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
+                default: ""
+
+            role:
+                description: The IAM role.
+                $ref: "#/types/aws-iam:index:Role"
+
+            maxSessionDuration:
+                type: integer
+                description: Maximum CLI/API session duration in seconds between 3600 and 43200.
+                default: 3600
+
+            forceDetachPolicies:
+                type: boolean
+                description: Whether policies should be detached from this role when destroying.
+                default: false
+
+            oidcFullyQualifiedSubjects:
+                type: array
+                description: The fully qualified OIDC subjects to be added to the role policy.
+                items:
+                    type: string
+
+            oidcSubjectsWithWildcards:
+                type: array
+                description: The OIDC subject using wildcards to be added to the role policy.
+                items:
+                    type: string
+
+            oidcFullyQualifiedAudiences:
+                type: array
+                description: The audience to be added to the role policy. Set to sts.amazonaws.com for cross-account assumable role. Leave empty otherwise.
+                items:
+                    type: string
+
+        requiredInputs: []
+
+        properties:
+            arn:
+                type: string
+                description: ARN of IAM role.
+
+            name:
+                type: string
+                description: Name of IAM role.
+
+            path:
+                type: string
+                description: Path of IAM role.
+
+            uniqueId:
+                type: string
+                description: Unique ID of IAM role.
+
+        required:
+            - arn
+            - name
+            - path
+            - uniqueId
+
+    "aws-iam:index:Account":
+        isComponent: true
+        inputProperties:
+            accountAlias:
+                type: string
+                description: AWS IAM account alias for this account.
+
+            passwordPolicy:
+                $ref: "#/types/aws-iam:index:AccountPasswordPolicy"
+                description: |
+                    Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords. If
+                    left empty the default AWS password policy will be applied.
+
+        requiredInputs:
+            - accountAlias
+            - passwordPolicy
+
+        properties:
+            id:
+                type: string
+                description: |
+                    The AWS Account ID number of the account that owns or contains the calling entity.
+
+            arn:
+                type: string
+                description: |
+                    The AWS ARN associated with the calling entity.
+
+            userId:
+                type: string
+                description: |
+                    The unique identifier of the calling entity.
+
+            passwordPolicyExpirePasswords:
+                type: boolean
+                description: |
+                    Indicates whether passwords in the account expire. Returns true if max password
+                    age contains a value greater than 0. Returns false if it is 0 or not present.
+
+        required:
+            - id
+            - arn
+            - userId
+            - passwordPolicyExpirePasswords
+
+    "aws-iam:index:Policy":
+        isComponent: true
+        inputProperties:
+            name:
+                type: string
+                description: The name of the policy.
+
+            path:
+                type: string
+                description: The path of the policy in IAM.
+                default: "/"
+
+            description:
+                type: string
+                description: The description of the policy.
+                default: IAM Policy
+
+            policyDocument:
+                type: string
+                description: The policy document.
+
+            tags:
+                type: object
+                description: A map of tags to add.
+                additionalProperties:
+                    type: string
+
+        requiredInputs:
+            - name
+            - policyDocument
+
+        properties:
+            id:
+                type: string
+                description: The policy's ID.
+
+            arn:
+                type: string
+                description: The ARN assigned by AWS to this policy.
+
+            description:
+                type: string
+                description: The description of the policy.
+
+            name:
+                type: string
+                description: The name of the policy.
+
+            path:
+                type: string
+                description: The path of the policy in IAM.
+
+            policyDocument:
+                type: string
+                description: The policy document.
+
+        required:
+            - id
+            - arn
+            - description
+            - name
+            - path
+            - policyDocument
+
+language:
+    java:
+        artifactId: "awsiam"
+        buildFiles: "gradle"
+    csharp:
+        namespaces:
+            "aws-iam": "AwsIam"
+        packageReferences:
+            Pulumi: 3.*
+            Pulumi.Aws: 5.*
+    go:
+        generateResourceContainerTypes: true
+        importBasePath: github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam
+    nodejs:
+        dependencies:
+            "@pulumi/aws": "^5.0.0"
+        devDependencies:
+            typescript: "^3.7.0"
+    python:
+        requires:
+            pulumi: ">=3.0.0,<4.0.0"
+            pulumi-aws: ">=5.0.0,<6.0.0"

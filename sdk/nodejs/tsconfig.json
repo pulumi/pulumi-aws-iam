@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "outDir": "bin",
+        "target": "es2016",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": true,
+        "sourceMap": true,
+        "stripInternal": true,
+        "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true
+    },
+    "files": [
+        "account.ts",
+        "assumableRole.ts",
+        "assumableRoleWithOIDC.ts",
+        "assumableRoleWithSAML.ts",
+        "assumableRoles.ts",
+        "assumableRolesWithSAML.ts",
+        "eksrole.ts",
+        "groupWithAssumableRolesPolicy.ts",
+        "groupWithPolicies.ts",
+        "index.ts",
+        "policy.ts",
+        "provider.ts",
+        "readOnlyPolicy.ts",
+        "roleForServiceAccountsEks.ts",
+        "types/index.ts",
+        "types/input.ts",
+        "types/output.ts",
+        "user.ts",
+        "utilities.ts"
+    ]
+}

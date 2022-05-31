@@ -1,0 +1,120 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.pulumi",
+    "module": "awsiam",
+    "version": "unspecified",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "30.1-jre"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.8.6"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "awsiam-unspecified.jar",
+          "url": "awsiam-unspecified.jar",
+          "size": 131324,
+          "sha512": "14623d8ea5f4ea0ebb2c737cb2d22aaf684416b21c88d1ccc77a8c5af05941cee868bd5a0e86b76c7936a23021518e6f333416eb981029d871e739231012e66a",
+          "sha256": "fa1d992299dda9d498fca97b20424e7a38d2b33f9bdf9ae167c52a5d9b438159",
+          "sha1": "d423e122fb9496e1ade902723dbb0bf6b98deedc",
+          "md5": "75748f0372cd493c61d71d102fbc056f"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.pulumi",
+          "module": "pulumi",
+          "version": {
+            "requires": "0.1.0"
+          }
+        },
+        {
+          "group": "com.google.code.findbugs",
+          "module": "jsr305",
+          "version": {
+            "requires": "3.0.2"
+          }
+        },
+        {
+          "group": "com.google.protobuf",
+          "module": "protobuf-java",
+          "version": {
+            "requires": "3.12.0"
+          }
+        },
+        {
+          "group": "com.google.protobuf",
+          "module": "protobuf-java-util",
+          "version": {
+            "requires": "3.12.0"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "30.1-jre"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.8.6"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "awsiam-unspecified.jar",
+          "url": "awsiam-unspecified.jar",
+          "size": 131324,
+          "sha512": "14623d8ea5f4ea0ebb2c737cb2d22aaf684416b21c88d1ccc77a8c5af05941cee868bd5a0e86b76c7936a23021518e6f333416eb981029d871e739231012e66a",
+          "sha256": "fa1d992299dda9d498fca97b20424e7a38d2b33f9bdf9ae167c52a5d9b438159",
+          "sha1": "d423e122fb9496e1ade902723dbb0bf6b98deedc",
+          "md5": "75748f0372cd493c61d71d102fbc056f"
+        }
+      ]
+    }
+  ]
+}
