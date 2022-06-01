@@ -38,7 +38,6 @@ func NewAccount(ctx *pulumi.Context,
 	if args.PasswordPolicy == nil {
 		return nil, errors.New("invalid value for required argument 'PasswordPolicy'")
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource Account
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:Account", name, args, &resource, opts...)
 	if err != nil {

@@ -39,7 +39,6 @@ func NewUser(ctx *pulumi.Context,
 	if isZero(args.SshKeyEncoding) {
 		args.SshKeyEncoding = pulumi.StringPtr("SSH")
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource User
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:User", name, args, &resource, opts...)
 	if err != nil {

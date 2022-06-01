@@ -42,7 +42,6 @@ func NewAssumableRoleWithOIDC(ctx *pulumi.Context,
 	if args.Role != nil {
 		args.Role = args.Role.ToRolePtrOutput().ApplyT(func(v *Role) *Role { return v.Defaults() }).(RolePtrOutput)
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource AssumableRoleWithOIDC
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRoleWithOIDC", name, args, &resource, opts...)
 	if err != nil {

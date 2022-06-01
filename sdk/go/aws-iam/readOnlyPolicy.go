@@ -58,7 +58,6 @@ func NewReadOnlyPolicy(ctx *pulumi.Context,
 	if isZero(args.Path) {
 		args.Path = pulumi.StringPtr("/")
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource ReadOnlyPolicy
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:ReadOnlyPolicy", name, args, &resource, opts...)
 	if err != nil {

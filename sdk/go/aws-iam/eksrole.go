@@ -39,7 +39,6 @@ func NewEKSRole(ctx *pulumi.Context,
 	if args.Role != nil {
 		args.Role = args.Role.ToRolePtrOutput().ApplyT(func(v *Role) *Role { return v.Defaults() }).(RolePtrOutput)
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource EKSRole
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:EKSRole", name, args, &resource, opts...)
 	if err != nil {

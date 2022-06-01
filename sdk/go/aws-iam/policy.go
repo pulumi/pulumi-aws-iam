@@ -47,7 +47,6 @@ func NewPolicy(ctx *pulumi.Context,
 	if isZero(args.Path) {
 		args.Path = pulumi.StringPtr("/")
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource Policy
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:Policy", name, args, &resource, opts...)
 	if err != nil {

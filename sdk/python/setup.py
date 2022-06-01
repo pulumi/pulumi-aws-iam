@@ -15,7 +15,7 @@ class InstallPluginCommand(install):
     def run(self):
         install.run(self)
         try:
-            check_call(['pulumi', 'plugin', 'install', 'resource', 'aws-iam', PLUGIN_VERSION, '--server', 'https://github.com/pulumi/pulumi-aws-iam/releases/download/v${VERSION}'])
+            check_call(['pulumi', 'plugin', 'install', 'resource', 'aws-iam', PLUGIN_VERSION])
         except OSError as error:
             if error.errno == errno.ENOENT:
                 print(f"""

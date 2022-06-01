@@ -43,7 +43,6 @@ func NewAssumableRolesWithSAML(ctx *pulumi.Context,
 	if args.Readonly != nil {
 		args.Readonly = args.Readonly.ToReadonlyRolePtrOutput().ApplyT(func(v *ReadonlyRole) *ReadonlyRole { return v.Defaults() }).(ReadonlyRolePtrOutput)
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource AssumableRolesWithSAML
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRolesWithSAML", name, args, &resource, opts...)
 	if err != nil {

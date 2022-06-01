@@ -15,7 +15,6 @@
         "@pulumi/pulumi": "latest"
     },
     "pulumi": {
-        "resource": true,
-        "server": "https://github.com/pulumi/pulumi-aws-iam/releases/download/v${VERSION}"
+        "resource": true
     }
 }

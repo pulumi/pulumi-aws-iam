@@ -48,7 +48,6 @@ func NewAssumableRole(ctx *pulumi.Context,
 	if args.Role != nil {
 		args.Role = args.Role.ToRoleWithMFAPtrOutput().ApplyT(func(v *RoleWithMFA) *RoleWithMFA { return v.Defaults() }).(RoleWithMFAPtrOutput)
 	}
-	opts = pkgResourceDefaultOpts(opts)
 	var resource AssumableRole
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRole", name, args, &resource, opts...)
 	if err != nil {
