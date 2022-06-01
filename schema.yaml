@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/pulumi/pulumi/master/pkg/codegen/schema/pulumi.json
 ---
 name: aws-iam
+pluginDownloadURL: https://github.com/pulumi/pulumi-aws-iam/releases/download/v${VERSION}
 types:
     "aws-iam:index:AccountPasswordPolicy":
         type: object
