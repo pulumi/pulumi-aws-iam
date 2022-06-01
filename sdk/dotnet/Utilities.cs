@@ -53,6 +53,7 @@ namespace Pulumi.AwsIam
         {
             var dst = src ?? new global::Pulumi.InvokeOptions{};
             dst.Version = src?.Version ?? Version;
+            dst.PluginDownloadURL = src?.PluginDownloadURL ?? "https://github.com/pulumi/pulumi-aws-iam/releases/download/v${VERSION}";
             return dst;
         }
 

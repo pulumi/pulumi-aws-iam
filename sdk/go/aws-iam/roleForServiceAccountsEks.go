@@ -41,6 +41,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context,
 	if args.Role != nil {
 		args.Role = args.Role.ToEKSServiceAccountRolePtrOutput().ApplyT(func(v *EKSServiceAccountRole) *EKSServiceAccountRole { return v.Defaults() }).(EKSServiceAccountRolePtrOutput)
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource RoleForServiceAccountsEks
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:RoleForServiceAccountsEks", name, args, &resource, opts...)
 	if err != nil {

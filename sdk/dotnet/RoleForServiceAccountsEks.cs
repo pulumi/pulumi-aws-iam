@@ -33,6 +33,7 @@ namespace Pulumi.AwsIam
             var defaultOptions = new ComponentResourceOptions
             {
                 Version = Utilities.Version,
+                PluginDownloadURL = "https://github.com/pulumi/pulumi-aws-iam/releases/download/v${VERSION}",
             };
             var merged = ComponentResourceOptions.Merge(defaultOptions, options);
             // Override the ID if one was specified for consistency with other language SDKs.

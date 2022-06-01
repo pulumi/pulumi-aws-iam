@@ -46,6 +46,7 @@ func NewGroupWithPolicies(ctx *pulumi.Context,
 	if isZero(args.Name) {
 		args.Name = pulumi.String("")
 	}
+	opts = pkgResourceDefaultOpts(opts)
 	var resource GroupWithPolicies
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:GroupWithPolicies", name, args, &resource, opts...)
 	if err != nil {
