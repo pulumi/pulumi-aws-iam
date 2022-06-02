@@ -1,18 +1,18 @@
 import * as iam from "@pulumi/aws-iam";
 
 // Account
-// export const account = new iam.Account("account", {
-//     accountAlias: "cool-alias",
-//     passwordPolicy: {
-//         minimumLength: 37,
-//         requireNumbers: false,
-//         allowUsersToChange: true,
-//         hardExpiry: true,
-//         requireSymbols: true,
-//         requireLowercaseCharacters: true,
-//         requireUppercaseCharacters: true,
-//     },
-// });
+export const account = new iam.Account("account", {
+    accountAlias: "cool-alias",
+    passwordPolicy: {
+        minimumLength: 37,
+        requireNumbers: false,
+        allowUsersToChange: true,
+        hardExpiry: true,
+        requireSymbols: true,
+        requireLowercaseCharacters: true,
+        requireUppercaseCharacters: true,
+    },
+});
 
 // User
 export const user = new iam.User("aws-iam-example-user", {

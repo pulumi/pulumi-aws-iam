@@ -745,7 +745,8 @@ types:
 resources:
     "aws-iam:index:User":
         description: |
-            Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+            This resources helps you create an IAM User, Login Profile, and Access Key. Additionally you
+            can optionally upload an IAM SSH User Public Key.
 
             {{% examples %}}
             ## Example Usage
@@ -765,8 +766,6 @@ resources:
             ```
 
             ```python
-            """An AWS Python Pulumi program"""
-
             import pulumi
             import pulumi_aws_iam as iam
 
@@ -838,12 +837,12 @@ resources:
             runtime: yaml
             resources:
                 user:
-                type: "aws-iam:index:User"
-                properties:
-                    name: "pulumipus"
-                    forceDestroy: true
-                    pgpKey: "keybase:test"
-                    passwordResetRequired: false
+                    type: "aws-iam:index:User"
+                    properties:
+                        name: "pulumipus"
+                        forceDestroy: true
+                        pgpKey: "keybase:test"
+                        passwordResetRequired: false
             outputs:
                 user: ${user}
             ```
@@ -926,6 +925,199 @@ resources:
             - keybase
 
     "aws-iam:index:RoleForServiceAccountsEks":
+        description: |
+            This resources helps you create an IAM role which can be assumed by AWS EKS ServiceAccounts with optional policies for
+            commonly used controllers/custom resources within EKS. The optional policies you can specify are:
+
+            - Cert-Manager
+            - Cluster Autoscaler
+            - EBS CSI Driver
+            - EFS CSI Driver
+            - External DNS
+            - External Secrets
+            - FSx for Lustre CSI Driver
+            - Karpenter
+            - Load Balancer Controller
+            - Load Balancer Controller Target Group Binding Only
+            - App Mesh Controller
+            - App Mesh Envoy Proxy
+            - Managed Service for Prometheus
+            - Node Termination Handler
+            - Velero
+            - VPC CNI
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## VPC CNI
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const roleForServiceAccountsEks = new iam.RoleForServiceAccountsEks("aws-iam-example-role-for-service-accounts-eks", {
+                role: {
+                    name: "vpc-cni"
+                },
+                tags: {
+                    Name: "vpc-cni-irsa",
+                },
+                oidcProviders: {
+                    main: {
+                        providerArn: "arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D",
+                        namespaceServiceAccounts: ["default:my-app", "canary:my-app"],
+                    }
+                },
+                policies: {
+                    vpnCni: {
+                        attach: true,
+                        enableIpv4: true,
+                    },
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            role_for_service_account_eks = iam.RoleForServiceAccountsEks(
+                'role_for_service_account_eks',
+                role=iam.RoleArgs(
+                    name='vpc-cni'
+                ),
+                tags={
+                    'Name': 'vpc-cni-irsa',
+                },
+                oidc_providers={
+                    'main': iam.OIDCProviderArgs(
+                        provider_arn='arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D',
+                        namespace_service_accounts=['default:my-app', 'canary:my-app'],
+                    ),
+                },
+                policies=iam.EKSRolePoliciesArgs(
+                    vpn_cni=iam.EKSVPNCNIPolicyArgs(
+                        attach=True,
+                        enable_ipv4=True,
+                    ),
+                ),
+            )
+
+            pulumi.export('role_for_service_account_eks', role_for_service_account_eks)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    roleForServiceAccountsEKS, err := iam.NewRoleForServiceAccountsEks(ctx, "role-for-service-accounts-eks", &iam.RoleForServiceAccountsEksArgs{
+                        Role: iam.EKSServiceAccountRolePtr(&iam.EKSServiceAccountRoleArgs{
+                            Name: pulumi.String("vpc-cni"),
+                        }),
+                        Tags: pulumi.ToStringMap(map[string]string{
+                            "Name": "vpc-cni-irsa",
+                        }),
+                        OidcProviders: iam.OIDCProviderMap{
+                            "main": iam.OIDCProviderArgs{
+                                ProviderArn:              pulumi.String("arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D"),
+                                NamespaceServiceAccounts: pulumi.ToStringArray([]string{"default:my-app", "canary:my-app"}),
+                            },
+                        },
+                        Policies: iam.EKSRolePoliciesPtr(&iam.EKSRolePoliciesArgs{
+                            VpnCni: iam.EKSVPNCNIPolicyPtr(&iam.EKSVPNCNIPolicyArgs{
+                                Attach:     pulumi.Bool(true),
+                                EnableIpv4: pulumi.BoolPtr(true),
+                            }),
+                        }),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("roleForServiceAccountsEKS", roleForServiceAccountsEKS)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var roleForServiceAccountEks = new RoleForServiceAccountsEks("role-for-service-account-eks", new RoleForServiceAccountsEksArgs
+                    {
+                        Role = new EKSServiceAccountRoleArgs
+                        {
+                            Name = "vpn-cni",
+                        },
+                        Tags = {
+                            {"Name", "vpc-cni-irsa"},
+                        },
+                        OidcProviders = {
+                            {"main", new OIDCProviderArgs
+                            {
+                                ProviderArn = "arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D",
+                                NamespaceServiceAccounts = {"default:my-app", "canary:my-app"},
+                            }},
+                        },
+                        Policies = new EKSRolePoliciesArgs
+                        {
+                            VpnCni = new EKSVPNCNIPolicyArgs
+                            {
+                                Attach = true,
+                                EnableIpv4 = true,
+                            },
+                        },
+                    });
+
+                    this.RoleForServiceAccountEks = Output.Create<RoleForServiceAccountsEks>(roleForServiceAccountEks);
+                }
+
+                [Output]
+                public Output<RoleForServiceAccountsEks> RoleForServiceAccountEks { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                roleForServiceAccountsEks:
+                    type: "aws-iam:index:RoleForServiceAccountsEks"
+                    properties:
+                        role:
+                            name: "vpc-cni"
+                        tags:
+                            Name: "vpc-cni-irsa"
+                        oidcProviders:
+                            main:
+                                providerArn: "arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D"
+                                namespaceServiceAccounts:
+                                    - "default:my-app"
+                                    - "canary:my-app"
+                        policies:
+                            vpnCni:
+                                attach: true
+                                enableIpv4: true
+            outputs:
+                roleForServiceAccountsEks: ${roleForServiceAccountsEks}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
+
         isComponent: true
         inputProperties:
             tags:
@@ -991,6 +1183,114 @@ resources:
             - role
 
     "aws-iam:index:ReadOnlyPolicy":
+        description: |
+            This resource helps you create an IAM read-only policy for the services you specify. The default AWS
+            read-only policies may not include services you need or may contain services you do not need access to.
+            This resource helps ensure your read-only policy has permissions to exactly what you specify.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## RDS and Dynamo Read Only Policy
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const readOnlyPolicy = new iam.ReadOnlyPolicy("aws-iam-example-read-only-policy", {
+                name: "aws-iam-example-read-only",
+                path: "/",
+                description: "My example read only policy",
+                allowedServices: [ "rds", "dynamodb" ],
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            read_only_policy = iam.ReadOnlyPolicy(
+                'read_only_policy',
+                name='example',
+                path='/',
+                description='My example read only policy',
+                allowed_services=['rds','dynamodb'],
+            )
+
+            pulumi.export('read_only_policy', read_only_policy)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    readOnlyPolicy, err := iam.NewReadOnlyPolicy(ctx, "read-only-policy", &iam.ReadOnlyPolicyArgs{
+                        Name:            pulumi.String("example"),
+                        Path:            pulumi.String("/"),
+                        Description:     pulumi.String("My example policy"),
+                        AllowedServices: pulumi.ToStringArray([]string{"rds", "dynamodb"}),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("readOnlyPolicy", readOnlyPolicy)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var readOnlyPolicy = new ReadOnlyPolicy("read-only-policy", new ReadOnlyPolicyArgs
+                    {
+                        Name = "example",
+                        Path = "/",
+                        Description = "My example read only policy",
+                        AllowedServices = {"rds", "dynamodb"},
+                    });
+
+                    this.ReadOnlyPolicy = Output.Create<ReadOnlyPolicy>(readOnlyPolicy);
+                }
+
+                [Output]
+                public Output<ReadOnlyPolicy> ReadOnlyPolicy { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                readOnlyPolicy:
+                    type: "aws-iam:index:ReadOnlyPolicy"
+                    properties:
+                        name: "example"
+                        path: "/"
+                        description: "My example read only policy"
+                        allowedServices:
+                            - "rds"
+                            - "dynamodb"
+            outputs:
+                readOnlyPolicy: ${readOnlyPolicy}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             name:
@@ -1087,6 +1387,137 @@ resources:
             - policy
 
     "aws-iam:index:GroupWithPolicies":
+        description: |
+            This resources allows you to create an IAM group with specified IAM policies,
+            and then add specified users into your created group.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Group With Policies
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const groupWithPolicies = new iam.GroupWithPolicies("aws-iam-example-group-with-policies", {
+                name: "superadmins",
+                groupUsers: [ "user1", "user2" ],
+                attachIamSelfManagementPolicy: true,
+                customGroupPolicyArns: [ "arn:aws:iam::aws:policy/AdministratorAccess" ],
+                customGroupPolicies: [{
+                    "name": "AllowS3Listing",
+                    "policy": "{}",
+                }],
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            group_with_policies = iam.GroupWithPolicies(
+                'group_with_policies',
+                name='superadmins',
+                group_users=['user1','user2'],
+                attach_iam_self_management_policy=True,
+                custom_group_policy_arns=['arn:aws:iam::aws:policy/AdministratorAccess'],
+                custom_group_policies=[{
+                    'name': 'AllowS3Listing',
+                    'policy': '{}',
+                }],
+            )
+
+            pulumi.export('group_with_policies', group_with_policies)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    groupWithPolicies, err := iam.NewGroupWithPolicies(ctx, "group-with-policies", &iam.GroupWithPoliciesArgs{
+                        Name:                          pulumi.String("superadmins"),
+                        GroupUsers:                    pulumi.ToStringArray([]string{"user1", "user2"}),
+                        AttachIamSelfManagementPolicy: pulumi.BoolPtr(true),
+                        CustomGroupPolicyArns:         pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AdministratorAccess"}),
+                        CustomGroupPolicies: pulumi.ToStringMapArray([]map[string]string{
+                            {
+                                "name":   "AllowS3Listing",
+                                "policy": "{}",
+                            },
+                        }),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("groupWithPolicies", groupWithPolicies)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var groupWithPolicies = new GroupWithPolicies("group-with-policies", new GroupWithPoliciesArgs
+                    {
+                        Name = "superadmins",
+                        GroupUsers = {"user1", "user2"},
+                        AttachIamSelfManagementPolicy = true,
+                        CustomGroupPolicyArns = {"arn:aws:iam::aws:policy/AdministratorAccess"},
+                        CustomGroupPolicies = new InputList<ImmutableDictionary<string, string>>
+                        {
+                            ImmutableDictionary.Create<string, string>()
+                                .Add("name", "AllowS3Listing")
+                                .Add("policy", "{}"),
+                        },
+                    });
+
+                    this.GroupWithPolicies = Output.Create<GroupWithPolicies>(groupWithPolicies);
+                }
+
+                [Output]
+                public Output<GroupWithPolicies> GroupWithPolicies { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                groupWithPolicies:
+                    type: "aws-iam:index:GroupWithPolicies"
+                    properties:
+                        name: "superadmins"
+                        groupUsers:
+                            - "user1"
+                            - "user2"
+                        attachIamSelfManagementPolicy: true
+                        customGroupPolicyArns:
+                            - "arn:aws:iam::aws:policy/AdministratorAccess"
+                        customGroupPolicies:
+                            - name: "AllowS3Listing"
+                            policy: "{}"
+                        outputs:
+                            groupWithPolicies: ${groupWithPolicies}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             name:
@@ -1165,6 +1596,109 @@ resources:
             - groupName
 
     "aws-iam:index:GroupWithAssumableRolesPolicy":
+        description: |
+            This resource helps you create an IAM Group with Users who are allowed to assume specified
+            IAM roles.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Group With Assumable Roles Policy
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const groupWithAssumableRolesPolicy = new iam.GroupWithAssumableRolesPolicy("aws-iam-example-group-with-assumable-roles-policy", {
+                name: "production-readonly",
+                assumableRoles: [ "arn:aws:iam::835367859855:role/readonly" ],
+                groupUsers: [ "user1" ],
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            group_with_assume_roles_policy = iam.GroupWithAssumableRolesPolicy(
+                'group_with_assume_roles_policy',
+                name='production-readonly',
+                assumable_roles=['arn:aws:iam::835367859855:role/readonly'],
+                group_users=['user1','user2'],
+            )
+
+            pulumi.export('group_with_assume_roles_policy', group_with_assume_roles_policy)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    groupWithAssumableRolesPolicy, err := iam.NewGroupWithAssumableRolesPolicy(ctx, "group-with-assumable-roles-policy", &iam.GroupWithAssumableRolesPolicyArgs{
+                        Name:           pulumi.String("production-readonly"),
+                        AssumableRoles: pulumi.ToStringArray([]string{"arn:aws:iam::835367859855:role/readonly"}),
+                        GroupUsers:     pulumi.ToStringArray([]string{"user1", "user2"}),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("groupWithAssumableRolesPolicy", groupWithAssumableRolesPolicy)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var groupWithAssumableRolePolicy = new GroupWithAssumableRolesPolicy("group-with-assumable-roles-policy", new GroupWithAssumableRolesPolicyArgs
+                    {
+                        Name = "production-readonly",
+                        AssumableRoles = {"arn:aws:iam::835367859855:role/readonly"},
+                        GroupUsers = {"user1", "user2"},
+                    });
+
+                    this.GroupWithAssumableRolesPolicy = Output.Create<GroupWithAssumableRolesPolicy>(groupWithAssumableRolePolicy);
+                }
+
+                [Output]
+                public Output<GroupWithAssumableRolesPolicy> GroupWithAssumableRolesPolicy { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                groupWithAssumableRolesPolicy:
+                    type: "aws-iam:index:GroupWithAssumableRolesPolicy"
+                    properties:
+                        name: "production-readonly"
+                        assumableRoles:
+                            - "arn:aws:iam::835367859855:role/readonly"
+                        groupUsers:
+                            - "user1"
+                            - "user2"
+            outputs:
+                groupWithAssumableRolesPolicy: ${groupWithAssumableRolesPolicy}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             tags:
@@ -1226,6 +1760,163 @@ resources:
             - groupArn
 
     "aws-iam:index:EKSRole":
+        description: |
+            This resource helps you create an IAM role that can be assumed by one or more EKS ServiceAccounts,
+            in one or more EKS Clusters. With this resource:
+
+            - You do not need any knowledge of cluster OIDC information.
+            - You can assume the role from multiple EKS clusters, for example used in DR or when a workload is spread across clusters.
+            - You can support multiple ServiceAccount in the same cluster, for example when a workload runs in multiple namespaces.
+
+            Notes:
+
+            - The EKS cluster needs to exist first, in the current AWS account and region
+            - The key in the `Cluster Service Accounts` is the exact name of the EKS cluster.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Multi Cluster
+
+            With this resource you can provision an IAM Role named `my-app` that can be assumed from:
+
+            - EKS cluster `staging-main-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+            - EKS cluster `staging-backup-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const eksRole = new iam.EKSRole("aws-iam-example-eks-role", {
+                role: {
+                    name: "eks-role",
+                    policyArns: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ],
+                },
+                tags: {
+                    Name: "eks-role",
+                },
+                clusterServiceAccounts: {
+                    "staging-main-1": [ "default:my-app-staging" ],
+                    "staging-backup-1": [ "default:my-app-staging" ],
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            eks_role = iam.EKSRole(
+                'eks_role',
+                role=iam.RoleArgs(
+                    name='eks-role',
+                    policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy'],
+                ),
+                tags={
+                    'Name': 'eks-role',
+                },
+                cluster_service_acccounts={
+                    'staging-main-1': [ 'default:my-app-staging' ],
+                    'staging-backup-1': [ 'default:my-app-staging' ],
+                },
+            )
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    eksRole, err := iam.NewEKSRole(ctx, "eks-role", &iam.EKSRoleArgs{
+                        Role: iam.RoleArgs{
+                            Name:       pulumi.String("eks-role"),
+                            PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
+                        },
+                        Tags: pulumi.ToStringMap(map[string]string{
+                            "Role": "eks-role",
+                        }),
+                        Uncomment the below and replace actual cluster values.
+                        ClusterServiceAccounts: pulumi.ToStringArrayMap(map[string][]string{
+                            "staging-main-1": {"default:my-app-staging"},
+                            "staging-backup-1": {"default:my-app-staging"},
+                        }),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("eksRole", eksRole)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+            using System.Collections.Immutable;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var eksRole = new EKSRole("eks-role", new EKSRoleArgs
+                    {
+                        Role = new RoleArgs
+                        {
+                            Name = "eks-role",
+                            PolicyArns = {"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"},
+                        },
+                        Tags = new InputMap<string>
+                        {
+                            {"Name", "eks-role"},
+                        },
+                        Uncomment the below and replace actual cluster values.
+                        ClusterServiceAccounts = {
+                            {"staging-main-1", ImmutableArray.Create<string>(new string[] {"default:my-app-staging"})},
+                            {"staging-backup-1", ImmutableArray.Create<string>(new string[] {"default:my-app-staging"})}
+                        },
+                    });
+
+                    this.EksRole = Output.Create<EKSRole>(eksRole);
+                }
+
+                [Output]
+                public Output<EKSRole> EksRole { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                eksRole:
+                    type: "aws-iam:index:EKSRole"
+                    properties:
+                        role:
+                            name: "eks-role"
+                            policyArns:
+                                - "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+                        tags:
+                            Name: "eks-role"
+                        clusterServiceAccounts:
+                            "staging-main-1":
+                                - "default:my-app-staging"
+                            "staging-backup-1":
+                                - "default:my-app-staging"
+            outputs:
+                eksRole: ${eksRole}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             tags:
@@ -1295,6 +1986,133 @@ resources:
             - uniqueId
 
     "aws-iam:index:AssumableRoles":
+        description: |
+            This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which
+            can be assumed by trusted resources. Trusted resources can be any IAM ARNs, typically, AWS Accounts
+            and Users.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Assumable Roles
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const assumableRoles = new iam.AssumableRoles("aws-iam-example-assumable-roles", {
+                trustedRoleArns: [ "arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus" ],
+                admin: {},
+                poweruser: {
+                    name: "developer",
+                },
+                readonly: {
+                    requiresMfa: true,
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            assumable_roles = iam.AssumableRoles(
+                'assumable_roles',
+                trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
+                admin=iam.AdminRoleArgs(),
+                poweruser=iam.PoweruserRoleArgs(
+                    name='developer',
+                ),
+                readonly=iam.ReadonlyRoleWithMFAArgs(
+                    requires_mfa=True,
+                ),
+            )
+
+            pulumi.export('assumable_roles', assumable_roles)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    assumableRoles, err := iam.NewAssumableRoles(ctx, "assumable-roles", &iam.AssumableRolesArgs{
+                        TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
+                        Admin:           iam.AdminRoleWithMFAArgs{},
+                        Poweruser: iam.PoweruserRoleWithMFAArgs{
+                            Name: pulumi.String("developer"),
+                        },
+                        Readonly: iam.ReadonlyRoleWithMFAArgs{
+                            RequiresMfa: pulumi.BoolPtr(true),
+                        },
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("assumableRoles", assumableRoles)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var assumableRoles = new AssumableRoles("assumable-roles", new AssumableRolesArgs
+                    {
+                        TrustedRoleArns = {"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"},
+                        Admin = new AdminRoleWithMFAArgs(),
+                        Poweruser = new PoweruserRoleWithMFAArgs
+                        {
+                            Name = "developer",
+                        },
+                        Readonly = new ReadonlyRoleWithMFAArgs
+                        {
+                            RequiresMfa = true,
+                        },
+                    });
+
+                    this.AssumableRoles = Output.Create<AssumableRoles>(assumableRoles);
+                }
+
+                [Output]
+                public Output<AssumableRoles> AssumableRoles { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                assumableRoles:
+                    type: "aws-iam:index:AssumableRoles"
+                    properties:
+                        trustedRoleArns:
+                            - "arn:aws:iam::307990089504:root"
+                            - "arn:aws:iam::835367859851:user/pulumipus"
+                        poweruser:
+                            name: "developer"
+                        readonly:
+                            requiresMfa: true
+            outputs:
+                assumableRoles: ${assumableRoles}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             trustedRoleArns:
@@ -1410,6 +2228,120 @@ resources:
             - admin
 
     "aws-iam:index:AssumableRolesWithSAML":
+        description: |
+            This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which can be assumed
+            by trusted resources using SAML Federated Users.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ### Assumable Roles With SAML
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const assumableRolesWithSaml = new iam.AssumableRolesWithSAML("aws-iam-example-assumable-role-with-saml", {
+                providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
+                admin: {},
+                poweruser: {
+                    name: "developer",
+                },
+                readonly: {},
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            assumable_roles_with_saml = iam.AssumableRolesWithSAML(
+                'assumable_roles_with_saml',
+                provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml'],
+                admin=iam.AdminRoleArgs(),
+                readonly=iam.ReadonlyRoleArgs(),
+                poweruser=iam.PoweruserRoleArgs(
+                    name='developer',
+                ),
+            )
+
+            pulumi.export('assumable_roles_with_saml', assumable_roles_with_saml)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    assumableRolesWithSAML, err := iam.NewAssumableRolesWithSAML(ctx, "assumable-roles-with-saml", &iam.AssumableRolesWithSAMLArgs{
+                        ProviderIds: pulumi.ToStringArray([]string{"arn:aws:iam::235367859851:saml-provider/idp_saml"}),
+                        Admin:       iam.AdminRoleArgs{},
+                        Readonly:    iam.ReadonlyRoleArgs{},
+                        Poweruser: iam.PoweruserRoleArgs{
+                            Name: pulumi.String("developer"),
+                        },
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("assumableRolesWithSAML", assumableRolesWithSAML)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var assumableRolesWithSaml = new AssumableRolesWithSAML("assumable-roles-with-saml", new AssumableRolesWithSAMLArgs
+                    {
+                        ProviderIds = {"arn:aws:iam::235367859851:saml-provider/idp_saml"},
+                        Admin = new AdminRoleArgs(),
+                        Readonly = new ReadonlyRoleArgs(),
+                        Poweruser = new PoweruserRoleArgs
+                        {
+                            Name = "developer",
+                        },
+                    });
+
+                    this.AssumableRolesWithSaml = Output.Create<AssumableRolesWithSAML>(assumableRolesWithSaml);
+                }
+
+                [Output]
+                public Output<AssumableRolesWithSAML> AssumableRolesWithSaml { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                assumableRolesWithSaml:
+                    type: "aws-iam:index:AssumableRolesWithSAML"
+                    properties:
+                        providerIds:
+                            - "arn:aws:iam::235367859851:saml-provider/idp_saml"
+                        poweruser:
+                            name: "developer"
+            outputs:
+                assumableRolesWithSaml: ${assumableRolesWithSaml}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             providerIds:
@@ -1506,6 +2438,125 @@ resources:
             - admin
 
     "aws-iam:index:AssumableRole":
+        description: |
+            This resource helps you create a single IAM Role which can be assumed by trusted resources.
+            Trusted resources can be any IAM ARNs, typically, AWS Accounts and Users.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Assumable Role
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const assumableRole = new iam.AssumableRole("aws-iam-example-assumable-role", {
+                trustedRoleArns: [ "arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus" ],
+                role: {
+                    name: "custom",
+                    requiresMfa: true,
+                    policyArns: [ "arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess" ],
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            assumable_role = iam.AssumableRole(
+                'assumable_role',
+                trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
+                role=iam.RoleWithMFAArgs(
+                    name='custom',
+                    requires_mfa=True,
+                    policy_arns=['arn:aws:iam::aws:policy/AmazonCognitoReadOnly','arn:aws:iam::aws:policy/AlexaForBusinessFullAccess'],
+                ),
+            )
+
+            pulumi.export('assumable_role', assumable_role)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    assumableRole, err := iam.NewAssumableRole(ctx, "assumable-role", &iam.AssumableRoleArgs{
+                        TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
+                        Role: &iam.RoleWithMFAArgs{
+                            Name:        pulumi.String("custom"),
+                            RequiresMfa: pulumi.BoolPtr(true),
+                            PolicyArns:  pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonCognitoReadOnly", "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"}),
+                        },
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("assumableRole", assumableRole)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var assumableRole = new AssumableRole("assumable-role", new AssumableRoleArgs
+                    {
+                        TrustedRoleArns = {"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"},
+                        Role = new RoleWithMFAArgs
+                        {
+                            Name = "custom",
+                            RequiresMfa = true,
+                            PolicyArns = {"arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"},
+                        },
+                    });
+
+                    this.AssumableRole = Output.Create<AssumableRole>(assumableRole);
+                }
+
+                [Output]
+                public Output<AssumableRole> AssumableRole { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                assumableRole:
+                    type: "aws-iam:index:AssumableRole"
+                    properties:
+                        trustedRoleArns:
+                            - "arn:aws:iam::307990089504:root"
+                            - "arn:aws:iam::835367859851:user/pulumipus"
+                        role:
+                            name: "custom"
+                            requiresMfa: true
+                            policyArns:
+                                - "arn:aws:iam::aws:policy/AmazonCognitoReadOnly"
+                                - "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"
+            outputs:
+                assumableRole: ${assumableRole}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             trustedRoleActions:
@@ -1631,6 +2682,133 @@ resources:
             - instanceProfile
 
     "aws-iam:index:AssumableRoleWithSAML":
+        description: |
+            This resource helps you create a single IAM Role which can be assumed by trusted
+            resources using SAML Federated Users.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Assumable Role With SAML
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const assumableRoleWithSaml = new iam.AssumableRoleWithSAML("aws-iam-example-assumable-role-with-saml", {
+                providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
+                role: {
+                    name: "saml-role",
+                    policyArns: [ "arn:aws:iam::aws:policy/ReadOnlyAccess" ],
+                },
+                tags: {
+                    Role: "saml-role",
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            assumable_role_with_saml = iam.AssumableRoleWithSAML(
+                'assumable_role_with_saml',
+                role=iam.RoleArgs(
+                    name='saml-role',
+                    policy_arns=['arn:aws:iam::aws:policy/ReadOnlyAccess'],
+                ),
+                tags={
+                    'Role': 'saml-role',
+                },
+                provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml']
+            )
+
+            pulumi.export('assumable_role_with_saml', assumable_role_with_saml)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    assumableRoleWithSAML, err := iam.NewAssumableRoleWithSAML(ctx, "assumable-role-with-saml", &iam.AssumableRoleWithSAMLArgs{
+                        Role: iam.RoleArgs{
+                            Name:       pulumi.String("saml-role"),
+                            PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/ReadOnlyAccess"}),
+                        },
+                        Tags: pulumi.ToStringMap(map[string]string{
+                            "Role": "saml-role",
+                        }),
+                        ProviderIds: pulumi.ToStringArray([]string{"arn:aws:iam::235367859851:saml-provider/idp_saml"}),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("assumableRoleWithSAML", assumableRoleWithSAML)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var assumableRoleWithSaml = new AssumableRoleWithSAML("assumable-role-with-saml", new AssumableRoleWithSAMLArgs
+                    {
+                        Role = new RoleArgs
+                        {
+                            Name = "saml-role",
+                            PolicyArns = {"arn:aws:iam::aws:policy/ReadOnlyAccess"},
+                        },
+                        Tags = new InputMap<string>
+                        {
+                            {"Role", "saml-role"},
+                        },
+                        ProviderIds = {"arn:aws:iam::235367859851:saml-provider/idp_saml"},
+                    });
+
+                    this.AssumableRoleWithSaml = Output.Create<AssumableRoleWithSAML>(assumableRoleWithSaml);
+                }
+
+                [Output]
+                public Output<AssumableRoleWithSAML> AssumableRoleWithSaml { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                assumableRoleWithSaml:
+                    type: "aws-iam:index:AssumableRoleWithSAML"
+                    properties:
+                        role:
+                            name: "saml-role"
+                            policyArns:
+                                - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+                        tags:
+                            Role: "saml-role"
+                        providerIds:
+                            - "arn:aws:iam::235367859851:saml-provider/idp_saml"
+            outputs:
+                assumableRoleWithSaml: ${assumableRoleWithSaml}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             tags:
@@ -1689,6 +2867,133 @@ resources:
             - roleUniqueId
 
     "aws-iam:index:AssumableRoleWithOIDC":
+        description: |
+            This resources helps you create a single IAM role which can be assume by trusted
+            resources using OpenID Connect Federated Users.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Assumable Role With OIDC
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const assumableRoleWithOidc = new iam.AssumableRoleWithOIDC("aws-iam-example-assumable-role-with-oidc", {
+                providerUrls: ["oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"],
+                role: {
+                    name: "oidc-role",
+                    policyArns: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ],
+                },
+                tags: {
+                    Role: "oidc-role",
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            assumable_role_with_oidc = iam.AssumableRoleWithOIDC(
+                'assumable_role_with_oidc',
+                role=iam.RoleArgs(
+                    name='oidc-role',
+                    policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy']
+                ),
+                tags={
+                    'Role': 'oidc-role',
+                },
+                provider_urls=['oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8']
+            )
+
+            pulumi.export('assumable_role_with_oidc', assumable_role_with_oidc)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    assumableRoleWithOIDC, err := iam.NewAssumableRoleWithOIDC(ctx, "assumable-role-with-oidc", &iam.AssumableRoleWithOIDCArgs{
+                        Role: iam.RoleArgs{
+                            Name:       pulumi.String("oidc-role"),
+                            PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
+                        },
+                        Tags: pulumi.ToStringMap(map[string]string{
+                            "Role": "oidc-role",
+                        }),
+                        ProviderUrls: pulumi.ToStringArray([]string{"oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"}),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("assumableRoleWithOIDC", assumableRoleWithOIDC)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var assumableRoleWithOidc = new AssumableRoleWithOIDC("assumable-role-with-oidc", new AssumableRoleWithOIDCArgs
+                    {
+                        Role = new RoleArgs
+                        {
+                            Name = "oidc-role",
+                            PolicyArns = {"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"},
+                        },
+                        Tags = new InputMap<string>
+                        {
+                            {"Role", "odic-role"},
+                        },
+                        ProviderUrls = {"oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"},
+                    });
+
+                    this.AssumableRoleWithOidc = Output.Create<AssumableRoleWithOIDC>(assumableRoleWithOidc);
+                }
+
+                [Output]
+                public Output<AssumableRoleWithOIDC> AssumableRoleWithOidc { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                assumableRoleWithOidc:
+                    type: "aws-iam:index:AssumableRoleWithOIDC"
+                    properties:
+                        role:
+                            name: "oidc-role"
+                            policyArns:
+                                - "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+                        tags:
+                            Role: "oidc-role"
+                        providerUrls:
+                            - "oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"
+            outputs:
+                assumableRoleWithOidc: ${assumableRoleWithOidc}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             tags:
@@ -1766,6 +3071,148 @@ resources:
             - uniqueId
 
     "aws-iam:index:Account":
+        description: |
+            This resource helps you manage an Iam Account's Alias and Password Policy. If your IAM Account Alias was previously
+            set (either via the AWS console or when AWS created your Account) you will see an error like the below:
+
+            ```
+                * Aws_iam_account_alias.this: Error creating account alias with name my-account-alias
+            ```
+
+            If you want to manage you Alias using Pulumi you will need to import this resource.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Account
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const account = new iam.Account("account", {
+                accountAlias: "cool-alias",
+                passwordPolicy: {
+                    minimumLength: 37,
+                    requireNumbers: false,
+                    allowUsersToChange: true,
+                    hardExpiry: true,
+                    requireSymbols: true,
+                    requireLowercaseCharacters: true,
+                    requireUppercaseCharacters: true,
+                },
+            });
+            ```
+
+            ```python
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            account = iam.Account(
+                'account',
+                account_alias='cool-alias',
+                password_policy=iam.AccountPasswordPolicyArgs(
+                    minimum_length=37,
+                    require_numbers=False,
+                    allow_users_to_change=True,
+                    hard_expiry=True,
+                    require_symbols=True,
+                    require_lowercase_characters=True,
+                    require_uppercase_characters=True,
+                )
+            )
+
+            pulumi.export('account', account)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    account, err := iam.NewAccount(ctx, "account", &iam.AccountArgs{
+                        AccountAlias: pulumi.String("cool-alias"),
+                        PasswordPolicy: iam.AccountPasswordPolicyArgs{
+                            MinimumLength:              pulumi.IntPtr(37),
+                            RequireNumbers:             pulumi.Bool(false),
+                            AllowUsersToChange:         pulumi.Bool(true),
+                            HardExpiry:                 pulumi.Bool(true),
+                            RequireSymbols:             pulumi.Bool(true),
+                            RequireLowercaseCharacters: pulumi.Bool(true),
+                            RequireUppercaseCharacters: pulumi.Bool(true),
+                        },
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("account", account)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var account = new Account("account", new AccountArgs
+                    {
+                        AccountAlias = "cool-alias",
+                        PasswordPolicy=new AccountPasswordPolicyArgs
+                        {
+                            MinimumLength = 37,
+                            RequireNumbers = false,
+                            AllowUsersToChange = true,
+                            HardExpiry = true,
+                            RequireSymbols = true,
+                            RequireLowercaseCharacters = true,
+                            RequireUppercaseCharacters = true,
+                        }
+
+                    });
+
+                    this.Account = Output.Create<Account>(account);
+                }
+
+                [Output]
+                public Output<Account> Account { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                account:
+                    type: "aws-iam:index:Account"
+                    properties:
+                        accountAlias: "cool-alias"
+                        passwordPolicy:
+                            minimumLength: 37
+                            requireNumbers: false
+                            allowUsersToChange: true
+                            hardExpiry: true
+                            requireSymbols: true
+                            requireLowercaseCharacters: true
+                            requireUppercaseCharacters: true
+            outputs:
+                account: ${account}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             accountAlias:
@@ -1811,6 +3258,169 @@ resources:
             - passwordPolicyExpirePasswords
 
     "aws-iam:index:Policy":
+        description: |
+            This resource helps you create an IAM policy.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ## Policy
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const policy = new iam.Policy("aws-iam-example-policy", {
+                name: "aws-iam-example-policy",
+                path: "/",
+                description: "My example policy",
+                policyDocument: `{
+                    "Version": "2012-10-17",
+                    "Statement": [
+                    {
+                        "Action": [
+                        "ec2:Describe*"
+                        ],
+                        "Effect": "Allow",
+                        "Resource": "*"
+                    }
+                    ]
+                }`,
+            });
+            ```
+
+            ```python
+            import json
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            policy = iam.Policy(
+                'policy',
+                name='example',
+                path='/',
+                description='My example policy',
+                policy_document=json.dumps({
+                    "Version": "2012-10-17",
+                    "Statement": [
+                    {
+                        "Action": [
+                        "ec2:Describe*"
+                        ],
+                        "Effect": "Allow",
+                        "Resource": "*"
+                    }
+                    ]
+                })
+            )
+            ```
+
+            ```go
+            package main
+
+            import (
+                "encoding/json"
+
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    policyJSON, err := json.Marshal(map[string]interface{}{
+                        "Version": "2012-10-17",
+                        "Statement": []interface{}{
+                            map[string]interface{}{
+                                "Effect":   "Allow",
+                                "Action":   []string{"ec2:Describe"},
+                                "Resource": []string{"*"},
+                            },
+                        },
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    policy, err := iam.NewPolicy(ctx, "policy", &iam.PolicyArgs{
+                        Name:           pulumi.String("example"),
+                        Path:           pulumi.String("/"),
+                        Description:    pulumi.String("My example policy"),
+                        PolicyDocument: pulumi.String(string(policyJSON)),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("policy", policy)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var policy = new Policy("policy", new PolicyArgs
+                    {
+                        Name = "example",
+                        Path = "/",
+                        Description = "My example policy",
+                        PolicyDocument =
+                            @"{
+                            ""Version"": ""2012-10-17"",
+                            ""Statement"": [
+                            {
+                                ""Action"": [
+                                ""ec2:Describe*""
+                                ],
+                                ""Effect"": ""Allow"",
+                                ""Resource"": ""*""
+                            }
+                            ]
+                        }"
+                    });
+                }
+
+                [Output]
+                public Output<Policy> Policy { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                policy:
+                    type: "aws-iam:index:Policy"
+                    properties:
+                        name: "example"
+                        path: "/"
+                        description: "My example policy"
+                        policyDocument: |
+                            {
+                                "Version": "2012-10-17",
+                                "Statement": [
+                                    {
+                                        "Action": [
+                                            "ec2:Describe*"
+                                        ],
+                                        "Effect": "Allow",
+                                        "Resource": "*"
+                                    }
+                                ]
+                            }
+            outputs:
+                policy: ${policy}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             name:

@@ -2,7 +2,6 @@
 
 import json
 import pulumi
-from pulumi_aws import s3
 import pulumi_aws_iam as iam
 
 # Account
