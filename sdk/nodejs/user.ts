@@ -5,6 +5,24 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+ *
+ * ## Example Usage
+ * ### User
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const user = new iam.User("aws-iam-example-user", {
+ *     name: "pulumipus",
+ *     forceDestroy: true,
+ *     pgpKey: "keybase:test",
+ *     passwordResetRequired: false,
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class User extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:User';

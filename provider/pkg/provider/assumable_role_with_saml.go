@@ -24,7 +24,7 @@ const AssumableRoleWithSAMLIdentifier = "aws-iam:index:AssumableRoleWithSAML"
 
 type AssumableRoleWithSAMLArgs struct {
 	// List of SAML Provider IDs.
-	ProviderIDs []string `pulumi:"providerIds"`
+	ProviderIDs pulumi.StringArrayInput `pulumi:"providerIds"`
 
 	// AWS SAML Endpoint.
 	AWSSAMLEndpoint string `pulumi:"awsSamlEndpoint"`
@@ -71,21 +71,25 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context, name string, args *AssumableR
 
 	opts = append(opts, pulumi.Parent(component))
 
-	policyDocArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRoleWithSAML"}).
-		AddFederatedPrincipal(args.ProviderIDs).
-		AddCondition("StringEquals", "SAML:aud", []string{args.AWSSAMLEndpoint}).
-		Build()
+	policyJSON := args.ProviderIDs.ToStringArrayOutput().ApplyT(func(ids []string) (string, error) {
+		policyDocArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRoleWithSAML"}).
+			AddFederatedPrincipal(ids).
+			AddCondition("StringEquals", "SAML:aud", []string{args.AWSSAMLEndpoint}).
+			Build()
 
-	policyDoc, err := iam.GetPolicyDocument(ctx, policyDocArgs)
-	if err != nil {
-		return nil, err
-	}
+		policyDoc, err := iam.GetPolicyDocument(ctx, policyDocArgs)
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, nil
+	}).(pulumi.StringOutput)
 
 	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
 		Role:                args.Role,
 		MaxSessionDuration:  args.MaxSessionDuration,
 		ForceDetachPolicies: args.ForceDetachPolicies,
-		AssumeRolePolicy:    policyDoc.Json,
+		AssumeRolePolicy:    policyJSON,
 		Tags:                args.Tags,
 	}, opts...)
 	if err != nil {

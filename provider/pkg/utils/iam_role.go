@@ -24,7 +24,7 @@ type RoleArgs struct {
 	PermissionsBoundaryArn string `pulumi:"permissionsBoundaryArn"`
 
 	// List of ARNs of IAM policies to attach to IAM role.
-	PolicyArns []string `pulumi:"policyArns"`
+	PolicyArns []pulumi.String `pulumi:"policyArns"`
 
 	// Whether role requires MFA.
 	RequiresMFA bool `pulumi:"requiresMfa"`
@@ -34,7 +34,7 @@ type RoleArgs struct {
 }
 
 type IAMRoleArgs struct {
-	AssumeRolePolicy    string
+	AssumeRolePolicy    pulumi.StringInput
 	ForceDetachPolicies bool
 	MaxSessionDuration  int
 	Tags                map[string]string
@@ -63,7 +63,7 @@ func NewIAMRole(ctx *pulumi.Context, name string, args *IAMRoleArgs, opts ...pul
 	}
 
 	role, err := iam.NewRole(ctx, roleResourceName, &iam.RoleArgs{
-		AssumeRolePolicy:    pulumi.String(args.AssumeRolePolicy),
+		AssumeRolePolicy:    args.AssumeRolePolicy,
 		Description:         pulumi.String(args.Role.Description),
 		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
 		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
@@ -81,7 +81,7 @@ func NewIAMRole(ctx *pulumi.Context, name string, args *IAMRoleArgs, opts ...pul
 		policyAttachmentName := fmt.Sprintf("%s-policy-attachment-%v", roleResourceName, i)
 		_, err = iam.NewRolePolicyAttachment(ctx, policyAttachmentName, &iam.RolePolicyAttachmentArgs{
 			Role:      role.Name,
-			PolicyArn: pulumi.String(policyARN),
+			PolicyArn: policyARN,
 		}, opts...)
 	}
 

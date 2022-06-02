@@ -19,7 +19,7 @@ namespace Pulumi.AwsIam.Outputs
         /// <summary>
         /// The ARN assigned by AWS for this user.
         /// </summary>
-        public readonly string? Arn;
+        public readonly string Arn;
         /// <summary>
         /// The encrypted password, base64 encoded.
         /// </summary>
@@ -35,7 +35,7 @@ namespace Pulumi.AwsIam.Outputs
         /// <summary>
         /// The user's name.
         /// </summary>
-        public readonly string? Name;
+        public readonly string Name;
         /// <summary>
         /// The unique identifier for the SSH public key.
         /// </summary>
@@ -47,11 +47,11 @@ namespace Pulumi.AwsIam.Outputs
         /// <summary>
         /// The unique ID assigned by AWS.
         /// </summary>
-        public readonly string? UniqueId;
+        public readonly string UniqueId;
 
         [OutputConstructor]
         private UserOutput(
-            string? arn,
+            string arn,
 
             string? loginProfileEncryptedPassword,
 
@@ -59,13 +59,13 @@ namespace Pulumi.AwsIam.Outputs
 
             string? loginProfilePassword,
 
-            string? name,
+            string name,
 
             string? sshKeyFingerprint,
 
             string? sshKeySshPublicKeyId,
 
-            string? uniqueId)
+            string uniqueId)
         {
             Arn = arn;
             LoginProfileEncryptedPassword = loginProfileEncryptedPassword;

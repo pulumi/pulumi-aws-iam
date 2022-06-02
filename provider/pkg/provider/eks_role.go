@@ -41,10 +41,10 @@ type EKSRoleArgs struct {
 	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
 
 	// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details.
-	ClusterServiceAccounts map[string][]string `pulumi:"clusterServiceAccounts"`
+	ClusterServiceAccounts map[string][]pulumi.StringInput `pulumi:"clusterServiceAccounts"`
 
 	// ARNs of any policies to attach to the IAM role
-	RolePolicyARNs []string `pulumi:"rolePolicyArns"`
+	RolePolicyARNs []pulumi.StringInput `pulumi:"rolePolicyArns"`
 }
 
 type EKSRole struct {
@@ -120,7 +120,7 @@ func NewEKSRole(ctx *pulumi.Context, name string, args *EKSRoleArgs, opts ...pul
 
 	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
 		Role:                args.Role,
-		AssumeRolePolicy:    assumeRoldWithOIDC.Json,
+		AssumeRolePolicy:    pulumi.String(assumeRoldWithOIDC.Json),
 		ForceDetachPolicies: args.ForceDetachPolicies,
 		MaxSessionDuration:  args.MaxSessionDuration,
 		Tags:                args.Tags,
@@ -132,7 +132,7 @@ func NewEKSRole(ctx *pulumi.Context, name string, args *EKSRoleArgs, opts ...pul
 	for _, arn := range args.RolePolicyARNs {
 		_, err := iam.NewRolePolicyAttachment(ctx, fmt.Sprintf("%s-custom", name), &iam.RolePolicyAttachmentArgs{
 			Role:      role.Name,
-			PolicyArn: pulumi.String(arn),
+			PolicyArn: arn,
 		}, opts...)
 		if err != nil {
 			return nil, err

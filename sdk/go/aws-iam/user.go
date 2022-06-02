@@ -11,6 +11,38 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+//
+// ## Example Usage
+// ### User
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         user, err := iam.NewUser(ctx, "user", &iam.UserArgs{
+//             Name:                  pulumi.String("pulumipus"),
+//             ForceDestroy:          pulumi.BoolPtr(true),
+//             PgpKey:                pulumi.String("keybase:test"),
+//             PasswordResetRequired: pulumi.BoolPtr(false),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("user", user)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type User struct {
 	pulumi.ResourceState
 

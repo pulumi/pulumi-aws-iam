@@ -5419,7 +5419,7 @@ func (o RoleWithMFAPtrOutput) Tags() pulumi.StringMapOutput {
 // The IAM user.
 type UserOutputType struct {
 	// The ARN assigned by AWS for this user.
-	Arn *string `pulumi:"arn"`
+	Arn string `pulumi:"arn"`
 	// The encrypted password, base64 encoded.
 	LoginProfileEncryptedPassword *string `pulumi:"loginProfileEncryptedPassword"`
 	// The fingerprint of the PGP key used to encrypt the password.
@@ -5427,13 +5427,13 @@ type UserOutputType struct {
 	// The user password.
 	LoginProfilePassword *string `pulumi:"loginProfilePassword"`
 	// The user's name.
-	Name *string `pulumi:"name"`
+	Name string `pulumi:"name"`
 	// The unique identifier for the SSH public key.
 	SshKeyFingerprint *string `pulumi:"sshKeyFingerprint"`
 	// The unique identifier for the SSH public key
 	SshKeySshPublicKeyId *string `pulumi:"sshKeySshPublicKeyId"`
 	// The unique ID assigned by AWS.
-	UniqueId *string `pulumi:"uniqueId"`
+	UniqueId string `pulumi:"uniqueId"`
 }
 
 // The IAM user.
@@ -5452,8 +5452,8 @@ func (o UserOutputTypeOutput) ToUserOutputTypeOutputWithContext(ctx context.Cont
 }
 
 // The ARN assigned by AWS for this user.
-func (o UserOutputTypeOutput) Arn() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v UserOutputType) *string { return v.Arn }).(pulumi.StringPtrOutput)
+func (o UserOutputTypeOutput) Arn() pulumi.StringOutput {
+	return o.ApplyT(func(v UserOutputType) string { return v.Arn }).(pulumi.StringOutput)
 }
 
 // The encrypted password, base64 encoded.
@@ -5472,8 +5472,8 @@ func (o UserOutputTypeOutput) LoginProfilePassword() pulumi.StringPtrOutput {
 }
 
 // The user's name.
-func (o UserOutputTypeOutput) Name() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v UserOutputType) *string { return v.Name }).(pulumi.StringPtrOutput)
+func (o UserOutputTypeOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v UserOutputType) string { return v.Name }).(pulumi.StringOutput)
 }
 
 // The unique identifier for the SSH public key.
@@ -5487,8 +5487,8 @@ func (o UserOutputTypeOutput) SshKeySshPublicKeyId() pulumi.StringPtrOutput {
 }
 
 // The unique ID assigned by AWS.
-func (o UserOutputTypeOutput) UniqueId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v UserOutputType) *string { return v.UniqueId }).(pulumi.StringPtrOutput)
+func (o UserOutputTypeOutput) UniqueId() pulumi.StringOutput {
+	return o.ApplyT(func(v UserOutputType) string { return v.UniqueId }).(pulumi.StringOutput)
 }
 
 func init() {

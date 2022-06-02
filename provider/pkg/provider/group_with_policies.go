@@ -29,10 +29,10 @@ type GroupWithPoliciesArgs struct {
 	Name string `pulumi:"name"`
 
 	// List of IAM users to have in an IAM group which can assume the role.
-	GroupUsers []string `pulumi:"groupUsers"`
+	GroupUsers pulumi.StringArrayInput `pulumi:"groupUsers"`
 
 	// List of IAM policies ARNs to attach to IAM group.
-	CustomGroupPolicyARNs []string `pulumi:"customGroupPolicyArns"`
+	CustomGroupPolicyARNs []pulumi.StringInput `pulumi:"customGroupPolicyArns"`
 
 	// List of maps of inline IAM policies to attach to IAM group. Should have `name` and `policy` keys in each element.
 	CustomGroupPolicies []map[string]string `pulumi:"customGroupPolicies"`
@@ -175,7 +175,7 @@ func NewGroupWithPolicies(ctx *pulumi.Context, name string, args *GroupWithPolic
 	_, err = iam.NewGroupMembership(ctx, name, &iam.GroupMembershipArgs{
 		Group: group.ID(),
 		Name:  pulumi.String(args.Name),
-		Users: pulumi.ToStringArray(args.GroupUsers),
+		Users: args.GroupUsers,
 	}, opts...)
 	if err != nil {
 		return nil, err
@@ -208,7 +208,7 @@ func NewGroupWithPolicies(ctx *pulumi.Context, name string, args *GroupWithPolic
 		groupPolicyAttachmentName := fmt.Sprintf("%s-group-policy-attachment-%s", name, arn)
 		_, err = iam.NewGroupPolicyAttachment(ctx, groupPolicyAttachmentName, &iam.GroupPolicyAttachmentArgs{
 			Group:     group.ID(),
-			PolicyArn: pulumi.String(arn),
+			PolicyArn: arn,
 		}, opts...)
 		if err != nil {
 			return nil, err
@@ -245,7 +245,7 @@ func NewGroupWithPolicies(ctx *pulumi.Context, name string, args *GroupWithPolic
 	component.AWSAccountID = pulumi.Sprintf("%s", awsAccountID)
 	component.GroupARN = group.Arn
 	component.GroupName = group.Name
-	component.GroupUsers = transformStringArrayToStringArrayOutput(args.GroupUsers)
+	component.GroupUsers = args.GroupUsers.ToStringArrayOutput()
 
 	return component, nil
 }

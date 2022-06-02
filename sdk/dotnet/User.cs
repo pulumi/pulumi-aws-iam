@@ -9,6 +9,38 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+    /// 
+    /// ## Example Usage
+    /// ### User
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var user = new User("user", new UserArgs
+    ///         {
+    ///             Name = "pulumipus",
+    ///             ForceDestroy = true,
+    ///             PgpKey = "keybase:test",
+    ///             PasswordResetRequired = false,
+    ///         });
+    /// 
+    ///         this.User = Output.Create&lt;User&gt;(user);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;User&gt; User { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:User")]
     public partial class User : Pulumi.ComponentResource
     {

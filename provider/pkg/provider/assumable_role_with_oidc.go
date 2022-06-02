@@ -28,7 +28,7 @@ const AssumableRoleWithOIDCIdentifier = "aws-iam:index:AssumableRoleWithOIDC"
 
 type AssumableRoleWithOIDCArgs struct {
 	// List of URLs of the OIDC Providers.
-	ProviderURLs []string `pulumi:"providerUrls"`
+	ProviderURLs pulumi.StringArrayInput `pulumi:"providerUrls"`
 
 	// The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
 	AWSAccountID string `pulumi:"awsAccountId"`
@@ -97,55 +97,57 @@ func NewIAMAssumableRoleWithOIDC(ctx *pulumi.Context, name string, args *Assumab
 		return nil, err
 	}
 
-	for index, url := range args.ProviderURLs {
-		args.ProviderURLs[index] = strings.ReplaceAll(url, "https://", "")
-	}
+	policyJSON := args.ProviderURLs.ToStringArrayOutput().ApplyT(func(urls []string) (string, error) {
+		var result []string
+		for _, u := range urls {
+			url := strings.ReplaceAll(u, "https://", "")
 
-	var policies []string
-	for _, url := range args.ProviderURLs {
-		effect := "Allow"
-		principalIdentifier := fmt.Sprintf("arn:%s:iam::%s:oidc-provider/%s", currentPartition.Partition, args.AWSAccountID, url)
+			effect := "Allow"
+			principalIdentifier := fmt.Sprintf("arn:%s:iam::%s:oidc-provider/%s", currentPartition.Partition, args.AWSAccountID, url)
 
-		var policyConditions []iam.GetPolicyDocumentStatementCondition
-		if len(args.OIDCFullyQualifiedSubjects) > 0 {
-			policyConditions = append(policyConditions, NewPolicyDocCondition("StringEquals", fmt.Sprintf("%s:sub", url), args.OIDCFullyQualifiedSubjects...))
-		}
+			var policyConditions []iam.GetPolicyDocumentStatementCondition
+			if len(args.OIDCFullyQualifiedSubjects) > 0 {
+				policyConditions = append(policyConditions, NewPolicyDocCondition("StringEquals", fmt.Sprintf("%s:sub", url), args.OIDCFullyQualifiedSubjects...))
+			}
 
-		if len(args.OIDCSubjectsWithWildcards) > 0 {
-			policyConditions = append(policyConditions, NewPolicyDocCondition("StringLike", fmt.Sprintf("%s:sub", url), args.OIDCSubjectsWithWildcards...))
-		}
+			if len(args.OIDCSubjectsWithWildcards) > 0 {
+				policyConditions = append(policyConditions, NewPolicyDocCondition("StringLike", fmt.Sprintf("%s:sub", url), args.OIDCSubjectsWithWildcards...))
+			}
 
-		if len(args.OIDCFullyQualifiedAudiences) > 0 {
-			policyConditions = append(policyConditions, NewPolicyDocCondition("StringLike", fmt.Sprintf("%s:aud", url), args.OIDCFullyQualifiedAudiences...))
-		}
+			if len(args.OIDCFullyQualifiedAudiences) > 0 {
+				policyConditions = append(policyConditions, NewPolicyDocCondition("StringLike", fmt.Sprintf("%s:aud", url), args.OIDCFullyQualifiedAudiences...))
+			}
 
-		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
-			Statements: []iam.GetPolicyDocumentStatement{
-				{
-					Effect:  &effect,
-					Actions: []string{"sts:AssumeRoleWithWebIdentity"},
-					Principals: []iam.GetPolicyDocumentStatementPrincipal{
-						{
-							Type:        "Federated",
-							Identifiers: []string{principalIdentifier},
+			policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+				Statements: []iam.GetPolicyDocumentStatement{
+					{
+						Effect:  &effect,
+						Actions: []string{"sts:AssumeRoleWithWebIdentity"},
+						Principals: []iam.GetPolicyDocumentStatementPrincipal{
+							{
+								Type:        "Federated",
+								Identifiers: []string{principalIdentifier},
+							},
 						},
+						Conditions: policyConditions,
 					},
-					Conditions: policyConditions,
 				},
-			},
-		})
-		if err != nil {
-			return nil, err
+			})
+			if err != nil {
+				return "", err
+			}
+
+			result = append(result, policyDoc.Json)
 		}
 
-		policies = append(policies, policyDoc.Json)
-	}
+		return strings.Join(result, ""), nil
+	}).(pulumi.StringOutput)
 
 	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
 		Role:                args.Role,
 		MaxSessionDuration:  args.MaxSessionDuration,
 		ForceDetachPolicies: args.ForceDetachPolicies,
-		AssumeRolePolicy:    strings.Join(policies, ""),
+		AssumeRolePolicy:    policyJSON,
 		Tags:                args.Tags,
 	}, opts...)
 	if err != nil {

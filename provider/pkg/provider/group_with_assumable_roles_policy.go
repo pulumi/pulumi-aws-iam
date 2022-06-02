@@ -26,10 +26,10 @@ type GroupWithAssumableRolesPolicyArgs struct {
 	Name string `pulumi:"name"`
 
 	// List of IAM roles ARNs which can be assumed by the group.
-	AssumableRoles []string `pulumi:"assumableRoles"`
+	AssumableRoles pulumi.StringArrayInput `pulumi:"assumableRoles"`
 
 	// List of IAM users to have in an IAM group which can assume the role.
-	GroupUsers []string `pulumi:"groupUsers"`
+	GroupUsers pulumi.StringArrayInput `pulumi:"groupUsers"`
 
 	// A map of tags to add to all resources.
 	Tags map[string]string `pulumi:"tags"`
@@ -67,19 +67,23 @@ func NewGroupWithAssumableRolesPolicy(ctx *pulumi.Context, name string, args *Gr
 
 	opts = append(opts, pulumi.Parent(component))
 
-	policyDocArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRole"}).
-		AddResources(args.AssumableRoles).
-		Build()
+	policyJSON := args.AssumableRoles.ToStringArrayOutput().ApplyT(func(roles []string) (string, error) {
+		policyDocArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRole"}).
+			AddResources(roles).
+			Build()
 
-	assumeRole, err := iam.GetPolicyDocument(ctx, policyDocArgs)
-	if err != nil {
-		return nil, err
-	}
+		assumeRole, err := iam.GetPolicyDocument(ctx, policyDocArgs)
+		if err != nil {
+			return "", err
+		}
+
+		return assumeRole.Json, nil
+	})
 
 	policy, err := iam.NewPolicy(ctx, name, &iam.PolicyArgs{
 		Name:        pulumi.String(args.Name),
 		Description: pulumi.String("Allows to assume role in another AWS account"),
-		Policy:      pulumi.String(assumeRole.Json),
+		Policy:      policyJSON,
 		Tags:        pulumi.ToStringMap(args.Tags),
 	}, opts...)
 	if err != nil {
@@ -104,14 +108,14 @@ func NewGroupWithAssumableRolesPolicy(ctx *pulumi.Context, name string, args *Gr
 	_, err = iam.NewGroupMembership(ctx, name, &iam.GroupMembershipArgs{
 		Group: group.ID(),
 		Name:  pulumi.String(args.Name),
-		Users: pulumi.ToStringArray(args.GroupUsers),
+		Users: args.GroupUsers,
 	}, opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	component.GroupUsers = transformStringArrayToStringArrayOutput(args.GroupUsers)
-	component.AssumableRoles = transformStringArrayToStringArrayOutput(args.AssumableRoles)
+	component.GroupUsers = args.GroupUsers.ToStringArrayOutput()
+	component.AssumableRoles = args.AssumableRoles.ToStringArrayOutput()
 	component.GroupARN = group.Arn
 	component.GroupName = group.Name
 	component.PolicyARN = policy.Arn

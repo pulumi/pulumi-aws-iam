@@ -62,7 +62,7 @@ export interface UserOutput {
     /**
      * The ARN assigned by AWS for this user.
      */
-    arn?: string;
+    arn: string;
     /**
      * The encrypted password, base64 encoded.
      */
@@ -78,7 +78,7 @@ export interface UserOutput {
     /**
      * The user's name.
      */
-    name?: string;
+    name: string;
     /**
      * The unique identifier for the SSH public key.
      */
@@ -90,6 +90,6 @@ export interface UserOutput {
     /**
      * The unique ID assigned by AWS.
      */
-    uniqueId?: string;
+    uniqueId: string;
 }
 

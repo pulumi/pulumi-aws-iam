@@ -698,6 +698,10 @@ types:
             sshKeyFingerprint:
                 type: string
                 description: The unique identifier for the SSH public key.
+        required:
+            - name
+            - arn
+            - uniqueId
 
     "aws-iam:index:AccessKeyOutput":
         type: object
@@ -740,6 +744,112 @@ types:
 
 resources:
     "aws-iam:index:User":
+        description: |
+            Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+
+            {{% examples %}}
+            ## Example Usage
+
+            {{% example %}}
+            ### User
+
+            ```typescript
+            import * as iam from "@pulumi/aws-iam";
+
+            export const user = new iam.User("aws-iam-example-user", {
+                name: "pulumipus",
+                forceDestroy: true,
+                pgpKey: "keybase:test",
+                passwordResetRequired: false,
+            });
+            ```
+
+            ```python
+            """An AWS Python Pulumi program"""
+
+            import pulumi
+            import pulumi_aws_iam as iam
+
+            user = iam.User(
+                'user',
+                name='pulumipus',
+                force_destroy=True,
+                pgp_key='keybase:test',
+                password_reset_required=False,
+            )
+
+            pulumi.export('user', user)
+            ```
+
+            ```go
+            package main
+
+            import (
+                iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+                "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+            )
+
+            func main() {
+                pulumi.Run(func(ctx *pulumi.Context) error {
+                    user, err := iam.NewUser(ctx, "user", &iam.UserArgs{
+                        Name:                  pulumi.String("pulumipus"),
+                        ForceDestroy:          pulumi.BoolPtr(true),
+                        PgpKey:                pulumi.String("keybase:test"),
+                        PasswordResetRequired: pulumi.BoolPtr(false),
+                    })
+                    if err != nil {
+                        return err
+                    }
+
+                    ctx.Export("user", user)
+
+                    return nil
+                })
+            }
+            ```
+
+            ```csharp
+            using Pulumi;
+            using Pulumi.AwsIam;
+            using Pulumi.AwsIam.Inputs;
+
+            class MyStack : Stack
+            {
+                public MyStack()
+                {
+                    var user = new User("user", new UserArgs
+                    {
+                        Name = "pulumipus",
+                        ForceDestroy = true,
+                        PgpKey = "keybase:test",
+                        PasswordResetRequired = false,
+                    });
+
+                    this.User = Output.Create<User>(user);
+                }
+
+                [Output]
+                public Output<User> User { get; set; }
+            }
+            ```
+
+            ```yaml
+            name: awsiam-yaml
+            runtime: yaml
+            resources:
+                user:
+                type: "aws-iam:index:User"
+                properties:
+                    name: "pulumipus"
+                    forceDestroy: true
+                    pgpKey: "keybase:test"
+                    passwordResetRequired: false
+            outputs:
+                user: ${user}
+            ```
+            {{ /example }}
+
+            {{% examples %}}
         isComponent: true
         inputProperties:
             name:

@@ -35,7 +35,7 @@ type AssumableRoleArgs struct {
 	TrustedRoleActions []string `pulumi:"trustedRoleActions"`
 
 	// ARNs of AWS entities who can assume these roles.
-	TrustedRoleArns []string `pulumi:"trustedRoleArns"`
+	TrustedRoleArns pulumi.StringArrayInput `pulumi:"trustedRoleArns"`
 
 	// AWS Services that can assume these roles.
 	TrustedRoleServices []string `pulumi:"trustedRoleServices"`
@@ -150,46 +150,49 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 
 	}
 
-	policyArgs := &iam.GetPolicyDocumentArgs{
-		Statements: []iam.GetPolicyDocumentStatement{
-			{
-				Effect:     pulumi.StringRef("Allow"),
-				Actions:    args.TrustedRoleActions,
-				Conditions: policyDocumentStatementConditions,
-				Principals: []iam.GetPolicyDocumentStatementPrincipal{
-					{
-						Type:        "AWS",
-						Identifiers: args.TrustedRoleArns,
-					},
-					{
-						Type:        "Service",
-						Identifiers: args.TrustedRoleServices,
+	rolePolicy := args.TrustedRoleArns.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		if args.CustomRoleTrustPolicy != "" {
+			return args.CustomRoleTrustPolicy, nil
+		}
+
+		policyArgs := &iam.GetPolicyDocumentArgs{
+			Statements: []iam.GetPolicyDocumentStatement{
+				{
+					Effect:     pulumi.StringRef("Allow"),
+					Actions:    args.TrustedRoleActions,
+					Conditions: policyDocumentStatementConditions,
+					Principals: []iam.GetPolicyDocumentStatementPrincipal{
+						{
+							Type:        "AWS",
+							Identifiers: arns,
+						},
+						{
+							Type:        "Service",
+							Identifiers: args.TrustedRoleServices,
+						},
 					},
 				},
 			},
-		},
-	}
-
-	rolePolicy := args.CustomRoleTrustPolicy
-	if rolePolicy == "" {
-		assumeRolePolicy, err := utils.GetIAMPolicyDocument(ctx, policyArgs)
-		if err != nil {
-			return nil, err
 		}
 
-		rolePolicy = assumeRolePolicy.Json
-	}
+		assumeRolePolicy, err := utils.GetIAMPolicyDocument(ctx, policyArgs)
+		if err != nil {
+			return "", err
+		}
+
+		return assumeRolePolicy.Json, nil
+	}).(pulumi.StringOutput)
 
 	if args.AttachAdminPolicy {
-		args.Role.PolicyArns = append(args.Role.PolicyArns, AdminRolePolicyARN)
+		args.Role.PolicyArns = append(args.Role.PolicyArns, pulumi.String(AdminRolePolicyARN))
 	}
 
 	if args.AttachPoweruserPolicy {
-		args.Role.PolicyArns = append(args.Role.PolicyArns, PoweruserRolePolicyARN)
+		args.Role.PolicyArns = append(args.Role.PolicyArns, pulumi.String(PoweruserRolePolicyARN))
 	}
 
 	if args.AttachReadonlyPolicy {
-		args.Role.PolicyArns = append(args.Role.PolicyArns, ReadonlyRolePolicyARN)
+		args.Role.PolicyArns = append(args.Role.PolicyArns, pulumi.String(ReadonlyRolePolicyARN))
 	}
 
 	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{

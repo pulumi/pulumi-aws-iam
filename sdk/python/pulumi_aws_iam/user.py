@@ -216,7 +216,29 @@ class User(pulumi.ComponentResource):
                  upload_iam_user_ssh_key: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
-        Create a User resource with the given unique name, props, and options.
+        Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+
+        ## Example Usage
+        ### User
+
+        ```python
+        \"\"\"An AWS Python Pulumi program\"\"\"
+
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        user = iam.User(
+            'user',
+            name='pulumipus',
+            force_destroy=True,
+            pgp_key='keybase:test',
+            password_reset_required=False,
+        )
+
+        pulumi.export('user', user)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] force_destroy: When destroying this user, destroy even if it has non-Pulumi-managed IAM access keys, login profile or MFA devices. Without forceDestroy a user with non-Pulumi-managed access keys and login profile will fail to be destroyed.
@@ -238,7 +260,29 @@ class User(pulumi.ComponentResource):
                  args: UserArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a User resource with the given unique name, props, and options.
+        Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+
+        ## Example Usage
+        ### User
+
+        ```python
+        \"\"\"An AWS Python Pulumi program\"\"\"
+
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        user = iam.User(
+            'user',
+            name='pulumipus',
+            force_destroy=True,
+            pgp_key='keybase:test',
+            password_reset_required=False,
+        )
+
+        pulumi.export('user', user)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param UserArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

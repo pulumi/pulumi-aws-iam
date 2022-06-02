@@ -150,15 +150,15 @@ type User struct {
 	pulumi.ResourceState
 
 	// The IAM user.
-	UserInfo UserInfoOutput `pulumi:"userInfo" pschema:"out"`
+	UserInfo UserInfoOutput `pulumi:"userInfo"`
 
 	// The IAM access key.
-	AccessKey AccessKeyOutput `pulumi:"accessKey" pschema:"out"`
+	AccessKey AccessKeyOutput `pulumi:"accessKey"`
 
 	// PGP key used to encrypt sensitive data for this user (if empty - secrets are not encrypted).
 	PGPKey pulumi.StringOutput `pulumi:"pgpKey"`
 
-	Keybase KeybaseOutput `pulumi:"keybase" pschema:"out"`
+	Keybase KeybaseOutput `pulumi:"keybase"`
 }
 
 func NewUser(ctx *pulumi.Context, name string, args *UserArgs, opts ...pulumi.ResourceOption) (*User, error) {

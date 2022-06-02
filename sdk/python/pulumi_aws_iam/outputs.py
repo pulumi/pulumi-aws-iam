@@ -204,7 +204,9 @@ class UserOutput(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "loginProfileEncryptedPassword":
+        if key == "uniqueId":
+            suggest = "unique_id"
+        elif key == "loginProfileEncryptedPassword":
             suggest = "login_profile_encrypted_password"
         elif key == "loginProfileKeyFingerprint":
             suggest = "login_profile_key_fingerprint"
@@ -214,8 +216,6 @@ class UserOutput(dict):
             suggest = "ssh_key_fingerprint"
         elif key == "sshKeySshPublicKeyId":
             suggest = "ssh_key_ssh_public_key_id"
-        elif key == "uniqueId":
-            suggest = "unique_id"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in UserOutput. Access the value via the '{suggest}' property getter instead.")
@@ -229,49 +229,62 @@ class UserOutput(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 arn: Optional[str] = None,
+                 arn: str,
+                 name: str,
+                 unique_id: str,
                  login_profile_encrypted_password: Optional[str] = None,
                  login_profile_key_fingerprint: Optional[str] = None,
                  login_profile_password: Optional[str] = None,
-                 name: Optional[str] = None,
                  ssh_key_fingerprint: Optional[str] = None,
-                 ssh_key_ssh_public_key_id: Optional[str] = None,
-                 unique_id: Optional[str] = None):
+                 ssh_key_ssh_public_key_id: Optional[str] = None):
         """
         The IAM user.
         :param str arn: The ARN assigned by AWS for this user.
+        :param str name: The user's name.
+        :param str unique_id: The unique ID assigned by AWS.
         :param str login_profile_encrypted_password: The encrypted password, base64 encoded.
         :param str login_profile_key_fingerprint: The fingerprint of the PGP key used to encrypt the password.
         :param str login_profile_password: The user password.
-        :param str name: The user's name.
         :param str ssh_key_fingerprint: The unique identifier for the SSH public key.
         :param str ssh_key_ssh_public_key_id: The unique identifier for the SSH public key
-        :param str unique_id: The unique ID assigned by AWS.
         """
-        if arn is not None:
-            pulumi.set(__self__, "arn", arn)
+        pulumi.set(__self__, "arn", arn)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "unique_id", unique_id)
         if login_profile_encrypted_password is not None:
             pulumi.set(__self__, "login_profile_encrypted_password", login_profile_encrypted_password)
         if login_profile_key_fingerprint is not None:
             pulumi.set(__self__, "login_profile_key_fingerprint", login_profile_key_fingerprint)
         if login_profile_password is not None:
             pulumi.set(__self__, "login_profile_password", login_profile_password)
-        if name is not None:
-            pulumi.set(__self__, "name", name)
         if ssh_key_fingerprint is not None:
             pulumi.set(__self__, "ssh_key_fingerprint", ssh_key_fingerprint)
         if ssh_key_ssh_public_key_id is not None:
             pulumi.set(__self__, "ssh_key_ssh_public_key_id", ssh_key_ssh_public_key_id)
-        if unique_id is not None:
-            pulumi.set(__self__, "unique_id", unique_id)
 
     @property
     @pulumi.getter
-    def arn(self) -> Optional[str]:
+    def arn(self) -> str:
         """
         The ARN assigned by AWS for this user.
         """
         return pulumi.get(self, "arn")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The user's name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="uniqueId")
+    def unique_id(self) -> str:
+        """
+        The unique ID assigned by AWS.
+        """
+        return pulumi.get(self, "unique_id")
 
     @property
     @pulumi.getter(name="loginProfileEncryptedPassword")
@@ -298,14 +311,6 @@ class UserOutput(dict):
         return pulumi.get(self, "login_profile_password")
 
     @property
-    @pulumi.getter
-    def name(self) -> Optional[str]:
-        """
-        The user's name.
-        """
-        return pulumi.get(self, "name")
-
-    @property
     @pulumi.getter(name="sshKeyFingerprint")
     def ssh_key_fingerprint(self) -> Optional[str]:
         """
@@ -320,13 +325,5 @@ class UserOutput(dict):
         The unique identifier for the SSH public key
         """
         return pulumi.get(self, "ssh_key_ssh_public_key_id")
-
-    @property
-    @pulumi.getter(name="uniqueId")
-    def unique_id(self) -> Optional[str]:
-        """
-        The unique ID assigned by AWS.
-        """
-        return pulumi.get(self, "unique_id")
 
 

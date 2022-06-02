@@ -26,8 +26,8 @@ type IAMAssumableRolesArgs struct {
 	Admin               RoleArgs
 	Poweruser           RoleArgs
 	Readonly            RoleArgs
-	AssumeRolePolicy    string
-	AssumeRoleWithMFA   string
+	AssumeRolePolicy    pulumi.StringInput
+	AssumeRoleWithMFA   pulumi.StringInput
 }
 
 func NewAssumableRoles(ctx *pulumi.Context, name string, args *IAMAssumableRolesArgs, opts ...pulumi.ResourceOption) (map[RoleTypeIdentifier]*iam.Role, error) {

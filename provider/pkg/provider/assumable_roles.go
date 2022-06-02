@@ -28,7 +28,7 @@ const AssumableRolesIdentifier = "aws-iam:index:AssumableRoles"
 
 type AssumableRolesArgs struct {
 	// ARNs of AWS entities who can assume these roles.
-	TrustedRoleArns []string `pulumi:"trustedRoleArns"`
+	TrustedRoleArns pulumi.StringArrayInput `pulumi:"trustedRoleArns"`
 
 	// AWS Services that can assume these roles.
 	TrustedRoleServices []string `pulumi:"trustedRoleServices"`
@@ -129,24 +129,33 @@ func NewAssumableRoles(ctx *pulumi.Context, name string, args *AssumableRolesArg
 
 	opts = append(opts, pulumi.Parent(component))
 
-	assumeRoleArgs := newAssumableRolePolicyDocumentArgs(args.TrustedRoleArns, args.TrustedRoleServices, false, 0)
-	assumeRoleWithMFAArgs := newAssumableRolePolicyDocumentArgs(args.TrustedRoleArns, args.TrustedRoleServices, true, args.MFAAge)
+	assumeRoleJSON := args.TrustedRoleArns.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		assumeRoleArgs := newAssumableRolePolicyDocumentArgs(arns, args.TrustedRoleServices, false, 0)
 
-	assumeRole, err := utils.GetIAMPolicyDocument(ctx, assumeRoleArgs)
-	if err != nil {
-		return nil, err
-	}
+		assumeRole, err := utils.GetIAMPolicyDocument(ctx, assumeRoleArgs)
+		if err != nil {
+			return "", err
+		}
 
-	assumeRoleMFA, err := utils.GetIAMPolicyDocument(ctx, assumeRoleWithMFAArgs)
-	if err != nil {
-		return nil, err
-	}
+		return assumeRole.Json, nil
+	}).(pulumi.StringOutput)
+
+	assumeRoleWithMFAJSON := args.TrustedRoleArns.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		assumeRoleWithMFAArgs := newAssumableRolePolicyDocumentArgs(arns, args.TrustedRoleServices, true, args.MFAAge)
+
+		assumeRoleMFA, err := utils.GetIAMPolicyDocument(ctx, assumeRoleWithMFAArgs)
+		if err != nil {
+			return "", err
+		}
+
+		return assumeRoleMFA.Json, nil
+	}).(pulumi.StringOutput)
 
 	roleOutput, err := utils.NewAssumableRoles(ctx, name, &utils.IAMAssumableRolesArgs{
 		MaxSessionDuration:  args.MaxSessionDuration,
 		ForceDetachPolicies: args.ForceDetachPolicies,
-		AssumeRolePolicy:    assumeRole.Json,
-		AssumeRoleWithMFA:   assumeRoleMFA.Json,
+		AssumeRolePolicy:    assumeRoleJSON,
+		AssumeRoleWithMFA:   assumeRoleWithMFAJSON,
 		Admin:               args.Admin,
 		Poweruser:           args.Poweruser,
 		Readonly:            args.Readonly,

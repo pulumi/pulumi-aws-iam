@@ -28,8 +28,8 @@ import (
 const RoleForServiceAccountsEksIdentifier = "aws-iam:index:RoleForServiceAccountsEks"
 
 type OIDCServiceProviderEKS struct {
-	ProviderARN              string   `pulumi:"providerArn"`
-	NamespaceServiceAccounts []string `pulumi:"namespaceServiceAccounts"`
+	ProviderARN              pulumi.StringInput      `pulumi:"providerArn"`
+	NamespaceServiceAccounts pulumi.StringArrayInput `pulumi:"namespaceServiceAccounts"`
 }
 
 type EKSServiceAccountPolicies struct {
@@ -143,51 +143,67 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 		return nil, err
 	}
 
-	var oidcPolicyDocStatements []iam.GetPolicyDocumentStatement
+	var oidcProviderOutputs []pulumi.AnyOutput
 	for _, provider := range args.OIDCProviders {
-		effect := "Allow"
+		providerOutput := pulumi.All(provider.NamespaceServiceAccounts, provider.ProviderARN).ApplyT(func(x []interface{}) iam.GetPolicyDocumentStatement {
+			namespaceServiceAccounts := x[0].([]string)
+			providerARN := x[1].(string)
 
-		var serviceAccounts []string
-		for _, sa := range provider.NamespaceServiceAccounts {
-			serviceAccounts = append(serviceAccounts, fmt.Sprintf("system:serviceaccount:%s", sa))
+			effect := "Allow"
+
+			var serviceAccounts []string
+			for _, sa := range namespaceServiceAccounts {
+				serviceAccounts = append(serviceAccounts, fmt.Sprintf("system:serviceaccount:%s", sa))
+			}
+
+			return iam.GetPolicyDocumentStatement{
+				Effect:  &effect,
+				Actions: []string{"sts:AssumeRoleWithWebIdentity"},
+				Principals: []iam.GetPolicyDocumentStatementPrincipal{
+					{
+						Type:        "Federated",
+						Identifiers: []string{providerARN},
+					},
+				},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					{
+						Test:     args.AssumeRoleConditionTest,
+						Variable: fmt.Sprintf("%s:sub", strings.ReplaceAll(providerARN, "/^(.*provider/)/", "")),
+						Values:   serviceAccounts,
+					},
+					{
+						Test:     args.AssumeRoleConditionTest,
+						Variable: fmt.Sprintf("%s:aud", strings.ReplaceAll(providerARN, "/^(.*provider/)/", "")),
+						Values:   []string{"sts.amazonaws.com"},
+					},
+				},
+			}
+		}).(pulumi.AnyOutput)
+		oidcProviderOutputs = append(oidcProviderOutputs, providerOutput)
+	}
+
+	policyDocJSON := pulumi.All(oidcProviderOutputs).ApplyT(func(x []interface{}) (string, error) {
+		var statements []iam.GetPolicyDocumentStatement
+		for _, v := range x {
+			s := v.(iam.GetPolicyDocumentStatement)
+			statements = append(statements, s)
 		}
 
-		oidcPolicyDocStatements = append(oidcPolicyDocStatements, iam.GetPolicyDocumentStatement{
-			Effect:  &effect,
-			Actions: []string{"sts:AssumeRoleWithWebIdentity"},
-			Principals: []iam.GetPolicyDocumentStatementPrincipal{
-				{
-					Type:        "Federated",
-					Identifiers: []string{provider.ProviderARN},
-				},
-			},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				{
-					Test:     args.AssumeRoleConditionTest,
-					Variable: fmt.Sprintf("%s:sub", strings.ReplaceAll(provider.ProviderARN, "/^(.*provider/)/", "")),
-					Values:   serviceAccounts,
-				},
-				{
-					Test:     args.AssumeRoleConditionTest,
-					Variable: fmt.Sprintf("%s:aud", strings.ReplaceAll(provider.ProviderARN, "/^(.*provider/)/", "")),
-					Values:   []string{"sts.amazonaws.com"},
-				},
-			},
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: statements,
 		})
-	}
+		if err != nil {
+			return "", err
+		}
 
-	policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
-		Statements: oidcPolicyDocStatements,
-	})
-	if err != nil {
-		return nil, err
-	}
+		return policyDoc.Json, nil
+	}).(pulumi.StringOutput)
 
 	eksRole, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
 		Role:                args.Role,
 		MaxSessionDuration:  args.MaxSessionDuration,
 		ForceDetachPolicies: args.ForceDetachPolicies,
-		AssumeRolePolicy:    policyDoc.Json,
+		AssumeRolePolicy:    policyDocJSON,
 		Tags:                args.Tags,
 	}, opts...)
 	if err != nil {
