@@ -33,49 +33,60 @@ type VeleroPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// List of S3 Bucket ARNs that Velero needs access to in order to backup and restore cluster resources.
-	S3BucketARNs []string `pulumi:"s3BucketArns"`
+	S3BucketARNs pulumi.StringArrayInput `pulumi:"s3BucketArns"`
 }
 
-func AttachVeleroPolicy(policyBuilder *EKSRoleBuilder, args VeleroPolicyArgs) error {
-	if len(args.S3BucketARNs) == 0 {
-		args.S3BucketARNs = append(args.S3BucketARNs, veleroDefaultS3BucketARN)
-	}
+func AttachVeleroPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, args VeleroPolicyArgs) error {
+	policyJSON := args.S3BucketARNs.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		if len(arns) == 0 {
+			arns = append(arns, veleroDefaultS3BucketARN)
+		}
 
-	var s3ReadWriteResources []string
-	for _, bucket := range args.S3BucketARNs {
-		s3ReadWriteResources = append(s3ReadWriteResources, fmt.Sprintf("%s/*", bucket))
-	}
+		var s3ReadWriteResources []string
+		for _, bucket := range arns {
+			s3ReadWriteResources = append(s3ReadWriteResources, fmt.Sprintf("%s/*", bucket))
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Sid:       pulumi.StringRef("Ec2ReadWrite"),
-			Resources: []string{"*"},
-			Actions: []string{
-				"ec2:DescribeVolumes",
-				"ec2:DescribeSnapshots",
-				"ec2:CreateTags",
-				"ec2:CreateVolume",
-				"ec2:CreateSnapshot",
-				"ec2:DeleteSnapshot",
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Sid:       pulumi.StringRef("Ec2ReadWrite"),
+				Resources: []string{"*"},
+				Actions: []string{
+					"ec2:DescribeVolumes",
+					"ec2:DescribeSnapshots",
+					"ec2:CreateTags",
+					"ec2:CreateVolume",
+					"ec2:CreateSnapshot",
+					"ec2:DeleteSnapshot",
+				},
 			},
-		},
-		{
-			Sid:       pulumi.StringRef("S3ReadWrite"),
-			Resources: s3ReadWriteResources,
-			Actions: []string{
-				"s3:GetObject",
-				"s3:DeleteObject",
-				"s3:PutObject",
-				"s3:AbortMultipartUpload",
-				"s3:ListMultipartUploadParts",
+			{
+				Sid:       pulumi.StringRef("S3ReadWrite"),
+				Resources: s3ReadWriteResources,
+				Actions: []string{
+					"s3:GetObject",
+					"s3:DeleteObject",
+					"s3:PutObject",
+					"s3:AbortMultipartUpload",
+					"s3:ListMultipartUploadParts",
+				},
 			},
-		},
-		{
-			Sid:       pulumi.StringRef("S3List"),
-			Resources: args.S3BucketARNs,
-			Actions:   []string{"s3:ListBucket"},
-		},
-	}
+			{
+				Sid:       pulumi.StringRef("S3List"),
+				Resources: arns,
+				Actions:   []string{"s3:ListBucket"},
+			},
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(veleroNamePrefix, veleroDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(veleroNamePrefix, veleroDescription, policyJSON)
 }

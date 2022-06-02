@@ -16,6 +16,7 @@ package eks_policies
 
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -30,29 +31,40 @@ type NodeTerminationHandlerPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// List of SQS ARNs that contain node termination events.
-	SQSQueueARNs []string `pulumi:"sqsQueueArns"`
+	SQSQueueARNs pulumi.StringArrayInput `pulumi:"sqsQueueArns"`
 }
 
-func AttachNodeTerminationPolicy(policyBuilder *EKSRoleBuilder, args NodeTerminationHandlerPolicyArgs) error {
-	if len(args.SQSQueueARNs) == 0 {
-		args.SQSQueueARNs = append(args.SQSQueueARNs, nodeTerminationHandlerDefaultSQSQueueARN)
-	}
+func AttachNodeTerminationPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, args NodeTerminationHandlerPolicyArgs) error {
+	policyJSON := args.SQSQueueARNs.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		if len(arns) == 0 {
+			arns = append(arns, nodeTerminationHandlerDefaultSQSQueueARN)
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Resources: []string{"*"},
-			Actions: []string{
-				"autoscaling:CompleteLifecycleAction",
-				"autoscaling:DescribeAutoScalingInstances",
-				"autoscaling:DescribeTags",
-				"ec2:DescribeInstances",
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Resources: []string{"*"},
+				Actions: []string{
+					"autoscaling:CompleteLifecycleAction",
+					"autoscaling:DescribeAutoScalingInstances",
+					"autoscaling:DescribeTags",
+					"ec2:DescribeInstances",
+				},
 			},
-		},
-		{
-			Actions:   []string{"sqs:DeleteMessage", "sqs:ReceiveMessage"},
-			Resources: args.SQSQueueARNs,
-		},
-	}
+			{
+				Actions:   []string{"sqs:DeleteMessage", "sqs:ReceiveMessage"},
+				Resources: arns,
+			},
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(nodeTerminationHandlerNamePrefix, nodeTerminationHandlerDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(nodeTerminationHandlerNamePrefix, nodeTerminationHandlerDescription, policyJSON)
 }

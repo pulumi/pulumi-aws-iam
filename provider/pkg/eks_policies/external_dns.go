@@ -16,6 +16,7 @@ package eks_policies
 
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -30,24 +31,35 @@ type ExternalDNSPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// Route53 hosted zone ARNs to allow External DNS to manage records.
-	HostedZoneARNs []string `pulumi:"hostedZoneArns"`
+	HostedZoneARNs pulumi.StringArrayInput `pulumi:"hostedZoneArns"`
 }
 
-func AttachExternalDNSPolicy(policyBuilder *EKSRoleBuilder, args ExternalDNSPolicyArgs) error {
-	if len(args.HostedZoneARNs) == 0 {
-		args.HostedZoneARNs = append(args.HostedZoneARNs, externalDNSDefaultHostedZoneARN)
-	}
+func AttachExternalDNSPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, args ExternalDNSPolicyArgs) error {
+	policyJSON := args.HostedZoneARNs.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		if len(arns) == 0 {
+			arns = append(arns, externalDNSDefaultHostedZoneARN)
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Actions:   []string{"route53:ChangeResourceRecordSets"},
-			Resources: args.HostedZoneARNs,
-		},
-		{
-			Actions:   []string{"route53:ListHostedZones", "route53:ListResourceRecordSets"},
-			Resources: []string{"*"},
-		},
-	}
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Actions:   []string{"route53:ChangeResourceRecordSets"},
+				Resources: arns,
+			},
+			{
+				Actions:   []string{"route53:ListHostedZones", "route53:ListResourceRecordSets"},
+				Resources: []string{"*"},
+			},
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(externalDNSNamePrefix, externalDNSDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(externalDNSNamePrefix, externalDNSDescription, policyJSON)
 }

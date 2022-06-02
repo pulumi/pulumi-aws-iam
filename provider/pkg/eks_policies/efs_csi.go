@@ -55,5 +55,5 @@ func AttachEFSCSIPolicy(policyBuilder *EKSRoleBuilder) error {
 		},
 	}
 
-	return policyBuilder.CreatePolicyWithAttachment(efsCSINamePrefix, efsCSIDescription, policyStatements)
+	return policyBuilder.CreatePolicyWithAttachmentGet(efsCSINamePrefix, efsCSIDescription, policyStatements)
 }

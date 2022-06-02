@@ -16,6 +16,7 @@ package eks_policies
 
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -31,36 +32,50 @@ type ExternalSecretsPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// List of Systems Manager Parameter ARNs that contain secrets to mount using External Secrets.
-	SSMParameterARNs []string `pulumi:"ssmParameterArns"`
+	SSMParameterARNs pulumi.StringArrayInput `pulumi:"ssmParameterArns"`
 
 	// List of Secrets Manager ARNs that contain secrets to mount using External Secrets.
-	SecretsMangerARNs []string `pulumi:"secretsManagerArns"`
+	SecretsMangerARNs pulumi.StringArrayInput `pulumi:"secretsManagerArns"`
 }
 
-func AttachExternalSecretsPolicy(policyBuilder *EKSRoleBuilder, args ExternalSecretsPolicyArgs) error {
-	if len(args.SSMParameterARNs) == 0 {
-		args.SSMParameterARNs = append(args.SSMParameterARNs, externalSecretsDefaultSSMParameterARN)
-	}
+func AttachExternalSecretsPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, args ExternalSecretsPolicyArgs) error {
+	policyJSON := pulumi.All(args.SSMParameterARNs, args.SecretsMangerARNs).ApplyT(func(x []interface{}) (string, error) {
+		ssmParameterARNs := x[0].([]string)
+		secretsManagerARNs := x[1].([]string)
 
-	if len(args.SecretsMangerARNs) == 0 {
-		args.SecretsMangerARNs = append(args.SecretsMangerARNs, externalSecretsDefaultSecretsManagerARN)
-	}
+		if len(ssmParameterARNs) == 0 {
+			ssmParameterARNs = append(ssmParameterARNs, externalSecretsDefaultSSMParameterARN)
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Actions:   []string{"ssm:GetParameter"},
-			Resources: args.SSMParameterARNs,
-		},
-		{
-			Actions: []string{
-				"secretsmanager:GetResourcePolicy",
-				"secretsmanager:GetSecretValue",
-				"secretsmanager:DescribeSecret",
-				"secretsmanager:ListSecretVersionIds",
+		if len(secretsManagerARNs) == 0 {
+			secretsManagerARNs = append(secretsManagerARNs, externalSecretsDefaultSecretsManagerARN)
+		}
+
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Actions:   []string{"ssm:GetParameter"},
+				Resources: ssmParameterARNs,
 			},
-			Resources: args.SecretsMangerARNs,
-		},
-	}
+			{
+				Actions: []string{
+					"secretsmanager:GetResourcePolicy",
+					"secretsmanager:GetSecretValue",
+					"secretsmanager:DescribeSecret",
+					"secretsmanager:ListSecretVersionIds",
+				},
+				Resources: secretsManagerARNs,
+			},
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(externalSecretsNamePrefix, externalSecretsDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(externalSecretsNamePrefix, externalSecretsDescription, policyJSON)
 }

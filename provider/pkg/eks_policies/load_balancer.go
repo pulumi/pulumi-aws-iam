@@ -211,7 +211,7 @@ func AttachLoadBalancerControllerPolicy(policyBuilder *EKSRoleBuilder, partition
 		},
 	}
 
-	return policyBuilder.CreatePolicyWithAttachment(loadBalancerControllerNamePrefix, loadBalancerControllerDescription, policyStatements)
+	return policyBuilder.CreatePolicyWithAttachmentGet(loadBalancerControllerNamePrefix, loadBalancerControllerDescription, policyStatements)
 }
 
 func AttachLoadBalancerTargetGroupBindingOnlyPolicy(policyBuilder *EKSRoleBuilder) error {
@@ -232,5 +232,5 @@ func AttachLoadBalancerTargetGroupBindingOnlyPolicy(policyBuilder *EKSRoleBuilde
 		},
 	}
 
-	return policyBuilder.CreatePolicyWithAttachment(loadBalancerTargetGroupBindingOnlyNamePrefix, loadBalancerTargetGroupBindingOnlyDescription, policyStatements)
+	return policyBuilder.CreatePolicyWithAttachmentGet(loadBalancerTargetGroupBindingOnlyNamePrefix, loadBalancerTargetGroupBindingOnlyDescription, policyStatements)
 }

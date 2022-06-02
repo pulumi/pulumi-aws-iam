@@ -224,7 +224,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	// Cert Manager
 	if args.Policies.CertManager.Attach {
-		err = eks_policies.AttachCertManagerPolicy(policyBuilder, currentPartition.Partition, args.Policies.CertManager)
+		err = eks_policies.AttachCertManagerPolicy(ctx, policyBuilder, currentPartition.Partition, args.Policies.CertManager)
 		if err != nil {
 			return nil, err
 		}
@@ -232,7 +232,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	// Cluster Autoscaler
 	if args.Policies.ClusterAutoScaling.Attach {
-		err = eks_policies.AttachClusterAutoscalerPolicy(policyBuilder, args.Policies.ClusterAutoScaling)
+		err = eks_policies.AttachClusterAutoscalerPolicy(ctx, policyBuilder, args.Policies.ClusterAutoScaling)
 		if err != nil {
 			return nil, err
 		}
@@ -240,7 +240,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	// EBS CSI
 	if args.Policies.EBSCSI.Attach {
-		err = eks_policies.AttachEBSCSIPolicy(policyBuilder, currentPartition.Partition, args.Policies.EBSCSI)
+		err = eks_policies.AttachEBSCSIPolicy(ctx, policyBuilder, currentPartition.Partition, args.Policies.EBSCSI)
 		if err != nil {
 			return nil, err
 		}
@@ -256,7 +256,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	// External DNS
 	if args.Policies.ExternalDNS.Attach {
-		err = eks_policies.AttachExternalDNSPolicy(policyBuilder, args.Policies.ExternalDNS)
+		err = eks_policies.AttachExternalDNSPolicy(ctx, policyBuilder, args.Policies.ExternalDNS)
 		if err != nil {
 			return nil, err
 		}
@@ -264,7 +264,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	// External Secrets
 	if args.Policies.ExternalSecrets.Attach {
-		err = eks_policies.AttachExternalSecretsPolicy(policyBuilder, args.Policies.ExternalSecrets)
+		err = eks_policies.AttachExternalSecretsPolicy(ctx, policyBuilder, args.Policies.ExternalSecrets)
 		if err != nil {
 			return nil, err
 		}
@@ -272,14 +272,14 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	// FSx Lustre CSI
 	if args.Policies.FSxLustreCSI.Attach {
-		err = eks_policies.AttachFSXLustreCSIPolicy(policyBuilder, currentPartition.DnsSuffix, args.Policies.FSxLustreCSI)
+		err = eks_policies.AttachFSXLustreCSIPolicy(ctx, policyBuilder, currentPartition.DnsSuffix, args.Policies.FSxLustreCSI)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	if args.Policies.KarpenterController.Attach {
-		err = eks_policies.AttachKarpenterControllerPolicy(policyBuilder, currentPartition.Partition, account.AccountId, args.Policies.KarpenterController)
+		err = eks_policies.AttachKarpenterControllerPolicy(ctx, policyBuilder, currentPartition.Partition, account.AccountId, args.Policies.KarpenterController)
 		if err != nil {
 			return nil, err
 		}
@@ -314,14 +314,14 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 	}
 
 	if args.Policies.AmazonManagedServicePrometheus.Attach {
-		err = eks_policies.AttachAmazonManagedServicePrometheusPolicy(policyBuilder, args.Policies.AmazonManagedServicePrometheus)
+		err = eks_policies.AttachAmazonManagedServicePrometheusPolicy(ctx, policyBuilder, args.Policies.AmazonManagedServicePrometheus)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	if args.Policies.Velero.Attach {
-		err = eks_policies.AttachVeleroPolicy(policyBuilder, args.Policies.Velero)
+		err = eks_policies.AttachVeleroPolicy(ctx, policyBuilder, args.Policies.Velero)
 		if err != nil {
 			return nil, err
 		}
@@ -335,7 +335,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 	}
 
 	if args.Policies.NodeTerminationHandler.Attach {
-		err = eks_policies.AttachNodeTerminationPolicy(policyBuilder, args.Policies.NodeTerminationHandler)
+		err = eks_policies.AttachNodeTerminationPolicy(ctx, policyBuilder, args.Policies.NodeTerminationHandler)
 		if err != nil {
 			return nil, err
 		}

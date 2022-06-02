@@ -18,6 +18,7 @@ import (
 	"fmt"
 
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -30,121 +31,132 @@ type EBSCSIPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// KMS CMK IDs to allow EBS CSI to manage encrypted volumes.
-	KMSCMKIDs []string `pulumi:"kmsCmkIds"`
+	KMSCMKIDs pulumi.StringArrayInput `pulumi:"kmsCmkIds"`
 }
 
-func AttachEBSCSIPolicy(policyBuilder *EKSRoleBuilder, partition string, args EBSCSIPolicyArgs) error {
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Resources: []string{"*"},
-			Actions: []string{
-				"ec2:CreateSnapshot",
-				"ec2:AttachVolume",
-				"ec2:DetachVolume",
-				"ec2:ModifyVolume",
-				"ec2:DescribeAvailabilityZones",
-				"ec2:DescribeInstances",
-				"ec2:DescribeSnapshots",
-				"ec2:DescribeTags",
-				"ec2:DescribeVolumes",
-				"ec2:DescribeVolumesModifications",
+func AttachEBSCSIPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, partition string, args EBSCSIPolicyArgs) error {
+	policyJSON := args.KMSCMKIDs.ToStringArrayOutput().ApplyT(func(ids []string) (string, error) {
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Resources: []string{"*"},
+				Actions: []string{
+					"ec2:CreateSnapshot",
+					"ec2:AttachVolume",
+					"ec2:DetachVolume",
+					"ec2:ModifyVolume",
+					"ec2:DescribeAvailabilityZones",
+					"ec2:DescribeInstances",
+					"ec2:DescribeSnapshots",
+					"ec2:DescribeTags",
+					"ec2:DescribeVolumes",
+					"ec2:DescribeVolumesModifications",
+				},
 			},
-		},
-		{
-			Actions: []string{"ec2:CreateTags"},
-			Resources: []string{
-				fmt.Sprintf("arn:%s:ec2:*:*:volume/*", partition),
-				fmt.Sprintf("arn:%s:ec2:*:*:snapshot/*", partition),
+			{
+				Actions: []string{"ec2:CreateTags"},
+				Resources: []string{
+					fmt.Sprintf("arn:%s:ec2:*:*:volume/*", partition),
+					fmt.Sprintf("arn:%s:ec2:*:*:snapshot/*", partition),
+				},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringEquals", "ec2:CreateAction", "CreateVolume", "CreateSnapShot"),
+				},
 			},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringEquals", "ec2:CreateAction", "CreateVolume", "CreateSnapShot"),
+			{
+				Actions: []string{"ec2:DeleteTags"},
+				Resources: []string{
+					fmt.Sprintf("arn:%s:ec2:*:*:volume/*", partition),
+					fmt.Sprintf("arn:%s:ec2:*:*:snapshot/*", partition),
+				},
 			},
-		},
-		{
-			Actions: []string{"ec2:DeleteTags"},
-			Resources: []string{
-				fmt.Sprintf("arn:%s:ec2:*:*:volume/*", partition),
-				fmt.Sprintf("arn:%s:ec2:*:*:snapshot/*", partition),
+			{
+				Actions:   []string{"ec2:CreateVolume"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "aws:RequestTag/ebs.csi.aws.com/cluster", "true"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:CreateVolume"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "aws:RequestTag/ebs.csi.aws.com/cluster", "true"),
+			{
+				Actions:   []string{"ec2:CreateVolume"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "aws:RequestTag/CSIVolumeName", "*"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:CreateVolume"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "aws:RequestTag/CSIVolumeName", "*"),
+			{
+				Actions:   []string{"ec2:CreateVolume"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "aws:RequestTag/kubernetes.io/cluster/*", "owned"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:CreateVolume"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "aws:RequestTag/kubernetes.io/cluster/*", "owned"),
+			{
+				Actions:   []string{"ec2:DeleteVolume"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "aws:RequestTag/ebs.csi.aws.com/cluster", "true"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:DeleteVolume"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "aws:RequestTag/ebs.csi.aws.com/cluster", "true"),
+			{
+				Actions:   []string{"ec2:DeleteVolume"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "aws:RequestTag/CSIVolumeName", "*"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:DeleteVolume"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "aws:RequestTag/CSIVolumeName", "*"),
+			{
+				Actions:   []string{"ec2:DeleteVolume"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "aws:RequestTag/kubernetes.io/cluster/*", "owned"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:DeleteVolume"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "aws:RequestTag/kubernetes.io/cluster/*", "owned"),
+			{
+				Actions:   []string{"ec2:DeleteSnapshot"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "ec2:ResourceTag/CSIVolumeSnapshotName", "*"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:DeleteSnapshot"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "ec2:ResourceTag/CSIVolumeSnapshotName", "*"),
+			{
+				Actions:   []string{"ec2:DeleteSnapshot"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "ec2:ResourceTag/ebs.csi.aws.com/cluster", "true"),
+				},
 			},
-		},
-		{
-			Actions:   []string{"ec2:DeleteSnapshot"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "ec2:ResourceTag/ebs.csi.aws.com/cluster", "true"),
-			},
-		},
-	}
+		}
 
-	if len(args.KMSCMKIDs) > 0 {
-		policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
-			Actions: []string{
-				"kms:CreateGrant",
-				"kms:ListGrants",
-				"kms:RevokeGrant",
-			},
-			Resources: args.KMSCMKIDs,
-		})
-		policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
-			Actions: []string{
-				"kms:Encrypt",
-				"kms:Decrypt",
-				"kms:ReEncrypt*",
-				"kms:GenerateDataKey*",
-				"kms:DescribeKey",
-			},
-			Resources: args.KMSCMKIDs,
-		})
-	}
+		if len(ids) > 0 {
+			policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
+				Actions: []string{
+					"kms:CreateGrant",
+					"kms:ListGrants",
+					"kms:RevokeGrant",
+				},
+				Resources: ids,
+			})
+			policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
+				Actions: []string{
+					"kms:Encrypt",
+					"kms:Decrypt",
+					"kms:ReEncrypt*",
+					"kms:GenerateDataKey*",
+					"kms:DescribeKey",
+				},
+				Resources: ids,
+			})
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(ebsCSINamePrefix, ebsCSIDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(ebsCSINamePrefix, ebsCSIDescription, policyJSON)
 }

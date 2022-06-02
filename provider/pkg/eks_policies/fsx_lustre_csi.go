@@ -18,6 +18,7 @@ import (
 	"fmt"
 
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -32,41 +33,52 @@ type FSXLustreCSIPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// Service role ARNs to allow FSx for Lustre CSI create and manage FSX for Lustre service linked roles.
-	ServiceRoleARNs []string `pulumi:"serviceRoleArns"`
+	ServiceRoleARNs pulumi.StringArrayInput `pulumi:"serviceRoleArns"`
 }
 
-func AttachFSXLustreCSIPolicy(policyBuilder *EKSRoleBuilder, dnsSuffix string, args FSXLustreCSIPolicyArgs) error {
-	if len(args.ServiceRoleARNs) == 0 {
-		args.ServiceRoleARNs = append(args.ServiceRoleARNs, fsxLustreCSIDefaultServiceRoleARN)
-	}
+func AttachFSXLustreCSIPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, dnsSuffix string, args FSXLustreCSIPolicyArgs) error {
+	policyJSON := args.ServiceRoleARNs.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		if len(arns) == 0 {
+			arns = append(arns, fsxLustreCSIDefaultServiceRoleARN)
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Actions: []string{
-				"iam:CreateServiceLinkedRole",
-				"iam:AttachRolePolicy",
-				"iam:PutRolePolicy",
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Actions: []string{
+					"iam:CreateServiceLinkedRole",
+					"iam:AttachRolePolicy",
+					"iam:PutRolePolicy",
+				},
+				Resources: arns,
 			},
-			Resources: args.ServiceRoleARNs,
-		},
-		{
-			Actions:   []string{"iam:CreateServiceLinkedRole"},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringLike", "iam:AWSServiceName", fmt.Sprintf("fsx.%s", dnsSuffix)),
+			{
+				Actions:   []string{"iam:CreateServiceLinkedRole"},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringLike", "iam:AWSServiceName", fmt.Sprintf("fsx.%s", dnsSuffix)),
+				},
 			},
-		},
-		{
-			Actions: []string{
-				"s3:ListBucket",
-				"fsx:CreateFileSystem",
-				"fsx:DeleteFileSystem",
-				"fsx:DescribeFileSystems",
-				"fsx:TagResource",
+			{
+				Actions: []string{
+					"s3:ListBucket",
+					"fsx:CreateFileSystem",
+					"fsx:DeleteFileSystem",
+					"fsx:DescribeFileSystems",
+					"fsx:TagResource",
+				},
+				Resources: []string{"*"},
 			},
-			Resources: []string{"*"},
-		},
-	}
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(fsxLustreCSINamePrefix, fsxLustreCSIDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(fsxLustreCSINamePrefix, fsxLustreCSIDescription, policyJSON)
 }

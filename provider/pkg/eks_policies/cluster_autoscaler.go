@@ -18,6 +18,7 @@ import (
 	"fmt"
 
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -30,40 +31,51 @@ type ClusterAutoScalingPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// List of cluster IDs to appropriately scope permissions within the Cluster Autoscaler IAM policy.
-	ClusterIDs []string `pulumi:"clusterIds"`
+	ClusterIDs pulumi.StringArrayInput `pulumi:"clusterIds"`
 }
 
-func AttachClusterAutoscalerPolicy(policyBuilder *EKSRoleBuilder, args ClusterAutoScalingPolicyArgs) error {
-	var policyStatements []iam.GetPolicyDocumentStatement
-	for _, id := range args.ClusterIDs {
+func AttachClusterAutoscalerPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, args ClusterAutoScalingPolicyArgs) error {
+	policyJSON := args.ClusterIDs.ToStringArrayOutput().ApplyT(func(ids []string) (string, error) {
+		var policyStatements []iam.GetPolicyDocumentStatement
+		for _, id := range ids {
+			policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
+				Actions: []string{
+					"autoscaling:SetDesiredCapacity",
+					"autoscaling:TerminateInstanceInAutoScalingGroup",
+					"autoscaling:UpdateAutoScalingGroup",
+				},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					{
+						Test:     "StringEquals",
+						Variable: fmt.Sprintf("autoscaling:ResourceTag/kubernetes.io/cluster/%s", id),
+						Values:   []string{"owned"},
+					},
+				},
+			})
+		}
+
 		policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
 			Actions: []string{
-				"autoscaling:SetDesiredCapacity",
-				"autoscaling:TerminateInstanceInAutoScalingGroup",
-				"autoscaling:UpdateAutoScalingGroup",
+				"autoscaling:DescribeAutoScalingGroups",
+				"autoscaling:DescribeAutoScalingInstances",
+				"autoscaling:DescribeLaunchConfigurations",
+				"autoscaling:DescribeTags",
+				"ec2:DescribeLaunchTemplateVersions",
+				"ec2:DescribeInstanceTypes",
 			},
 			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				{
-					Test:     "StringEquals",
-					Variable: fmt.Sprintf("autoscaling:ResourceTag/kubernetes.io/cluster/%s", id),
-					Values:   []string{"owned"},
-				},
-			},
 		})
-	}
 
-	policyStatements = append(policyStatements, iam.GetPolicyDocumentStatement{
-		Actions: []string{
-			"autoscaling:DescribeAutoScalingGroups",
-			"autoscaling:DescribeAutoScalingInstances",
-			"autoscaling:DescribeLaunchConfigurations",
-			"autoscaling:DescribeTags",
-			"ec2:DescribeLaunchTemplateVersions",
-			"ec2:DescribeInstanceTypes",
-		},
-		Resources: []string{"*"},
-	})
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(clusterAutoscalerNamePrefix, clusterAutoscalerDescription, policyStatements)
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(clusterAutoscalerNamePrefix, clusterAutoscalerDescription, policyJSON)
 }

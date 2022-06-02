@@ -120,7 +120,7 @@ func AttachAppmeshControllerPolicy(policyBuilder *EKSRoleBuilder, partition, dns
 		},
 	}
 
-	return policyBuilder.CreatePolicyWithAttachment(appmeshControllerNamePrefix, appmeshControllerDescription, policyStatements)
+	return policyBuilder.CreatePolicyWithAttachmentGet(appmeshControllerNamePrefix, appmeshControllerDescription, policyStatements)
 }
 
 func AttachAppmeshEnvoyProxyPolicy(policyBuilder *EKSRoleBuilder) error {
@@ -135,5 +135,5 @@ func AttachAppmeshEnvoyProxyPolicy(policyBuilder *EKSRoleBuilder) error {
 		},
 	}
 
-	return policyBuilder.CreatePolicyWithAttachment(appmeshEnvoyProxyNamePrefix, appmeshEnvoyProxyDescription, policyStatements)
+	return policyBuilder.CreatePolicyWithAttachmentGet(appmeshEnvoyProxyNamePrefix, appmeshEnvoyProxyDescription, policyStatements)
 }

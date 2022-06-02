@@ -54,9 +54,9 @@ func CreateNewRoleBuilder(ctx *pulumi.Context, role *iam.Role, name, baseNamePre
 	}
 }
 
-func (r *EKSRoleBuilder) CreatePolicyWithAttachment(namePrefix, description string, statements []iam.GetPolicyDocumentStatement) error {
+func (r *EKSRoleBuilder) CreatePolicyWithAttachmentGet(namePrefix, description string, policyStatements []iam.GetPolicyDocumentStatement) error {
 	policyDoc, err := iam.GetPolicyDocument(r.Ctx, &iam.GetPolicyDocumentArgs{
-		Statements: statements,
+		Statements: policyStatements,
 	})
 	if err != nil {
 		return err
@@ -67,6 +67,25 @@ func (r *EKSRoleBuilder) CreatePolicyWithAttachment(namePrefix, description stri
 		Path:        pulumi.String(r.Path),
 		Description: pulumi.String(description),
 		Policy:      pulumi.String(policyDoc.Json),
+		Tags:        pulumi.ToStringMap(r.Tags),
+	}, r.ResourceOpts...)
+	if err != nil {
+		return err
+	}
+
+	_, err = iam.NewRolePolicyAttachment(r.Ctx, r.Name, &iam.RolePolicyAttachmentArgs{
+		Role:      r.Role.Name,
+		PolicyArn: policy.Arn,
+	}, r.ResourceOpts...)
+	return err
+}
+
+func (r *EKSRoleBuilder) CreatePolicyWithAttachment(namePrefix, description string, policyDocJSON pulumi.StringOutput) error {
+	policy, err := iam.NewPolicy(r.Ctx, r.Name, &iam.PolicyArgs{
+		NamePrefix:  pulumi.Sprintf("%s%s", r.BaseNamePrefix, namePrefix),
+		Path:        pulumi.String(r.Path),
+		Description: pulumi.String(description),
+		Policy:      policyDocJSON,
 		Tags:        pulumi.ToStringMap(r.Tags),
 	}, r.ResourceOpts...)
 	if err != nil {

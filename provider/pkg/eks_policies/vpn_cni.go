@@ -80,5 +80,5 @@ func AttachVPNCNIPolicy(policyBuilder *EKSRoleBuilder, partition string, args VP
 		})
 	}
 
-	return policyBuilder.CreatePolicyWithAttachment(vpnCNINamePrefix, vpnCNIDescription, policyStatements)
+	return policyBuilder.CreatePolicyWithAttachmentGet(vpnCNINamePrefix, vpnCNIDescription, policyStatements)
 }

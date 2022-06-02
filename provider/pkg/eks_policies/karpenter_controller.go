@@ -18,6 +18,7 @@ import (
 	"fmt"
 
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -33,90 +34,107 @@ type KarpenterControllerPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// Cluster ID where the Karpenter controller is provisioned/managing.
-	ClusterID string `pulumi:"clusterId"`
+	ClusterID pulumi.StringInput `pulumi:"clusterId"`
 
 	// Tag key (`{key = value}`) applied to resources launched by Karpenter through the Karpenter provisioner.
 	TagKey string `pulumi:"tagKey"`
 
 	// List of SSM Parameter ARNs that contain AMI IDs launched by Karpenter.
-	SSMParameterARNs []string `pulumi:"ssmParameterArns"`
+	SSMParameterARNs pulumi.StringArrayInput `pulumi:"ssmParameterArns"`
 
 	// List of node IAM role ARNs Karpenter can use to launch nodes.
-	NodeIAMRoleARNS []string `pulumi:"nodeIamRoleArns"`
+	NodeIAMRoleARNS pulumi.StringArrayInput `pulumi:"nodeIamRoleArns"`
 
 	// Account ID of where the subnets Karpenter will utilize resides. Used when subnets are shared from another account.
-	SubnetAccountID string `pulumi:"subnetAccountId"`
+	SubnetAccountID pulumi.StringInput `pulumi:"subnetAccountId"`
 }
 
-func AttachKarpenterControllerPolicy(policyBuilder *EKSRoleBuilder, partition, awsAccountID string, args KarpenterControllerPolicyArgs) error {
-	karpenterSubnetId := args.SubnetAccountID
-	if karpenterSubnetId == "" {
-		karpenterSubnetId = awsAccountID
-	}
+func AttachKarpenterControllerPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, partition, awsAccountID string, args KarpenterControllerPolicyArgs) error {
+	karpenterSubnetId := args.SubnetAccountID.ToStringOutput().ApplyT(func(id string) string {
+		if id == "" {
+			return awsAccountID
+		}
+		return id
+	}).(pulumi.StringOutput)
 
-	if len(args.SSMParameterARNs) == 0 {
-		args.SSMParameterARNs = append(args.SSMParameterARNs, karpenterControllerDefaultSSMParameterARN)
-	}
+	policyJSON := pulumi.All(karpenterSubnetId, args.ClusterID, args.SSMParameterARNs, args.NodeIAMRoleARNS).ApplyT(func(x []interface{}) (string, error) {
+		kId := x[0].(string)
+		cId := x[1].(string)
+		ssm := x[2].([]string)
+		node := x[3].([]string)
 
-	if len(args.NodeIAMRoleARNS) == 0 {
-		args.NodeIAMRoleARNS = append(args.NodeIAMRoleARNS, karpenterControllerDefaultNodeIAMRoleARN)
-	}
+		if len(ssm) == 0 {
+			ssm = append(ssm, karpenterControllerDefaultSSMParameterARN)
+		}
+		if len(node) == 0 {
+			node = append(node, karpenterControllerDefaultNodeIAMRoleARN)
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Actions: []string{
-				"ec2:CreateLaunchTemplate",
-				"ec2:CreateFleet",
-				"ec2:CreateTags",
-				"ec2:DescribeLaunchTemplates",
-				"ec2:DescribeInstances",
-				"ec2:DescribeSecurityGroups",
-				"ec2:DescribeSubnets",
-				"ec2:DescribeInstanceTypes",
-				"ec2:DescribeInstanceTypeOfferings",
-				"ec2:DescribeAvailabilityZones",
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Actions: []string{
+					"ec2:CreateLaunchTemplate",
+					"ec2:CreateFleet",
+					"ec2:CreateTags",
+					"ec2:DescribeLaunchTemplates",
+					"ec2:DescribeInstances",
+					"ec2:DescribeSecurityGroups",
+					"ec2:DescribeSubnets",
+					"ec2:DescribeInstanceTypes",
+					"ec2:DescribeInstanceTypeOfferings",
+					"ec2:DescribeAvailabilityZones",
+				},
+				Resources: []string{"*"},
 			},
-			Resources: []string{"*"},
-		},
-		{
-			Actions: []string{
-				"ec2:TerminateInstances",
-				"ec2:DeleteLaunchTemplate",
+			{
+				Actions: []string{
+					"ec2:TerminateInstances",
+					"ec2:DeleteLaunchTemplate",
+				},
+				Resources: []string{"*"},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringEquals", fmt.Sprintf("ec2:ResourceTag/%s", args.TagKey), cId),
+				},
 			},
-			Resources: []string{"*"},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringEquals", fmt.Sprintf("ec2:ResourceTag/%s", args.TagKey), args.ClusterID),
+			{
+				Actions: []string{"ec2:RunInstances"},
+				Resources: []string{
+					fmt.Sprintf("arn:%s:ec2:*:%s:launch-template/*", partition, awsAccountID),
+					fmt.Sprintf("arn:%s:ec2:*:%s:security-group/*", partition, awsAccountID),
+					fmt.Sprintf("arn:%s:ec2:*:%s:subnet/*", partition, kId),
+				},
+				Conditions: []iam.GetPolicyDocumentStatementCondition{
+					NewPolicyDocCondition("StringEquals", fmt.Sprintf("ec2:ResourceTag/%s", args.TagKey), cId),
+				},
 			},
-		},
-		{
-			Actions: []string{"ec2:RunInstances"},
-			Resources: []string{
-				fmt.Sprintf("arn:%s:ec2:*:%s:launch-template/*", partition, awsAccountID),
-				fmt.Sprintf("arn:%s:ec2:*:%s:security-group/*", partition, awsAccountID),
-				fmt.Sprintf("arn:%s:ec2:*:%s:subnet/*", partition, karpenterSubnetId),
+			{
+				Actions: []string{"ec2:RunInstances"},
+				Resources: []string{
+					fmt.Sprintf("arn:%s:ec2:*::image/*", partition),
+					fmt.Sprintf("arn:%s:ec2:*:%s:instance/*", partition, awsAccountID),
+					fmt.Sprintf("arn:%s:ec2:*:%s:volume/*", partition, awsAccountID),
+					fmt.Sprintf("arn:%s:ec2:*:%s:network-interface/*", partition, awsAccountID),
+				},
 			},
-			Conditions: []iam.GetPolicyDocumentStatementCondition{
-				NewPolicyDocCondition("StringEquals", fmt.Sprintf("ec2:ResourceTag/%s", args.TagKey), args.ClusterID),
+			{
+				Actions:   []string{"ssm:GetParameter"},
+				Resources: ssm,
 			},
-		},
-		{
-			Actions: []string{"ec2:RunInstances"},
-			Resources: []string{
-				fmt.Sprintf("arn:%s:ec2:*::image/*", partition),
-				fmt.Sprintf("arn:%s:ec2:*:%s:instance/*", partition, awsAccountID),
-				fmt.Sprintf("arn:%s:ec2:*:%s:volume/*", partition, awsAccountID),
-				fmt.Sprintf("arn:%s:ec2:*:%s:network-interface/*", partition, awsAccountID),
+			{
+				Actions:   []string{"iam:PassRole"},
+				Resources: node,
 			},
-		},
-		{
-			Actions:   []string{"ssm:GetParameter"},
-			Resources: args.SSMParameterARNs,
-		},
-		{
-			Actions:   []string{"iam:PassRole"},
-			Resources: args.NodeIAMRoleARNS,
-		},
-	}
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(karpenterControllerNamePrefix, karpenterControllerDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(karpenterControllerNamePrefix, karpenterControllerDescription, policyJSON)
 }

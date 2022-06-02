@@ -16,6 +16,7 @@ package eks_policies
 
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const (
@@ -30,26 +31,37 @@ type AmazonManagedServicePrometheusPolicyArgs struct {
 	Attach bool `pulumi:"attach"`
 
 	// List of AMP Workspace ARNs to read and write metrics.
-	WorkspaceARNs []string `pulumi:"workspaceArns"`
+	WorkspaceARNs pulumi.StringArrayInput `pulumi:"workspaceArns"`
 }
 
-func AttachAmazonManagedServicePrometheusPolicy(policyBuilder *EKSRoleBuilder, args AmazonManagedServicePrometheusPolicyArgs) error {
-	if len(args.WorkspaceARNs) == 0 {
-		args.WorkspaceARNs = append(args.WorkspaceARNs, amazonManagedServicePrometheusDefaultWorkspaceARN)
-	}
+func AttachAmazonManagedServicePrometheusPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, args AmazonManagedServicePrometheusPolicyArgs) error {
+	policyJSON := args.WorkspaceARNs.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
+		if len(arns) == 0 {
+			arns = append(arns, amazonManagedServicePrometheusDefaultWorkspaceARN)
+		}
 
-	policyStatements := []iam.GetPolicyDocumentStatement{
-		{
-			Actions: []string{
-				"aps:RemoteWrite",
-				"aps:QueryMetrics",
-				"aps:GetSeries",
-				"aps:GetLabels",
-				"aps:GetMetricMetadata",
+		policyStatements := []iam.GetPolicyDocumentStatement{
+			{
+				Actions: []string{
+					"aps:RemoteWrite",
+					"aps:QueryMetrics",
+					"aps:GetSeries",
+					"aps:GetLabels",
+					"aps:GetMetricMetadata",
+				},
+				Resources: arns,
 			},
-			Resources: args.WorkspaceARNs,
-		},
-	}
+		}
 
-	return policyBuilder.CreatePolicyWithAttachment(amazonManagedServicePrometheusNamePrefix, amazonManagedServicePrometheusDescription, policyStatements)
+		policyDoc, err := iam.GetPolicyDocument(ctx, &iam.GetPolicyDocumentArgs{
+			Statements: policyStatements,
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return policyDoc.Json, err
+	}).(pulumi.StringOutput)
+
+	return policyBuilder.CreatePolicyWithAttachment(amazonManagedServicePrometheusNamePrefix, amazonManagedServicePrometheusDescription, policyJSON)
 }
