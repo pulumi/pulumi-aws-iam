@@ -11,6 +11,47 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you manage an Iam Account's Alias and Password Policy. If your IAM Account Alias was previously
+// set (either via the AWS console or when AWS created your Account) you will see an error like the below:
+//
+// If you want to manage you Alias using Pulumi you will need to import this resource.
+//
+// ## Example Usage
+// ## Account
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         account, err := iam.NewAccount(ctx, "account", &iam.AccountArgs{
+//             AccountAlias: pulumi.String("cool-alias"),
+//             PasswordPolicy: iam.AccountPasswordPolicyArgs{
+//                 MinimumLength:              pulumi.IntPtr(37),
+//                 RequireNumbers:             pulumi.Bool(false),
+//                 AllowUsersToChange:         pulumi.Bool(true),
+//                 HardExpiry:                 pulumi.Bool(true),
+//                 RequireSymbols:             pulumi.Bool(true),
+//                 RequireLowercaseCharacters: pulumi.Bool(true),
+//                 RequireUppercaseCharacters: pulumi.Bool(true),
+//             },
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("account", account)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type Account struct {
 	pulumi.ResourceState
 

@@ -9,6 +9,48 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create an IAM policy.
+    /// 
+    /// ## Example Usage
+    /// ## Policy
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var policy = new Policy("policy", new PolicyArgs
+    ///         {
+    ///             Name = "example",
+    ///             Path = "/",
+    ///             Description = "My example policy",
+    ///             PolicyDocument =
+    ///                 @"{
+    ///                 ""Version"": ""2012-10-17"",
+    ///                 ""Statement"": [
+    ///                 {
+    ///                     ""Action"": [
+    ///                     ""ec2:Describe*""
+    ///                     ],
+    ///                     ""Effect"": ""Allow"",
+    ///                     ""Resource"": ""*""
+    ///                 }
+    ///                 ]
+    ///             }"
+    ///         });
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;Policy&gt; Policy { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:Policy")]
     public partial class Policy : Pulumi.ComponentResource
     {

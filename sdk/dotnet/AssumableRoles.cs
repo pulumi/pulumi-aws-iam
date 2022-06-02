@@ -9,6 +9,46 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which
+    /// can be assumed by trusted resources. Trusted resources can be any IAM ARNs, typically, AWS Accounts
+    /// and Users.
+    /// 
+    /// ## Example Usage
+    /// ## Assumable Roles
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var assumableRoles = new AssumableRoles("assumable-roles", new AssumableRolesArgs
+    ///         {
+    ///             TrustedRoleArns = {"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"},
+    ///             Admin = new AdminRoleWithMFAArgs(),
+    ///             Poweruser = new PoweruserRoleWithMFAArgs
+    ///             {
+    ///                 Name = "developer",
+    ///             },
+    ///             Readonly = new ReadonlyRoleWithMFAArgs
+    ///             {
+    ///                 RequiresMfa = true,
+    ///             },
+    ///         });
+    /// 
+    ///         this.AssumableRoles = Output.Create&lt;AssumableRoles&gt;(assumableRoles);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;AssumableRoles&gt; AssumableRoles { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRoles")]
     public partial class AssumableRoles : Pulumi.ComponentResource
     {

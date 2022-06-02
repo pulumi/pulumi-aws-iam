@@ -11,6 +11,44 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which
+// can be assumed by trusted resources. Trusted resources can be any IAM ARNs, typically, AWS Accounts
+// and Users.
+//
+// ## Example Usage
+// ## Assumable Roles
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         assumableRoles, err := iam.NewAssumableRoles(ctx, "assumable-roles", &iam.AssumableRolesArgs{
+//             TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
+//             Admin:           iam.AdminRoleWithMFAArgs{},
+//             Poweruser: iam.PoweruserRoleWithMFAArgs{
+//                 Name: pulumi.String("developer"),
+//             },
+//             Readonly: iam.ReadonlyRoleWithMFAArgs{
+//                 RequiresMfa: pulumi.BoolPtr(true),
+//             },
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("assumableRoles", assumableRoles)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type AssumableRoles struct {
 	pulumi.ResourceState
 

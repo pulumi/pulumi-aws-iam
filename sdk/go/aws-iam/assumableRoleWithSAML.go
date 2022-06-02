@@ -10,6 +10,43 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you create a single IAM Role which can be assumed by trusted
+// resources using SAML Federated Users.
+//
+// ## Example Usage
+// ## Assumable Role With SAML
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         assumableRoleWithSAML, err := iam.NewAssumableRoleWithSAML(ctx, "assumable-role-with-saml", &iam.AssumableRoleWithSAMLArgs{
+//             Role: iam.RoleArgs{
+//                 Name:       pulumi.String("saml-role"),
+//                 PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/ReadOnlyAccess"}),
+//             },
+//             Tags: pulumi.ToStringMap(map[string]string{
+//                 "Role": "saml-role",
+//             }),
+//             ProviderIds: pulumi.ToStringArray([]string{"arn:aws:iam::235367859851:saml-provider/idp_saml"}),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("assumableRoleWithSAML", assumableRoleWithSAML)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type AssumableRoleWithSAML struct {
 	pulumi.ResourceState
 

@@ -11,7 +11,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+// This resources helps you create an IAM User, Login Profile, and Access Key. Additionally you
+// can optionally upload an IAM SSH User Public Key.
 //
 // ## Example Usage
 // ### User

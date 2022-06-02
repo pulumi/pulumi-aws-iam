@@ -9,6 +9,45 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create a single IAM Role which can be assumed by trusted
+    /// resources using SAML Federated Users.
+    /// 
+    /// ## Example Usage
+    /// ## Assumable Role With SAML
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var assumableRoleWithSaml = new AssumableRoleWithSAML("assumable-role-with-saml", new AssumableRoleWithSAMLArgs
+    ///         {
+    ///             Role = new RoleArgs
+    ///             {
+    ///                 Name = "saml-role",
+    ///                 PolicyArns = {"arn:aws:iam::aws:policy/ReadOnlyAccess"},
+    ///             },
+    ///             Tags = new InputMap&lt;string&gt;
+    ///             {
+    ///                 {"Role", "saml-role"},
+    ///             },
+    ///             ProviderIds = {"arn:aws:iam::235367859851:saml-provider/idp_saml"},
+    ///         });
+    /// 
+    ///         this.AssumableRoleWithSaml = Output.Create&lt;AssumableRoleWithSAML&gt;(assumableRoleWithSaml);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;AssumableRoleWithSAML&gt; AssumableRoleWithSaml { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRoleWithSAML")]
     public partial class AssumableRoleWithSAML : Pulumi.ComponentResource
     {

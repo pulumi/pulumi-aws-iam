@@ -5,6 +5,27 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create a single IAM Role which can be assumed by trusted resources.
+ * Trusted resources can be any IAM ARNs, typically, AWS Accounts and Users.
+ *
+ * ## Example Usage
+ * ## Assumable Role
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const assumableRole = new iam.AssumableRole("aws-iam-example-assumable-role", {
+ *     trustedRoleArns: [ "arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus" ],
+ *     role: {
+ *         name: "custom",
+ *         requiresMfa: true,
+ *         policyArns: [ "arn:aws:iam::aws:policy/AmazonCognitoReadOnly","arn:aws:iam::aws:policy/AlexaForBusinessFullAccess" ],
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class AssumableRole extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:AssumableRole';

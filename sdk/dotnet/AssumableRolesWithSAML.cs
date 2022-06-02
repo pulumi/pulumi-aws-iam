@@ -9,6 +9,42 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which can be assumed
+    /// by trusted resources using SAML Federated Users.
+    /// 
+    /// ## Example Usage
+    /// ### Assumable Roles With SAML
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var assumableRolesWithSaml = new AssumableRolesWithSAML("assumable-roles-with-saml", new AssumableRolesWithSAMLArgs
+    ///         {
+    ///             ProviderIds = {"arn:aws:iam::235367859851:saml-provider/idp_saml"},
+    ///             Admin = new AdminRoleArgs(),
+    ///             Readonly = new ReadonlyRoleArgs(),
+    ///             Poweruser = new PoweruserRoleArgs
+    ///             {
+    ///                 Name = "developer",
+    ///             },
+    ///         });
+    /// 
+    ///         this.AssumableRolesWithSaml = Output.Create&lt;AssumableRolesWithSAML&gt;(assumableRolesWithSaml);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;AssumableRolesWithSAML&gt; AssumableRolesWithSaml { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRolesWithSAML")]
     public partial class AssumableRolesWithSAML : Pulumi.ComponentResource
     {

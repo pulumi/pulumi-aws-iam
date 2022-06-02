@@ -5,6 +5,46 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create an IAM role that can be assumed by one or more EKS ServiceAccounts,
+ * in one or more EKS Clusters. With this resource:
+ *
+ * - You do not need any knowledge of cluster OIDC information.
+ * - You can assume the role from multiple EKS clusters, for example used in DR or when a workload is spread across clusters.
+ * - You can support multiple ServiceAccount in the same cluster, for example when a workload runs in multiple namespaces.
+ *
+ * Notes:
+ *
+ * - The EKS cluster needs to exist first, in the current AWS account and region
+ * - The key in the `Cluster Service Accounts` is the exact name of the EKS cluster.
+ *
+ * ## Example Usage
+ * ## Multi Cluster
+ *
+ * With this resource you can provision an IAM Role named `my-app` that can be assumed from:
+ *
+ * - EKS cluster `staging-main-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+ * - EKS cluster `staging-backup-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const eksRole = new iam.EKSRole("aws-iam-example-eks-role", {
+ *     role: {
+ *         name: "eks-role",
+ *         policyArns: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ],
+ *     },
+ *     tags: {
+ *         Name: "eks-role",
+ *     },
+ *     clusterServiceAccounts: {
+ *         "staging-main-1": [ "default:my-app-staging" ],
+ *         "staging-backup-1": [ "default:my-app-staging" ],
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class EKSRole extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:EKSRole';

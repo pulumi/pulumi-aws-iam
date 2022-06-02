@@ -90,7 +90,27 @@ class GroupWithAssumableRolesPolicy(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a GroupWithAssumableRolesPolicy resource with the given unique name, props, and options.
+        This resource helps you create an IAM Group with Users who are allowed to assume specified
+        IAM roles.
+
+        ## Example Usage
+        ## Group With Assumable Roles Policy
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        group_with_assume_roles_policy = iam.GroupWithAssumableRolesPolicy(
+            'group_with_assume_roles_policy',
+            name='production-readonly',
+            assumable_roles=['arn:aws:iam::835367859855:role/readonly'],
+            group_users=['user1','user2'],
+        )
+
+        pulumi.export('group_with_assume_roles_policy', group_with_assume_roles_policy)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] assumable_roles: List of IAM roles ARNs which can be assumed by the group
@@ -105,7 +125,27 @@ class GroupWithAssumableRolesPolicy(pulumi.ComponentResource):
                  args: GroupWithAssumableRolesPolicyArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a GroupWithAssumableRolesPolicy resource with the given unique name, props, and options.
+        This resource helps you create an IAM Group with Users who are allowed to assume specified
+        IAM roles.
+
+        ## Example Usage
+        ## Group With Assumable Roles Policy
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        group_with_assume_roles_policy = iam.GroupWithAssumableRolesPolicy(
+            'group_with_assume_roles_policy',
+            name='production-readonly',
+            assumable_roles=['arn:aws:iam::835367859855:role/readonly'],
+            group_users=['user1','user2'],
+        )
+
+        pulumi.export('group_with_assume_roles_policy', group_with_assume_roles_policy)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param GroupWithAssumableRolesPolicyArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

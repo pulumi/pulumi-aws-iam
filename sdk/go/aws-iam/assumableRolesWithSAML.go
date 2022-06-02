@@ -10,6 +10,41 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which can be assumed
+// by trusted resources using SAML Federated Users.
+//
+// ## Example Usage
+// ### Assumable Roles With SAML
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         assumableRolesWithSAML, err := iam.NewAssumableRolesWithSAML(ctx, "assumable-roles-with-saml", &iam.AssumableRolesWithSAMLArgs{
+//             ProviderIds: pulumi.ToStringArray([]string{"arn:aws:iam::235367859851:saml-provider/idp_saml"}),
+//             Admin:       iam.AdminRoleArgs{},
+//             Readonly:    iam.ReadonlyRoleArgs{},
+//             Poweruser: iam.PoweruserRoleArgs{
+//                 Name: pulumi.String("developer"),
+//             },
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("assumableRolesWithSAML", assumableRolesWithSAML)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type AssumableRolesWithSAML struct {
 	pulumi.ResourceState
 

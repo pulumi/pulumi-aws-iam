@@ -216,14 +216,13 @@ class User(pulumi.ComponentResource):
                  upload_iam_user_ssh_key: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
-        Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+        This resources helps you create an IAM User, Login Profile, and Access Key. Additionally you
+        can optionally upload an IAM SSH User Public Key.
 
         ## Example Usage
         ### User
 
         ```python
-        \"\"\"An AWS Python Pulumi program\"\"\"
-
         import pulumi
         import pulumi_aws_iam as iam
 
@@ -260,14 +259,13 @@ class User(pulumi.ComponentResource):
                  args: UserArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+        This resources helps you create an IAM User, Login Profile, and Access Key. Additionally you
+        can optionally upload an IAM SSH User Public Key.
 
         ## Example Usage
         ### User
 
         ```python
-        \"\"\"An AWS Python Pulumi program\"\"\"
-
         import pulumi
         import pulumi_aws_iam as iam
 

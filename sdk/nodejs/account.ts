@@ -5,6 +5,33 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you manage an Iam Account's Alias and Password Policy. If your IAM Account Alias was previously
+ * set (either via the AWS console or when AWS created your Account) you will see an error like the below:
+ *
+ * If you want to manage you Alias using Pulumi you will need to import this resource.
+ *
+ * ## Example Usage
+ * ## Account
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const account = new iam.Account("account", {
+ *     accountAlias: "cool-alias",
+ *     passwordPolicy: {
+ *         minimumLength: 37,
+ *         requireNumbers: false,
+ *         allowUsersToChange: true,
+ *         hardExpiry: true,
+ *         requireSymbols: true,
+ *         requireLowercaseCharacters: true,
+ *         requireUppercaseCharacters: true,
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class Account extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:Account';

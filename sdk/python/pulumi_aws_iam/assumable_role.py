@@ -261,7 +261,30 @@ class AssumableRole(pulumi.ComponentResource):
                  trusted_role_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a AssumableRole resource with the given unique name, props, and options.
+        This resource helps you create a single IAM Role which can be assumed by trusted resources.
+        Trusted resources can be any IAM ARNs, typically, AWS Accounts and Users.
+
+        ## Example Usage
+        ## Assumable Role
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_role = iam.AssumableRole(
+            'assumable_role',
+            trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
+            role=iam.RoleWithMFAArgs(
+                name='custom',
+                requires_mfa=True,
+                policy_arns=['arn:aws:iam::aws:policy/AmazonCognitoReadOnly','arn:aws:iam::aws:policy/AlexaForBusinessFullAccess'],
+            ),
+        )
+
+        pulumi.export('assumable_role', assumable_role)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] attach_admin_policy: Whether to attach an admin policy to a role.
@@ -285,7 +308,30 @@ class AssumableRole(pulumi.ComponentResource):
                  args: Optional[AssumableRoleArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a AssumableRole resource with the given unique name, props, and options.
+        This resource helps you create a single IAM Role which can be assumed by trusted resources.
+        Trusted resources can be any IAM ARNs, typically, AWS Accounts and Users.
+
+        ## Example Usage
+        ## Assumable Role
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_role = iam.AssumableRole(
+            'assumable_role',
+            trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
+            role=iam.RoleWithMFAArgs(
+                name='custom',
+                requires_mfa=True,
+                policy_arns=['arn:aws:iam::aws:policy/AmazonCognitoReadOnly','arn:aws:iam::aws:policy/AlexaForBusinessFullAccess'],
+            ),
+        )
+
+        pulumi.export('assumable_role', assumable_role)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param AssumableRoleArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

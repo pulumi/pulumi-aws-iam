@@ -4,6 +4,35 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create an IAM policy.
+ *
+ * ## Example Usage
+ * ## Policy
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const policy = new iam.Policy("aws-iam-example-policy", {
+ *     name: "aws-iam-example-policy",
+ *     path: "/",
+ *     description: "My example policy",
+ *     policyDocument: `{
+ *         "Version": "2012-10-17",
+ *         "Statement": [
+ *         {
+ *             "Action": [
+ *             "ec2:Describe*"
+ *             ],
+ *             "Effect": "Allow",
+ *             "Resource": "*"
+ *         }
+ *         ]
+ *     }`,
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class Policy extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:Policy';

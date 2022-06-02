@@ -139,7 +139,30 @@ class AssumableRolesWithSAML(pulumi.ComponentResource):
                  readonly: Optional[pulumi.Input[pulumi.InputType['ReadonlyRoleArgs']]] = None,
                  __props__=None):
         """
-        Create a AssumableRolesWithSAML resource with the given unique name, props, and options.
+        This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which can be assumed
+        by trusted resources using SAML Federated Users.
+
+        ## Example Usage
+        ### Assumable Roles With SAML
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_roles_with_saml = iam.AssumableRolesWithSAML(
+            'assumable_roles_with_saml',
+            provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml'],
+            admin=iam.AdminRoleArgs(),
+            readonly=iam.ReadonlyRoleArgs(),
+            poweruser=iam.PoweruserRoleArgs(
+                name='developer',
+            ),
+        )
+
+        pulumi.export('assumable_roles_with_saml', assumable_roles_with_saml)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] aws_saml_endpoint: AWS SAML Endpoint.
@@ -154,7 +177,30 @@ class AssumableRolesWithSAML(pulumi.ComponentResource):
                  args: Optional[AssumableRolesWithSAMLArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a AssumableRolesWithSAML resource with the given unique name, props, and options.
+        This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which can be assumed
+        by trusted resources using SAML Federated Users.
+
+        ## Example Usage
+        ### Assumable Roles With SAML
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_roles_with_saml = iam.AssumableRolesWithSAML(
+            'assumable_roles_with_saml',
+            provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml'],
+            admin=iam.AdminRoleArgs(),
+            readonly=iam.ReadonlyRoleArgs(),
+            poweruser=iam.PoweruserRoleArgs(
+                name='developer',
+            ),
+        )
+
+        pulumi.export('assumable_roles_with_saml', assumable_roles_with_saml)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param AssumableRolesWithSAMLArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

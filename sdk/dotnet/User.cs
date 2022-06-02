@@ -10,7 +10,8 @@ using Pulumi.Serialization;
 namespace Pulumi.AwsIam
 {
     /// <summary>
-    /// Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+    /// This resources helps you create an IAM User, Login Profile, and Access Key. Additionally you
+    /// can optionally upload an IAM SSH User Public Key.
     /// 
     /// ## Example Usage
     /// ### User

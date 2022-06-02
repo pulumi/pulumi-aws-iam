@@ -9,6 +9,40 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create an IAM read-only policy for the services you specify. The default AWS
+    /// read-only policies may not include services you need or may contain services you do not need access to.
+    /// This resource helps ensure your read-only policy has permissions to exactly what you specify.
+    /// 
+    /// ## Example Usage
+    /// ## RDS and Dynamo Read Only Policy
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var readOnlyPolicy = new ReadOnlyPolicy("read-only-policy", new ReadOnlyPolicyArgs
+    ///         {
+    ///             Name = "example",
+    ///             Path = "/",
+    ///             Description = "My example read only policy",
+    ///             AllowedServices = {"rds", "dynamodb"},
+    ///         });
+    /// 
+    ///         this.ReadOnlyPolicy = Output.Create&lt;ReadOnlyPolicy&gt;(readOnlyPolicy);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;ReadOnlyPolicy&gt; ReadOnlyPolicy { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:ReadOnlyPolicy")]
     public partial class ReadOnlyPolicy : Pulumi.ComponentResource
     {

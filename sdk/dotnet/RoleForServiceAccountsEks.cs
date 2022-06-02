@@ -9,6 +9,74 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resources helps you create an IAM role which can be assumed by AWS EKS ServiceAccounts with optional policies for
+    /// commonly used controllers/custom resources within EKS. The optional policies you can specify are:
+    /// 
+    /// - Cert-Manager
+    /// - Cluster Autoscaler
+    /// - EBS CSI Driver
+    /// - EFS CSI Driver
+    /// - External DNS
+    /// - External Secrets
+    /// - FSx for Lustre CSI Driver
+    /// - Karpenter
+    /// - Load Balancer Controller
+    /// - Load Balancer Controller Target Group Binding Only
+    /// - App Mesh Controller
+    /// - App Mesh Envoy Proxy
+    /// - Managed Service for Prometheus
+    /// - Node Termination Handler
+    /// - Velero
+    /// - VPC CNI
+    /// 
+    /// ## Example Usage
+    /// ## VPC CNI
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var roleForServiceAccountEks = new RoleForServiceAccountsEks("role-for-service-account-eks", new RoleForServiceAccountsEksArgs
+    ///         {
+    ///             Role = new EKSServiceAccountRoleArgs
+    ///             {
+    ///                 Name = "vpn-cni",
+    ///             },
+    ///             Tags = {
+    ///                 {"Name", "vpc-cni-irsa"},
+    ///             },
+    ///             OidcProviders = {
+    ///                 {"main", new OIDCProviderArgs
+    ///                 {
+    ///                     ProviderArn = "arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D",
+    ///                     NamespaceServiceAccounts = {"default:my-app", "canary:my-app"},
+    ///                 }},
+    ///             },
+    ///             Policies = new EKSRolePoliciesArgs
+    ///             {
+    ///                 VpnCni = new EKSVPNCNIPolicyArgs
+    ///                 {
+    ///                     Attach = true,
+    ///                     EnableIpv4 = true,
+    ///                 },
+    ///             },
+    ///         });
+    /// 
+    ///         this.RoleForServiceAccountEks = Output.Create&lt;RoleForServiceAccountsEks&gt;(roleForServiceAccountEks);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;RoleForServiceAccountsEks&gt; RoleForServiceAccountEks { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:RoleForServiceAccountsEks")]
     public partial class RoleForServiceAccountsEks : Pulumi.ComponentResource
     {

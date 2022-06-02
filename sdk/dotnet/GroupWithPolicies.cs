@@ -9,6 +9,45 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resources allows you to create an IAM group with specified IAM policies,
+    /// and then add specified users into your created group.
+    /// 
+    /// ## Example Usage
+    /// ## Group With Policies
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var groupWithPolicies = new GroupWithPolicies("group-with-policies", new GroupWithPoliciesArgs
+    ///         {
+    ///             Name = "superadmins",
+    ///             GroupUsers = {"user1", "user2"},
+    ///             AttachIamSelfManagementPolicy = true,
+    ///             CustomGroupPolicyArns = {"arn:aws:iam::aws:policy/AdministratorAccess"},
+    ///             CustomGroupPolicies = new InputList&lt;ImmutableDictionary&lt;string, string&gt;&gt;
+    ///             {
+    ///                 ImmutableDictionary.Create&lt;string, string&gt;()
+    ///                     .Add("name", "AllowS3Listing")
+    ///                     .Add("policy", "{}"),
+    ///             },
+    ///         });
+    /// 
+    ///         this.GroupWithPolicies = Output.Create&lt;GroupWithPolicies&gt;(groupWithPolicies);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;GroupWithPolicies&gt; GroupWithPolicies { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:GroupWithPolicies")]
     public partial class GroupWithPolicies : Pulumi.ComponentResource
     {

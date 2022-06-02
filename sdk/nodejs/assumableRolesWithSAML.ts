@@ -5,6 +5,27 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which can be assumed
+ * by trusted resources using SAML Federated Users.
+ *
+ * ## Example Usage
+ * ### Assumable Roles With SAML
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const assumableRolesWithSaml = new iam.AssumableRolesWithSAML("aws-iam-example-assumable-role-with-saml", {
+ *     providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
+ *     admin: {},
+ *     poweruser: {
+ *         name: "developer",
+ *     },
+ *     readonly: {},
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class AssumableRolesWithSAML extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:AssumableRolesWithSAML';

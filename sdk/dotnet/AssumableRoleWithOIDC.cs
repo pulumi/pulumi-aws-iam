@@ -9,6 +9,45 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resources helps you create a single IAM role which can be assume by trusted
+    /// resources using OpenID Connect Federated Users.
+    /// 
+    /// ## Example Usage
+    /// ## Assumable Role With OIDC
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var assumableRoleWithOidc = new AssumableRoleWithOIDC("assumable-role-with-oidc", new AssumableRoleWithOIDCArgs
+    ///         {
+    ///             Role = new RoleArgs
+    ///             {
+    ///                 Name = "oidc-role",
+    ///                 PolicyArns = {"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"},
+    ///             },
+    ///             Tags = new InputMap&lt;string&gt;
+    ///             {
+    ///                 {"Role", "odic-role"},
+    ///             },
+    ///             ProviderUrls = {"oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"},
+    ///         });
+    /// 
+    ///         this.AssumableRoleWithOidc = Output.Create&lt;AssumableRoleWithOIDC&gt;(assumableRoleWithOidc);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;AssumableRoleWithOIDC&gt; AssumableRoleWithOidc { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRoleWithOIDC")]
     public partial class AssumableRoleWithOIDC : Pulumi.ComponentResource
     {

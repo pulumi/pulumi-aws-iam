@@ -185,7 +185,32 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a AssumableRoleWithOIDC resource with the given unique name, props, and options.
+        This resources helps you create a single IAM role which can be assume by trusted
+        resources using OpenID Connect Federated Users.
+
+        ## Example Usage
+        ## Assumable Role With OIDC
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_role_with_oidc = iam.AssumableRoleWithOIDC(
+            'assumable_role_with_oidc',
+            role=iam.RoleArgs(
+                name='oidc-role',
+                policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy']
+            ),
+            tags={
+                'Role': 'oidc-role',
+            },
+            provider_urls=['oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8']
+        )
+
+        pulumi.export('assumable_role_with_oidc', assumable_role_with_oidc)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] aws_account_id: The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
@@ -205,7 +230,32 @@ class AssumableRoleWithOIDC(pulumi.ComponentResource):
                  args: Optional[AssumableRoleWithOIDCArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a AssumableRoleWithOIDC resource with the given unique name, props, and options.
+        This resources helps you create a single IAM role which can be assume by trusted
+        resources using OpenID Connect Federated Users.
+
+        ## Example Usage
+        ## Assumable Role With OIDC
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_role_with_oidc = iam.AssumableRoleWithOIDC(
+            'assumable_role_with_oidc',
+            role=iam.RoleArgs(
+                name='oidc-role',
+                policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy']
+            ),
+            tags={
+                'Role': 'oidc-role',
+            },
+            provider_urls=['oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8']
+        )
+
+        pulumi.export('assumable_role_with_oidc', assumable_role_with_oidc)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param AssumableRoleWithOIDCArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

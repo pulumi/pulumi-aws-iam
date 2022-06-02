@@ -60,7 +60,36 @@ class Account(pulumi.ComponentResource):
                  password_policy: Optional[pulumi.Input[pulumi.InputType['AccountPasswordPolicyArgs']]] = None,
                  __props__=None):
         """
-        Create a Account resource with the given unique name, props, and options.
+        This resource helps you manage an Iam Account's Alias and Password Policy. If your IAM Account Alias was previously
+        set (either via the AWS console or when AWS created your Account) you will see an error like the below:
+
+        If you want to manage you Alias using Pulumi you will need to import this resource.
+
+        ## Example Usage
+        ## Account
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        account = iam.Account(
+            'account',
+            account_alias='cool-alias',
+            password_policy=iam.AccountPasswordPolicyArgs(
+                minimum_length=37,
+                require_numbers=False,
+                allow_users_to_change=True,
+                hard_expiry=True,
+                require_symbols=True,
+                require_lowercase_characters=True,
+                require_uppercase_characters=True,
+            )
+        )
+
+        pulumi.export('account', account)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account_alias: AWS IAM account alias for this account.
@@ -74,7 +103,36 @@ class Account(pulumi.ComponentResource):
                  args: AccountArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a Account resource with the given unique name, props, and options.
+        This resource helps you manage an Iam Account's Alias and Password Policy. If your IAM Account Alias was previously
+        set (either via the AWS console or when AWS created your Account) you will see an error like the below:
+
+        If you want to manage you Alias using Pulumi you will need to import this resource.
+
+        ## Example Usage
+        ## Account
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        account = iam.Account(
+            'account',
+            account_alias='cool-alias',
+            password_policy=iam.AccountPasswordPolicyArgs(
+                minimum_length=37,
+                require_numbers=False,
+                allow_users_to_change=True,
+                hard_expiry=True,
+                require_symbols=True,
+                require_lowercase_characters=True,
+                require_uppercase_characters=True,
+            )
+        )
+
+        pulumi.export('account', account)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param AccountArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

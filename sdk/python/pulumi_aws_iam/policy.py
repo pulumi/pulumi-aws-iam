@@ -112,7 +112,37 @@ class Policy(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a Policy resource with the given unique name, props, and options.
+        This resource helps you create an IAM policy.
+
+        ## Example Usage
+        ## Policy
+
+        ```python
+        import json
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        policy = iam.Policy(
+            'policy',
+            name='example',
+            path='/',
+            description='My example policy',
+            policy_document=json.dumps({
+                "Version": "2012-10-17",
+                "Statement": [
+                {
+                    "Action": [
+                    "ec2:Describe*"
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "*"
+                }
+                ]
+            })
+        )
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: The description of the policy.
@@ -128,7 +158,37 @@ class Policy(pulumi.ComponentResource):
                  args: PolicyArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a Policy resource with the given unique name, props, and options.
+        This resource helps you create an IAM policy.
+
+        ## Example Usage
+        ## Policy
+
+        ```python
+        import json
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        policy = iam.Policy(
+            'policy',
+            name='example',
+            path='/',
+            description='My example policy',
+            policy_document=json.dumps({
+                "Version": "2012-10-17",
+                "Statement": [
+                {
+                    "Action": [
+                    "ec2:Describe*"
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "*"
+                }
+                ]
+            })
+        )
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param PolicyArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

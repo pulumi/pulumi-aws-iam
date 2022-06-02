@@ -9,6 +9,49 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you manage an Iam Account's Alias and Password Policy. If your IAM Account Alias was previously
+    /// set (either via the AWS console or when AWS created your Account) you will see an error like the below:
+    /// 
+    /// If you want to manage you Alias using Pulumi you will need to import this resource.
+    /// 
+    /// ## Example Usage
+    /// ## Account
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var account = new Account("account", new AccountArgs
+    ///         {
+    ///             AccountAlias = "cool-alias",
+    ///             PasswordPolicy=new AccountPasswordPolicyArgs
+    ///             {
+    ///                 MinimumLength = 37,
+    ///                 RequireNumbers = false,
+    ///                 AllowUsersToChange = true,
+    ///                 HardExpiry = true,
+    ///                 RequireSymbols = true,
+    ///                 RequireLowercaseCharacters = true,
+    ///                 RequireUppercaseCharacters = true,
+    ///             }
+    /// 
+    ///         });
+    /// 
+    ///         this.Account = Output.Create&lt;Account&gt;(account);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;Account&gt; Account { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:Account")]
     public partial class Account : Pulumi.ComponentResource
     {

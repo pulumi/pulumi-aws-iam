@@ -4,6 +4,29 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
+/**
+ * This resources allows you to create an IAM group with specified IAM policies,
+ * and then add specified users into your created group.
+ *
+ * ## Example Usage
+ * ## Group With Policies
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const groupWithPolicies = new iam.GroupWithPolicies("aws-iam-example-group-with-policies", {
+ *     name: "superadmins",
+ *     groupUsers: [ "user1", "user2" ],
+ *     attachIamSelfManagementPolicy: true,
+ *     customGroupPolicyArns: [ "arn:aws:iam::aws:policy/AdministratorAccess" ],
+ *     customGroupPolicies: [{
+ *         "name": "AllowS3Listing",
+ *         "policy": "{}",
+ *     }],
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class GroupWithPolicies extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:GroupWithPolicies';

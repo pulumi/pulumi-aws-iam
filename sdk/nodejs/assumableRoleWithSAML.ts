@@ -5,6 +5,29 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create a single IAM Role which can be assumed by trusted
+ * resources using SAML Federated Users.
+ *
+ * ## Example Usage
+ * ## Assumable Role With SAML
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const assumableRoleWithSaml = new iam.AssumableRoleWithSAML("aws-iam-example-assumable-role-with-saml", {
+ *     providerIds: [ "arn:aws:iam::235367859851:saml-provider/idp_saml" ],
+ *     role: {
+ *         name: "saml-role",
+ *         policyArns: [ "arn:aws:iam::aws:policy/ReadOnlyAccess" ],
+ *     },
+ *     tags: {
+ *         Role: "saml-role",
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class AssumableRoleWithSAML extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:AssumableRoleWithSAML';

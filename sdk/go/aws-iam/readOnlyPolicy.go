@@ -11,6 +11,40 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you create an IAM read-only policy for the services you specify. The default AWS
+// read-only policies may not include services you need or may contain services you do not need access to.
+// This resource helps ensure your read-only policy has permissions to exactly what you specify.
+//
+// ## Example Usage
+// ## RDS and Dynamo Read Only Policy
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         readOnlyPolicy, err := iam.NewReadOnlyPolicy(ctx, "read-only-policy", &iam.ReadOnlyPolicyArgs{
+//             Name:            pulumi.String("example"),
+//             Path:            pulumi.String("/"),
+//             Description:     pulumi.String("My example policy"),
+//             AllowedServices: pulumi.ToStringArray([]string{"rds", "dynamodb"}),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("readOnlyPolicy", readOnlyPolicy)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type ReadOnlyPolicy struct {
 	pulumi.ResourceState
 

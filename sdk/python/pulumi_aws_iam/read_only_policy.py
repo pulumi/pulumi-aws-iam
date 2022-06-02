@@ -206,7 +206,29 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
                  web_console_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a ReadOnlyPolicy resource with the given unique name, props, and options.
+        This resource helps you create an IAM read-only policy for the services you specify. The default AWS
+        read-only policies may not include services you need or may contain services you do not need access to.
+        This resource helps ensure your read-only policy has permissions to exactly what you specify.
+
+        ## Example Usage
+        ## RDS and Dynamo Read Only Policy
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        read_only_policy = iam.ReadOnlyPolicy(
+            'read_only_policy',
+            name='example',
+            path='/',
+            description='My example read only policy',
+            allowed_services=['rds','dynamodb'],
+        )
+
+        pulumi.export('read_only_policy', read_only_policy)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] additional_policy_json: JSON policy document if you want to add custom actions.
@@ -227,7 +249,29 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
                  args: ReadOnlyPolicyArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a ReadOnlyPolicy resource with the given unique name, props, and options.
+        This resource helps you create an IAM read-only policy for the services you specify. The default AWS
+        read-only policies may not include services you need or may contain services you do not need access to.
+        This resource helps ensure your read-only policy has permissions to exactly what you specify.
+
+        ## Example Usage
+        ## RDS and Dynamo Read Only Policy
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        read_only_policy = iam.ReadOnlyPolicy(
+            'read_only_policy',
+            name='example',
+            path='/',
+            description='My example read only policy',
+            allowed_services=['rds','dynamodb'],
+        )
+
+        pulumi.export('read_only_policy', read_only_policy)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param ReadOnlyPolicyArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

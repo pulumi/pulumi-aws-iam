@@ -11,6 +11,45 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resources allows you to create an IAM group with specified IAM policies,
+// and then add specified users into your created group.
+//
+// ## Example Usage
+// ## Group With Policies
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         groupWithPolicies, err := iam.NewGroupWithPolicies(ctx, "group-with-policies", &iam.GroupWithPoliciesArgs{
+//             Name:                          pulumi.String("superadmins"),
+//             GroupUsers:                    pulumi.ToStringArray([]string{"user1", "user2"}),
+//             AttachIamSelfManagementPolicy: pulumi.BoolPtr(true),
+//             CustomGroupPolicyArns:         pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AdministratorAccess"}),
+//             CustomGroupPolicies: pulumi.ToStringMapArray([]map[string]string{
+//                 {
+//                     "name":   "AllowS3Listing",
+//                     "policy": "{}",
+//                 },
+//             }),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("groupWithPolicies", groupWithPolicies)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type GroupWithPolicies struct {
 	pulumi.ResourceState
 

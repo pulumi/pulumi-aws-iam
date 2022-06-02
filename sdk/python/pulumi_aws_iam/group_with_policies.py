@@ -167,7 +167,32 @@ class GroupWithPolicies(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a GroupWithPolicies resource with the given unique name, props, and options.
+        This resources allows you to create an IAM group with specified IAM policies,
+        and then add specified users into your created group.
+
+        ## Example Usage
+        ## Group With Policies
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        group_with_policies = iam.GroupWithPolicies(
+            'group_with_policies',
+            name='superadmins',
+            group_users=['user1','user2'],
+            attach_iam_self_management_policy=True,
+            custom_group_policy_arns=['arn:aws:iam::aws:policy/AdministratorAccess'],
+            custom_group_policies=[{
+                'name': 'AllowS3Listing',
+                'policy': '{}',
+            }],
+        )
+
+        pulumi.export('group_with_policies', group_with_policies)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] attach_iam_self_management_policy: Whether to attach IAM policy which allows IAM users to manage their credentials and MFA.
@@ -186,7 +211,32 @@ class GroupWithPolicies(pulumi.ComponentResource):
                  args: GroupWithPoliciesArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a GroupWithPolicies resource with the given unique name, props, and options.
+        This resources allows you to create an IAM group with specified IAM policies,
+        and then add specified users into your created group.
+
+        ## Example Usage
+        ## Group With Policies
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        group_with_policies = iam.GroupWithPolicies(
+            'group_with_policies',
+            name='superadmins',
+            group_users=['user1','user2'],
+            attach_iam_self_management_policy=True,
+            custom_group_policy_arns=['arn:aws:iam::aws:policy/AdministratorAccess'],
+            custom_group_policies=[{
+                'name': 'AllowS3Listing',
+                'policy': '{}',
+            }],
+        )
+
+        pulumi.export('group_with_policies', group_with_policies)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param GroupWithPoliciesArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

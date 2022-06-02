@@ -155,7 +155,33 @@ class AssumableRoles(pulumi.ComponentResource):
                  trusted_role_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a AssumableRoles resource with the given unique name, props, and options.
+        This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which
+        can be assumed by trusted resources. Trusted resources can be any IAM ARNs, typically, AWS Accounts
+        and Users.
+
+        ## Example Usage
+        ## Assumable Roles
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_roles = iam.AssumableRoles(
+            'assumable_roles',
+            trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
+            admin=iam.AdminRoleArgs(),
+            poweruser=iam.PoweruserRoleArgs(
+                name='developer',
+            ),
+            readonly=iam.ReadonlyRoleWithMFAArgs(
+                requires_mfa=True,
+            ),
+        )
+
+        pulumi.export('assumable_roles', assumable_roles)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
@@ -171,7 +197,33 @@ class AssumableRoles(pulumi.ComponentResource):
                  args: AssumableRolesArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a AssumableRoles resource with the given unique name, props, and options.
+        This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which
+        can be assumed by trusted resources. Trusted resources can be any IAM ARNs, typically, AWS Accounts
+        and Users.
+
+        ## Example Usage
+        ## Assumable Roles
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_roles = iam.AssumableRoles(
+            'assumable_roles',
+            trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
+            admin=iam.AdminRoleArgs(),
+            poweruser=iam.PoweruserRoleArgs(
+                name='developer',
+            ),
+            readonly=iam.ReadonlyRoleWithMFAArgs(
+                requires_mfa=True,
+            ),
+        )
+
+        pulumi.export('assumable_roles', assumable_roles)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param AssumableRolesArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

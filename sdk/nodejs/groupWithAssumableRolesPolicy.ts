@@ -4,6 +4,24 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create an IAM Group with Users who are allowed to assume specified
+ * IAM roles.
+ *
+ * ## Example Usage
+ * ## Group With Assumable Roles Policy
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const groupWithAssumableRolesPolicy = new iam.GroupWithAssumableRolesPolicy("aws-iam-example-group-with-assumable-roles-policy", {
+ *     name: "production-readonly",
+ *     assumableRoles: [ "arn:aws:iam::835367859855:role/readonly" ],
+ *     groupUsers: [ "user1" ],
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class GroupWithAssumableRolesPolicy extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:GroupWithAssumableRolesPolicy';

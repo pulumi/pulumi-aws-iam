@@ -4,6 +4,26 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create an IAM read-only policy for the services you specify. The default AWS
+ * read-only policies may not include services you need or may contain services you do not need access to.
+ * This resource helps ensure your read-only policy has permissions to exactly what you specify.
+ *
+ * ## Example Usage
+ * ## RDS and Dynamo Read Only Policy
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const readOnlyPolicy = new iam.ReadOnlyPolicy("aws-iam-example-read-only-policy", {
+ *     name: "aws-iam-example-read-only",
+ *     path: "/",
+ *     description: "My example read only policy",
+ *     allowedServices: [ "rds", "dynamodb" ],
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class ReadOnlyPolicy extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:ReadOnlyPolicy';

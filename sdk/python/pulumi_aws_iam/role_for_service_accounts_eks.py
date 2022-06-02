@@ -162,7 +162,59 @@ class RoleForServiceAccountsEks(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a RoleForServiceAccountsEks resource with the given unique name, props, and options.
+        This resources helps you create an IAM role which can be assumed by AWS EKS ServiceAccounts with optional policies for
+        commonly used controllers/custom resources within EKS. The optional policies you can specify are:
+
+        - Cert-Manager
+        - Cluster Autoscaler
+        - EBS CSI Driver
+        - EFS CSI Driver
+        - External DNS
+        - External Secrets
+        - FSx for Lustre CSI Driver
+        - Karpenter
+        - Load Balancer Controller
+        - Load Balancer Controller Target Group Binding Only
+        - App Mesh Controller
+        - App Mesh Envoy Proxy
+        - Managed Service for Prometheus
+        - Node Termination Handler
+        - Velero
+        - VPC CNI
+
+        ## Example Usage
+        ## VPC CNI
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        role_for_service_account_eks = iam.RoleForServiceAccountsEks(
+            'role_for_service_account_eks',
+            role=iam.RoleArgs(
+                name='vpc-cni'
+            ),
+            tags={
+                'Name': 'vpc-cni-irsa',
+            },
+            oidc_providers={
+                'main': iam.OIDCProviderArgs(
+                    provider_arn='arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D',
+                    namespace_service_accounts=['default:my-app', 'canary:my-app'],
+                ),
+            },
+            policies=iam.EKSRolePoliciesArgs(
+                vpn_cni=iam.EKSVPNCNIPolicyArgs(
+                    attach=True,
+                    enable_ipv4=True,
+                ),
+            ),
+        )
+
+        pulumi.export('role_for_service_account_eks', role_for_service_account_eks)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] assume_role_condition_test: Name of the IAM condition operator to evaluate when assuming the role.
@@ -179,7 +231,59 @@ class RoleForServiceAccountsEks(pulumi.ComponentResource):
                  args: Optional[RoleForServiceAccountsEksArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a RoleForServiceAccountsEks resource with the given unique name, props, and options.
+        This resources helps you create an IAM role which can be assumed by AWS EKS ServiceAccounts with optional policies for
+        commonly used controllers/custom resources within EKS. The optional policies you can specify are:
+
+        - Cert-Manager
+        - Cluster Autoscaler
+        - EBS CSI Driver
+        - EFS CSI Driver
+        - External DNS
+        - External Secrets
+        - FSx for Lustre CSI Driver
+        - Karpenter
+        - Load Balancer Controller
+        - Load Balancer Controller Target Group Binding Only
+        - App Mesh Controller
+        - App Mesh Envoy Proxy
+        - Managed Service for Prometheus
+        - Node Termination Handler
+        - Velero
+        - VPC CNI
+
+        ## Example Usage
+        ## VPC CNI
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        role_for_service_account_eks = iam.RoleForServiceAccountsEks(
+            'role_for_service_account_eks',
+            role=iam.RoleArgs(
+                name='vpc-cni'
+            ),
+            tags={
+                'Name': 'vpc-cni-irsa',
+            },
+            oidc_providers={
+                'main': iam.OIDCProviderArgs(
+                    provider_arn='arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D',
+                    namespace_service_accounts=['default:my-app', 'canary:my-app'],
+                ),
+            },
+            policies=iam.EKSRolePoliciesArgs(
+                vpn_cni=iam.EKSVPNCNIPolicyArgs(
+                    attach=True,
+                    enable_ipv4=True,
+                ),
+            ),
+        )
+
+        pulumi.export('role_for_service_account_eks', role_for_service_account_eks)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param RoleForServiceAccountsEksArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

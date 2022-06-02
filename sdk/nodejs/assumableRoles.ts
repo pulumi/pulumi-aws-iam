@@ -5,6 +5,30 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resource helps you create predefined IAM roles (`admin`, `poweruser`, and `readonly`) which
+ * can be assumed by trusted resources. Trusted resources can be any IAM ARNs, typically, AWS Accounts
+ * and Users.
+ *
+ * ## Example Usage
+ * ## Assumable Roles
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const assumableRoles = new iam.AssumableRoles("aws-iam-example-assumable-roles", {
+ *     trustedRoleArns: [ "arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus" ],
+ *     admin: {},
+ *     poweruser: {
+ *         name: "developer",
+ *     },
+ *     readonly: {
+ *         requiresMfa: true,
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class AssumableRoles extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:AssumableRoles';

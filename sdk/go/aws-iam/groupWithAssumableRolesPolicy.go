@@ -11,6 +11,38 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you create an IAM Group with Users who are allowed to assume specified
+// IAM roles.
+//
+// ## Example Usage
+// ## Group With Assumable Roles Policy
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         groupWithAssumableRolesPolicy, err := iam.NewGroupWithAssumableRolesPolicy(ctx, "group-with-assumable-roles-policy", &iam.GroupWithAssumableRolesPolicyArgs{
+//             Name:           pulumi.String("production-readonly"),
+//             AssumableRoles: pulumi.ToStringArray([]string{"arn:aws:iam::835367859855:role/readonly"}),
+//             GroupUsers:     pulumi.ToStringArray([]string{"user1", "user2"}),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("groupWithAssumableRolesPolicy", groupWithAssumableRolesPolicy)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type GroupWithAssumableRolesPolicy struct {
 	pulumi.ResourceState
 

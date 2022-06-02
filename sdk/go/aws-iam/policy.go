@@ -11,6 +11,54 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resource helps you create an IAM policy.
+//
+// ## Example Usage
+// ## Policy
+//
+// ```go
+// package main
+//
+// import (
+//     "encoding/json"
+//
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         policyJSON, err := json.Marshal(map[string]interface{}{
+//             "Version": "2012-10-17",
+//             "Statement": []interface{}{
+//                 map[string]interface{}{
+//                     "Effect":   "Allow",
+//                     "Action":   []string{"ec2:Describe"},
+//                     "Resource": []string{"*"},
+//                 },
+//             },
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         policy, err := iam.NewPolicy(ctx, "policy", &iam.PolicyArgs{
+//             Name:           pulumi.String("example"),
+//             Path:           pulumi.String("/"),
+//             Description:    pulumi.String("My example policy"),
+//             PolicyDocument: pulumi.String(string(policyJSON)),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("policy", policy)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type Policy struct {
 	pulumi.ResourceState
 

@@ -5,6 +5,56 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resources helps you create an IAM role which can be assumed by AWS EKS ServiceAccounts with optional policies for
+ * commonly used controllers/custom resources within EKS. The optional policies you can specify are:
+ *
+ * - Cert-Manager
+ * - Cluster Autoscaler
+ * - EBS CSI Driver
+ * - EFS CSI Driver
+ * - External DNS
+ * - External Secrets
+ * - FSx for Lustre CSI Driver
+ * - Karpenter
+ * - Load Balancer Controller
+ * - Load Balancer Controller Target Group Binding Only
+ * - App Mesh Controller
+ * - App Mesh Envoy Proxy
+ * - Managed Service for Prometheus
+ * - Node Termination Handler
+ * - Velero
+ * - VPC CNI
+ *
+ * ## Example Usage
+ * ## VPC CNI
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const roleForServiceAccountsEks = new iam.RoleForServiceAccountsEks("aws-iam-example-role-for-service-accounts-eks", {
+ *     role: {
+ *         name: "vpc-cni"
+ *     },
+ *     tags: {
+ *         Name: "vpc-cni-irsa",
+ *     },
+ *     oidcProviders: {
+ *         main: {
+ *             providerArn: "arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D",
+ *             namespaceServiceAccounts: ["default:my-app", "canary:my-app"],
+ *         }
+ *     },
+ *     policies: {
+ *         vpnCni: {
+ *             attach: true,
+ *             enableIpv4: true,
+ *         },
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class RoleForServiceAccountsEks extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:RoleForServiceAccountsEks';

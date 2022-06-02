@@ -10,6 +10,70 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resources helps you create an IAM role which can be assumed by AWS EKS ServiceAccounts with optional policies for
+// commonly used controllers/custom resources within EKS. The optional policies you can specify are:
+//
+// - Cert-Manager
+// - Cluster Autoscaler
+// - EBS CSI Driver
+// - EFS CSI Driver
+// - External DNS
+// - External Secrets
+// - FSx for Lustre CSI Driver
+// - Karpenter
+// - Load Balancer Controller
+// - Load Balancer Controller Target Group Binding Only
+// - App Mesh Controller
+// - App Mesh Envoy Proxy
+// - Managed Service for Prometheus
+// - Node Termination Handler
+// - Velero
+// - VPC CNI
+//
+// ## Example Usage
+// ## VPC CNI
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         roleForServiceAccountsEKS, err := iam.NewRoleForServiceAccountsEks(ctx, "role-for-service-accounts-eks", &iam.RoleForServiceAccountsEksArgs{
+//             Role: iam.EKSServiceAccountRolePtr(&iam.EKSServiceAccountRoleArgs{
+//                 Name: pulumi.String("vpc-cni"),
+//             }),
+//             Tags: pulumi.ToStringMap(map[string]string{
+//                 "Name": "vpc-cni-irsa",
+//             }),
+//             OidcProviders: iam.OIDCProviderMap{
+//                 "main": iam.OIDCProviderArgs{
+//                     ProviderArn:              pulumi.String("arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D"),
+//                     NamespaceServiceAccounts: pulumi.ToStringArray([]string{"default:my-app", "canary:my-app"}),
+//                 },
+//             },
+//             Policies: iam.EKSRolePoliciesPtr(&iam.EKSRolePoliciesArgs{
+//                 VpnCni: iam.EKSVPNCNIPolicyPtr(&iam.EKSVPNCNIPolicyArgs{
+//                     Attach:     pulumi.Bool(true),
+//                     EnableIpv4: pulumi.BoolPtr(true),
+//                 }),
+//             }),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("roleForServiceAccountsEKS", roleForServiceAccountsEKS)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type RoleForServiceAccountsEks struct {
 	pulumi.ResourceState
 

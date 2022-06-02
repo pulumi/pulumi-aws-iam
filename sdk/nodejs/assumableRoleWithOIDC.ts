@@ -5,6 +5,29 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
+/**
+ * This resources helps you create a single IAM role which can be assume by trusted
+ * resources using OpenID Connect Federated Users.
+ *
+ * ## Example Usage
+ * ## Assumable Role With OIDC
+ *
+ * ```typescript
+ * import * as iam from "@pulumi/aws-iam";
+ *
+ * export const assumableRoleWithOidc = new iam.AssumableRoleWithOIDC("aws-iam-example-assumable-role-with-oidc", {
+ *     providerUrls: ["oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"],
+ *     role: {
+ *         name: "oidc-role",
+ *         policyArns: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ],
+ *     },
+ *     tags: {
+ *         Role: "oidc-role",
+ *     },
+ * });
+ * ```
+ * {{ /example }}
+ */
 export class AssumableRoleWithOIDC extends pulumi.ComponentResource {
     /** @internal */
     public static readonly __pulumiType = 'aws-iam:index:AssumableRoleWithOIDC';

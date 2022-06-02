@@ -6,7 +6,8 @@ import { input as inputs, output as outputs } from "./types";
 import * as utilities from "./utilities";
 
 /**
- * Creates IAM user, IAM login profile, IAM access key and optionally uploads IAM SSH user public key.
+ * This resources helps you create an IAM User, Login Profile, and Access Key. Additionally you
+ * can optionally upload an IAM SSH User Public Key.
  *
  * ## Example Usage
  * ### User

@@ -10,6 +10,43 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// This resources helps you create a single IAM role which can be assume by trusted
+// resources using OpenID Connect Federated Users.
+//
+// ## Example Usage
+// ## Assumable Role With OIDC
+//
+// ```go
+// package main
+//
+// import (
+//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+// )
+//
+// func main() {
+//     pulumi.Run(func(ctx *pulumi.Context) error {
+//         assumableRoleWithOIDC, err := iam.NewAssumableRoleWithOIDC(ctx, "assumable-role-with-oidc", &iam.AssumableRoleWithOIDCArgs{
+//             Role: iam.RoleArgs{
+//                 Name:       pulumi.String("oidc-role"),
+//                 PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
+//             },
+//             Tags: pulumi.ToStringMap(map[string]string{
+//                 "Role": "oidc-role",
+//             }),
+//             ProviderUrls: pulumi.ToStringArray([]string{"oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"}),
+//         })
+//         if err != nil {
+//             return err
+//         }
+//
+//         ctx.Export("assumableRoleWithOIDC", assumableRoleWithOIDC)
+//
+//         return nil
+//     })
+// }
+// ```
+// {{ /example }}
 type AssumableRoleWithOIDC struct {
 	pulumi.ResourceState
 

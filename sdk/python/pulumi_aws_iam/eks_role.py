@@ -145,7 +145,47 @@ class EKSRole(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a EKSRole resource with the given unique name, props, and options.
+        This resource helps you create an IAM role that can be assumed by one or more EKS ServiceAccounts,
+        in one or more EKS Clusters. With this resource:
+
+        - You do not need any knowledge of cluster OIDC information.
+        - You can assume the role from multiple EKS clusters, for example used in DR or when a workload is spread across clusters.
+        - You can support multiple ServiceAccount in the same cluster, for example when a workload runs in multiple namespaces.
+
+        Notes:
+
+        - The EKS cluster needs to exist first, in the current AWS account and region
+        - The key in the `Cluster Service Accounts` is the exact name of the EKS cluster.
+
+        ## Example Usage
+        ## Multi Cluster
+
+        With this resource you can provision an IAM Role named `my-app` that can be assumed from:
+
+        - EKS cluster `staging-main-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+        - EKS cluster `staging-backup-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        eks_role = iam.EKSRole(
+            'eks_role',
+            role=iam.RoleArgs(
+                name='eks-role',
+                policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy'],
+            ),
+            tags={
+                'Name': 'eks-role',
+            },
+            cluster_service_acccounts={
+                'staging-main-1': [ 'default:my-app-staging' ],
+                'staging-backup-1': [ 'default:my-app-staging' ],
+            },
+        )
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] cluster_service_accounts: EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
@@ -162,7 +202,47 @@ class EKSRole(pulumi.ComponentResource):
                  args: Optional[EKSRoleArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a EKSRole resource with the given unique name, props, and options.
+        This resource helps you create an IAM role that can be assumed by one or more EKS ServiceAccounts,
+        in one or more EKS Clusters. With this resource:
+
+        - You do not need any knowledge of cluster OIDC information.
+        - You can assume the role from multiple EKS clusters, for example used in DR or when a workload is spread across clusters.
+        - You can support multiple ServiceAccount in the same cluster, for example when a workload runs in multiple namespaces.
+
+        Notes:
+
+        - The EKS cluster needs to exist first, in the current AWS account and region
+        - The key in the `Cluster Service Accounts` is the exact name of the EKS cluster.
+
+        ## Example Usage
+        ## Multi Cluster
+
+        With this resource you can provision an IAM Role named `my-app` that can be assumed from:
+
+        - EKS cluster `staging-main-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+        - EKS cluster `staging-backup-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        eks_role = iam.EKSRole(
+            'eks_role',
+            role=iam.RoleArgs(
+                name='eks-role',
+                policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy'],
+            ),
+            tags={
+                'Name': 'eks-role',
+            },
+            cluster_service_acccounts={
+                'staging-main-1': [ 'default:my-app-staging' ],
+                'staging-backup-1': [ 'default:my-app-staging' ],
+            },
+        )
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param EKSRoleArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

@@ -9,6 +9,64 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create an IAM role that can be assumed by one or more EKS ServiceAccounts,
+    /// in one or more EKS Clusters. With this resource:
+    /// 
+    /// - You do not need any knowledge of cluster OIDC information.
+    /// - You can assume the role from multiple EKS clusters, for example used in DR or when a workload is spread across clusters.
+    /// - You can support multiple ServiceAccount in the same cluster, for example when a workload runs in multiple namespaces.
+    /// 
+    /// Notes:
+    /// 
+    /// - The EKS cluster needs to exist first, in the current AWS account and region
+    /// - The key in the `Cluster Service Accounts` is the exact name of the EKS cluster.
+    /// 
+    /// ## Example Usage
+    /// ## Multi Cluster
+    /// 
+    /// With this resource you can provision an IAM Role named `my-app` that can be assumed from:
+    /// 
+    /// - EKS cluster `staging-main-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+    /// - EKS cluster `staging-backup-1`, namespace `default`, ServiceAccount called `my-app-staging`.
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// using System.Collections.Immutable;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var eksRole = new EKSRole("eks-role", new EKSRoleArgs
+    ///         {
+    ///             Role = new RoleArgs
+    ///             {
+    ///                 Name = "eks-role",
+    ///                 PolicyArns = {"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"},
+    ///             },
+    ///             Tags = new InputMap&lt;string&gt;
+    ///             {
+    ///                 {"Name", "eks-role"},
+    ///             },
+    ///             Uncomment the below and replace actual cluster values.
+    ///             ClusterServiceAccounts = {
+    ///                 {"staging-main-1", ImmutableArray.Create&lt;string&gt;(new string[] {"default:my-app-staging"})},
+    ///                 {"staging-backup-1", ImmutableArray.Create&lt;string&gt;(new string[] {"default:my-app-staging"})}
+    ///             },
+    ///         });
+    /// 
+    ///         this.EksRole = Output.Create&lt;EKSRole&gt;(eksRole);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;EKSRole&gt; EksRole { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:EKSRole")]
     public partial class EKSRole : Pulumi.ComponentResource
     {

@@ -130,7 +130,32 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Create a AssumableRoleWithSAML resource with the given unique name, props, and options.
+        This resource helps you create a single IAM Role which can be assumed by trusted
+        resources using SAML Federated Users.
+
+        ## Example Usage
+        ## Assumable Role With SAML
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_role_with_saml = iam.AssumableRoleWithSAML(
+            'assumable_role_with_saml',
+            role=iam.RoleArgs(
+                name='saml-role',
+                policy_arns=['arn:aws:iam::aws:policy/ReadOnlyAccess'],
+            ),
+            tags={
+                'Role': 'saml-role',
+            },
+            provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml']
+        )
+
+        pulumi.export('assumable_role_with_saml', assumable_role_with_saml)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] aws_saml_endpoint: AWS SAML Endpoint.
@@ -146,7 +171,32 @@ class AssumableRoleWithSAML(pulumi.ComponentResource):
                  args: Optional[AssumableRoleWithSAMLArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a AssumableRoleWithSAML resource with the given unique name, props, and options.
+        This resource helps you create a single IAM Role which can be assumed by trusted
+        resources using SAML Federated Users.
+
+        ## Example Usage
+        ## Assumable Role With SAML
+
+        ```python
+        import pulumi
+        import pulumi_aws_iam as iam
+
+        assumable_role_with_saml = iam.AssumableRoleWithSAML(
+            'assumable_role_with_saml',
+            role=iam.RoleArgs(
+                name='saml-role',
+                policy_arns=['arn:aws:iam::aws:policy/ReadOnlyAccess'],
+            ),
+            tags={
+                'Role': 'saml-role',
+            },
+            provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml']
+        )
+
+        pulumi.export('assumable_role_with_saml', assumable_role_with_saml)
+        ```
+        {{ /example }}
+
         :param str resource_name: The name of the resource.
         :param AssumableRoleWithSAMLArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.

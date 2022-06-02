@@ -9,6 +9,38 @@ using Pulumi.Serialization;
 
 namespace Pulumi.AwsIam
 {
+    /// <summary>
+    /// This resource helps you create an IAM Group with Users who are allowed to assume specified
+    /// IAM roles.
+    /// 
+    /// ## Example Usage
+    /// ## Group With Assumable Roles Policy
+    /// 
+    /// ```csharp
+    /// using Pulumi;
+    /// using Pulumi.AwsIam;
+    /// using Pulumi.AwsIam.Inputs;
+    /// 
+    /// class MyStack : Stack
+    /// {
+    ///     public MyStack()
+    ///     {
+    ///         var groupWithAssumableRolePolicy = new GroupWithAssumableRolesPolicy("group-with-assumable-roles-policy", new GroupWithAssumableRolesPolicyArgs
+    ///         {
+    ///             Name = "production-readonly",
+    ///             AssumableRoles = {"arn:aws:iam::835367859855:role/readonly"},
+    ///             GroupUsers = {"user1", "user2"},
+    ///         });
+    /// 
+    ///         this.GroupWithAssumableRolesPolicy = Output.Create&lt;GroupWithAssumableRolesPolicy&gt;(groupWithAssumableRolePolicy);
+    ///     }
+    /// 
+    ///     [Output]
+    ///     public Output&lt;GroupWithAssumableRolesPolicy&gt; GroupWithAssumableRolesPolicy { get; set; }
+    /// }
+    /// ```
+    /// {{ /example }}
+    /// </summary>
     [AwsIamResourceType("aws-iam:index:GroupWithAssumableRolesPolicy")]
     public partial class GroupWithAssumableRolesPolicy : Pulumi.ComponentResource
     {
