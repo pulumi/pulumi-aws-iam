@@ -1,4 +1,4 @@
-VERSION         := 0.0.3-docs1
+VERSION         := 0.0.3
 
 PACK            := aws-iam
 PROJECT         := github.com/pulumi/pulumi-${PACK}
