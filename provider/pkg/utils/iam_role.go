@@ -53,17 +53,29 @@ func NewIAMRole(ctx *pulumi.Context, name string, args *IAMRoleArgs, opts ...pul
 		args.Role.Path = pulumi.String("/")
 	}
 
-	role, err := iam.NewRole(ctx, roleResourceName, &iam.RoleArgs{
+	roleArgs := &iam.RoleArgs{
 		AssumeRolePolicy:    args.AssumeRolePolicy,
 		Description:         args.Role.Description,
 		ForceDetachPolicies: args.ForceDetachPolicies,
 		MaxSessionDuration:  args.MaxSessionDuration,
 		Name:                args.Role.Name,
-		NamePrefix:          args.Role.NamePrefix,
 		Path:                args.Role.Path,
 		PermissionsBoundary: args.Role.PermissionsBoundaryArn,
 		Tags:                args.Tags,
-	}, opts...)
+	}
+
+	if args.Role.NamePrefix != nil {
+		roleArgs.NamePrefix = args.Role.NamePrefix.ToStringPtrOutput().ApplyT(func(prefix *string) *string {
+			if *prefix == "" {
+				return nil
+			}
+
+			roleArgs.Name = nil
+			return prefix
+		}).(pulumi.StringPtrOutput)
+	}
+
+	role, err := iam.NewRole(ctx, roleResourceName, roleArgs, opts...)
 	if err != nil {
 		return nil, err
 	}
