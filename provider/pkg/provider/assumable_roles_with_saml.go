@@ -29,10 +29,10 @@ type AssumableRolesWithSAMLArgs struct {
 	AWSSAMLEndpoint string `pulumi:"awsSamlEndpoint"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
-	MaxSessionDuration int `pulumi:"maxSessionDuration"`
+	MaxSessionDuration pulumi.IntInput `pulumi:"maxSessionDuration"`
 
 	// Whether policies should be detached from this role when destroying.
-	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
+	ForceDetachPolicies pulumi.BoolInput `pulumi:"forceDetachPolicies"`
 
 	// IAM role with admin access.
 	Admin utils.RoleArgs `pulumi:"admin"`
@@ -96,9 +96,9 @@ func NewAssumableRolesWithSAML(ctx *pulumi.Context, name string, args *Assumable
 		return nil, err
 	}
 
-	component.Admin = createAssumableRoleOutput(roleOutput[utils.AdminRoleType], false)
-	component.Poweruser = createAssumableRoleOutput(roleOutput[utils.PoweruserRoleType], false)
-	component.Readonly = createAssumableRoleOutput(roleOutput[utils.PoweruserRoleType], false)
+	component.Admin = createAssumableRoleOutput(roleOutput[utils.AdminRoleType], pulumi.Bool(false))
+	component.Poweruser = createAssumableRoleOutput(roleOutput[utils.PoweruserRoleType], pulumi.Bool(false))
+	component.Readonly = createAssumableRoleOutput(roleOutput[utils.PoweruserRoleType], pulumi.Bool(false))
 
 	return component, nil
 }

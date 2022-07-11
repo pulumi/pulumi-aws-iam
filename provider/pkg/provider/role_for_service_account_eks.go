@@ -78,7 +78,7 @@ type EKSServiceAccountPolicies struct {
 
 type RoleForServiceAccountsEksArgs struct {
 	// A map of tags to add.
-	Tags map[string]string `pulumi:"tags"`
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 
 	// IAM role.
 	Role utils.RoleArgs `pulumi:"role"`
@@ -87,10 +87,10 @@ type RoleForServiceAccountsEksArgs struct {
 	PolicyNamePrefix string `pulumi:"policyNamePrefix"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
-	MaxSessionDuration int `pulumi:"maxSessionDuration"`
+	MaxSessionDuration pulumi.IntInput `pulumi:"maxSessionDuration"`
 
 	// Whether policies should be detached from this role when destroying.
-	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
+	ForceDetachPolicies pulumi.BoolInput `pulumi:"forceDetachPolicies"`
 
 	// Map of OIDC providers.
 	OIDCProviders map[string]OIDCServiceProviderEKS `pulumi:"oidcProviders"`
@@ -143,7 +143,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 		return nil, err
 	}
 
-	var oidcProviderOutputs []pulumi.AnyOutput
+	var oidcProviderOutputs []interface{}
 	for _, provider := range args.OIDCProviders {
 		providerOutput := pulumi.All(provider.NamespaceServiceAccounts, provider.ProviderARN).ApplyT(func(x []interface{}) iam.GetPolicyDocumentStatement {
 			namespaceServiceAccounts := x[0].([]string)
@@ -178,11 +178,11 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 					},
 				},
 			}
-		}).(pulumi.AnyOutput)
+		}).(iam.GetPolicyDocumentStatementOutput)
 		oidcProviderOutputs = append(oidcProviderOutputs, providerOutput)
 	}
 
-	policyDocJSON := pulumi.All(oidcProviderOutputs).ApplyT(func(x []interface{}) (string, error) {
+	policyDocJSON := pulumi.All(oidcProviderOutputs...).ApplyT(func(x []interface{}) (string, error) {
 		var statements []iam.GetPolicyDocumentStatement
 		for _, v := range x {
 			s := v.(iam.GetPolicyDocumentStatement)
@@ -213,7 +213,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 	for _, policyARN := range args.Role.PolicyArns {
 		_, err := iam.NewRolePolicyAttachment(ctx, fmt.Sprintf("%s-custom", name), &iam.RolePolicyAttachmentArgs{
 			Role:      eksRole.Name,
-			PolicyArn: pulumi.String(policyARN),
+			PolicyArn: policyARN,
 		}, opts...)
 		if err != nil {
 			return nil, err

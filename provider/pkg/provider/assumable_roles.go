@@ -37,10 +37,10 @@ type AssumableRolesArgs struct {
 	MFAAge int `pulumi:"mfaAge"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
-	MaxSessionDuration int `pulumi:"maxSessionDuration"`
+	MaxSessionDuration pulumi.IntInput `pulumi:"maxSessionDuration"`
 
 	// Whether policies should be detached from this role when destroying.
-	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
+	ForceDetachPolicies pulumi.BoolInput `pulumi:"forceDetachPolicies"`
 
 	// IAM role with admin access.
 	Admin utils.RoleArgs `pulumi:"admin"`
@@ -66,7 +66,7 @@ type AssumableRoleOutput struct {
 	RoleUniqueID pulumi.StringOutput `pulumi:"roleUniqueId"`
 
 	// Whether readonly IAM role requires MFA.
-	RequiresMFA bool `pulumi:"requiresMfa"`
+	RequiresMFA pulumi.BoolInput `pulumi:"requiresMfa"`
 }
 
 type AssumableRoles struct {
