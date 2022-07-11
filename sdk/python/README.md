@@ -36,7 +36,7 @@ npm install @pulumi/aws-iam
 ### Go
 
 ```
-go get -t github.com/zchase/pulumi-aws-iam/sdk
+go get -t github.com/pulumi/pulumi-aws-iam/sdk
 ```
 
 # Usage

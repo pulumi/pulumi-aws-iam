@@ -29,16 +29,16 @@ const EKSRoleIdentifier = "aws-iam:index:EKSRole"
 
 type EKSRoleArgs struct {
 	// A map of tags to add.
-	Tags map[string]string `pulumi:"tags"`
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 
 	// IAM role.
 	Role utils.RoleArgs `pulumi:"role"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
-	MaxSessionDuration int `pulumi:"maxSessionDuration"`
+	MaxSessionDuration pulumi.IntInput `pulumi:"maxSessionDuration"`
 
 	// Whether policies should be detached from this role when destroying.
-	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
+	ForceDetachPolicies pulumi.BoolInput `pulumi:"forceDetachPolicies"`
 
 	// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details.
 	ClusterServiceAccounts map[string][]pulumi.StringInput `pulumi:"clusterServiceAccounts"`
@@ -143,6 +143,15 @@ func NewEKSRole(ctx *pulumi.Context, name string, args *EKSRoleArgs, opts ...pul
 	component.Name = role.Name
 	component.UniqueID = role.UniqueId
 	component.Path = role.Path
+
+	if err := ctx.RegisterResourceOutputs(component, pulumi.Map{
+		"arn":      role.Arn,
+		"name":     role.Name,
+		"uniqueId": role.UniqueId,
+		"path":     role.Path,
+	}); err != nil {
+		return nil, err
+	}
 
 	return component, nil
 }

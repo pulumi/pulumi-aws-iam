@@ -9,69 +9,60 @@ import (
 
 type RoleArgs struct {
 	// IAM role name.
-	Name string `pulumi:"name"`
+	Name pulumi.StringPtrInput `pulumi:"name"`
 
 	// IAM role name prefix.
-	NamePrefix string `pulumi:"namePrefix"`
+	NamePrefix pulumi.StringPtrInput `pulumi:"namePrefix"`
 
 	// IAM Role description.
-	Description string `pulumi:"description"`
+	Description pulumi.StringInput `pulumi:"description"`
 
 	// Path of IAM role.
-	Path string `pulumi:"path"`
+	Path pulumi.StringInput `pulumi:"path"`
 
 	// Permissions boundary ARN to use for IAM role.
-	PermissionsBoundaryArn string `pulumi:"permissionsBoundaryArn"`
+	PermissionsBoundaryArn pulumi.StringInput `pulumi:"permissionsBoundaryArn"`
 
 	// List of ARNs of IAM policies to attach to IAM role.
-	PolicyArns []pulumi.String `pulumi:"policyArns"`
+	PolicyArns []pulumi.StringInput `pulumi:"policyArns"`
 
 	// Whether role requires MFA.
-	RequiresMFA bool `pulumi:"requiresMfa"`
+	RequiresMFA pulumi.BoolInput `pulumi:"requiresMfa"`
 
 	// A map of tags to add.
-	Tags map[string]string `pulumi:"tags"`
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 type IAMRoleArgs struct {
 	AssumeRolePolicy    pulumi.StringInput
-	ForceDetachPolicies bool
-	MaxSessionDuration  int
-	Tags                map[string]string
+	ForceDetachPolicies pulumi.BoolInput
+	MaxSessionDuration  pulumi.IntInput
+	Tags                pulumi.StringMapInput
 	Role                RoleArgs
 }
 
 func NewIAMRole(ctx *pulumi.Context, name string, args *IAMRoleArgs, opts ...pulumi.ResourceOption) (*iam.Role, error) {
 	roleResourceName := fmt.Sprintf("%s-role", name)
 
-	// If the Role NamePrefix is set prefer that over the Name value.
-	var roleNamePrefix pulumi.StringPtrInput
-	roleName := pulumi.StringPtr(args.Role.Name)
-	if args.Role.NamePrefix != "" {
-		roleNamePrefix = pulumi.StringPtr(args.Role.NamePrefix)
-		roleName = nil
-	}
-
 	// Set MaxSession Duration to default value if not set.
-	if args.MaxSessionDuration == 0 {
-		args.MaxSessionDuration = 36000
+	if args.MaxSessionDuration == nil {
+		args.MaxSessionDuration = pulumi.Int(3600)
 	}
 
-	// Set the Path to "/" if it is not provided.
-	if args.Role.Path == "" {
-		args.Role.Path = "/"
+	if args.Role.Path == nil {
+		args.Role.Path = pulumi.String("/")
 	}
 
 	role, err := iam.NewRole(ctx, roleResourceName, &iam.RoleArgs{
 		AssumeRolePolicy:    args.AssumeRolePolicy,
-		Description:         pulumi.String(args.Role.Description),
-		ForceDetachPolicies: pulumi.BoolPtr(args.ForceDetachPolicies),
-		MaxSessionDuration:  pulumi.IntPtr(args.MaxSessionDuration),
-		Name:                roleName,
-		NamePrefix:          roleNamePrefix,
-		Path:                pulumi.String(args.Role.Path),
-		PermissionsBoundary: pulumi.String(args.Role.PermissionsBoundaryArn),
-		Tags:                pulumi.ToStringMap(args.Tags),
+		Description:         args.Role.Description,
+		ForceDetachPolicies: args.ForceDetachPolicies,
+		MaxSessionDuration:  args.MaxSessionDuration,
+		Name:                args.Role.Name,
+		NamePrefix:          args.Role.NamePrefix,
+		Path:                args.Role.Path,
+		PermissionsBoundary: args.Role.PermissionsBoundaryArn,
+		Tags:                args.Tags,
 	}, opts...)
 	if err != nil {
 		return nil, err

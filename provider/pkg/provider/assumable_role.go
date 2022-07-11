@@ -41,16 +41,16 @@ type AssumableRoleArgs struct {
 	TrustedRoleServices []string `pulumi:"trustedRoleServices"`
 
 	// Max age of valid MFA (in seconds) for roles which require MFA.
-	MFAAge int `pulumi:"mfaAge"`
+	MFAAge pulumi.IntInput `pulumi:"mfaAge"`
 
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
-	MaxSessionDuration int `pulumi:"maxSessionDuration"`
+	MaxSessionDuration pulumi.IntInput `pulumi:"maxSessionDuration"`
 
 	// IAM role.
 	Role utils.RoleArgs `pulumi:"role"`
 
 	// A map of tags to add.
-	Tags map[string]string `pulumi:"tags"`
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 
 	// A custom role trust policy.
 	CustomRoleTrustPolicy string `pulumi:"customRoleTrustPolicy"`
@@ -65,7 +65,7 @@ type AssumableRoleArgs struct {
 	AttachReadonlyPolicy bool `pulumi:"attachReadonlyPolicy"`
 
 	// Whether policies should be detached from this role when destroying.
-	ForceDetachPolicies bool `pulumi:"forceDetachPolicies"`
+	ForceDetachPolicies pulumi.BoolInput `pulumi:"forceDetachPolicies"`
 
 	// STS ExternalId condition values to use with a role (when MFA is not required).
 	RoleSTSExternalIDs []string `pulumi:"roleStsExternalIds"`
@@ -85,7 +85,7 @@ type AssumableRoleRoleOutput struct {
 	UniqueID pulumi.StringOutput `pulumi:"uniqueId"`
 
 	// Whether IAM role requires MFA.
-	RequiresMFA bool `pulumi:"requiresMfa"`
+	RequiresMFA pulumi.BoolOutput `pulumi:"requiresMfa"`
 
 	// STS ExternalId condition value to use with a role.
 	STSExternalIDs []string `pulumi:"stsExternalIds"`
@@ -136,19 +136,20 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 		NewPolicyDocCondition("StringEquals", "sts:ExternalId", args.RoleSTSExternalIDs...),
 	}
 
-	if args.Role.RequiresMFA {
-		mfaAge := args.MFAAge
-		if mfaAge == 0 {
-			mfaAge = 86400
-		}
+	var mfaAge pulumi.IntInput
+	args.Role.RequiresMFA.ToBoolOutput().ApplyT(func(mfa bool) error {
+		if mfa {
+			if args.MFAAge == nil {
+				args.MFAAge = pulumi.Int(86400)
+			}
 
-		policyDocumentStatementConditions = []iam.GetPolicyDocumentStatementCondition{
-			NewPolicyDocCondition("Bool", "aws:MultiFactorAuthPresent", "true"),
-			NewPolicyDocCondition("NumericLessThan", "aws:MultiFactorAuthAge", fmt.Sprintf("%v", mfaAge)),
+			policyDocumentStatementConditions = []iam.GetPolicyDocumentStatementCondition{
+				NewPolicyDocCondition("Bool", "aws:MultiFactorAuthPresent", "true"),
+				NewPolicyDocCondition("NumericLessThan", "aws:MultiFactorAuthAge", fmt.Sprintf("%v", mfaAge)),
+			}
 		}
-	} else {
-
-	}
+		return nil
+	})
 
 	rolePolicy := args.TrustedRoleArns.ToStringArrayOutput().ApplyT(func(arns []string) (string, error) {
 		if args.CustomRoleTrustPolicy != "" {
@@ -208,10 +209,10 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 
 	instanceProfileName := fmt.Sprintf("%s-instance-profile", name)
 	instanceProfile, err := iam.NewInstanceProfile(ctx, instanceProfileName, &iam.InstanceProfileArgs{
-		Name: pulumi.String(args.Role.Name),
-		Path: pulumi.String(args.Role.Path),
+		Name: args.Role.Name,
+		Path: args.Role.Path,
 		Role: role.Name,
-		Tags: pulumi.ToStringMap(args.Tags),
+		Tags: args.Tags,
 	}, opts...)
 	if err != nil {
 		return nil, err
@@ -221,7 +222,7 @@ func NewAssumableRole(ctx *pulumi.Context, name string, args *AssumableRoleArgs,
 	component.Role.Name = role.Name
 	component.Role.Path = role.Path
 	component.Role.UniqueID = role.UniqueId
-	component.Role.RequiresMFA = args.Role.RequiresMFA
+	component.Role.RequiresMFA = args.Role.RequiresMFA.ToBoolOutput()
 	component.Role.STSExternalIDs = args.RoleSTSExternalIDs
 	component.InstanceProfile.Arn = instanceProfile.Arn
 	component.InstanceProfile.ID = instanceProfile.UniqueId

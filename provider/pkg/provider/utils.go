@@ -57,7 +57,7 @@ func createRoleWithAttachments(ctx *pulumi.Context, name, typ string, policyARNS
 	return role, nil
 }
 
-func createAssumableRoleOutput(role *iam.Role, requiresMFA bool) AssumableRoleOutput {
+func createAssumableRoleOutput(role *iam.Role, requiresMFA pulumi.BoolInput) AssumableRoleOutput {
 	return AssumableRoleOutput{
 		RoleARN:      role.Arn,
 		RoleName:     role.Name,

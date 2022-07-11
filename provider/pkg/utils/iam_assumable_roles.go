@@ -21,8 +21,8 @@ const (
 )
 
 type IAMAssumableRolesArgs struct {
-	MaxSessionDuration  int
-	ForceDetachPolicies bool
+	MaxSessionDuration  pulumi.IntInput
+	ForceDetachPolicies pulumi.BoolInput
 	Admin               RoleArgs
 	Poweruser           RoleArgs
 	Readonly            RoleArgs
@@ -39,19 +39,25 @@ func NewAssumableRoles(ctx *pulumi.Context, name string, args *IAMAssumableRoles
 
 	roleOutput := make(map[RoleTypeIdentifier]*iam.Role)
 	for typ, roleArgs := range rolesToCreate {
-		rolePolicy := args.AssumeRolePolicy
-		if roleArgs.RequiresMFA {
-			rolePolicy = args.AssumeRoleWithMFA
+		if roleArgs.RequiresMFA == nil {
+			roleArgs.RequiresMFA = pulumi.Bool(false)
 		}
 
-		if len(roleArgs.PolicyArns) == 0 {
+		rolePolicy := roleArgs.RequiresMFA.ToBoolOutput().ApplyT(func(mfa bool) pulumi.StringOutput {
+			if mfa {
+				return args.AssumeRoleWithMFA.ToStringOutput()
+			}
+			return args.AssumeRolePolicy.ToStringOutput()
+		}).(pulumi.StringInput)
+
+		if roleArgs.PolicyArns == nil || len(roleArgs.PolicyArns) == 0 {
 			switch typ {
 			case AdminRoleType:
-				roleArgs.PolicyArns = append(roleArgs.PolicyArns, AdminRoleDefaultARN)
+				roleArgs.PolicyArns = append(roleArgs.PolicyArns, pulumi.String(AdminRoleDefaultARN))
 			case PoweruserRoleType:
-				roleArgs.PolicyArns = append(roleArgs.PolicyArns, PoweruserDefaultARN)
+				roleArgs.PolicyArns = append(roleArgs.PolicyArns, pulumi.String(PoweruserDefaultARN))
 			case ReadonlyRoleType:
-				roleArgs.PolicyArns = append(roleArgs.PolicyArns, ReadonlyDefaultARN)
+				roleArgs.PolicyArns = append(roleArgs.PolicyArns, pulumi.String(ReadonlyDefaultARN))
 			}
 		}
 
@@ -59,8 +65,8 @@ func NewAssumableRoles(ctx *pulumi.Context, name string, args *IAMAssumableRoles
 
 		// Set the role name to the resource name if a name was
 		// not provided.
-		if roleArgs.Name == "" {
-			roleArgs.Name = roleResourceName
+		if roleArgs.Name == nil {
+			roleArgs.Name = pulumi.StringPtr(roleResourceName)
 		}
 
 		role, err := NewIAMRole(ctx, roleResourceName, &IAMRoleArgs{
