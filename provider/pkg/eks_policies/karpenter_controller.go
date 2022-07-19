@@ -50,14 +50,22 @@ type KarpenterControllerPolicyArgs struct {
 }
 
 func AttachKarpenterControllerPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, partition, awsAccountID string, args KarpenterControllerPolicyArgs) error {
-	karpenterSubnetId := args.SubnetAccountID.ToStringOutput().ApplyT(func(id string) string {
-		if id == "" {
-			return awsAccountID
-		}
-		return id
-	}).(pulumi.StringOutput)
+	karpenterSubnetId := args.SubnetAccountID
+	if karpenterSubnetId == nil {
+		karpenterSubnetId = pulumi.String(awsAccountID)
+	}
 
-	policyJSON := pulumi.All(karpenterSubnetId, args.ClusterID, args.SSMParameterARNs, args.NodeIAMRoleARNS).ApplyT(func(x []interface{}) (string, error) {
+	ssmParameterARNs := args.SSMParameterARNs
+	if ssmParameterARNs == nil {
+		ssmParameterARNs = pulumi.ToStringArray([]string{"arn:aws:ssm:*:*:parameter/aws/service/*"})
+	}
+
+	nodeIAMRoleARNS := args.NodeIAMRoleARNS
+	if nodeIAMRoleARNS == nil {
+		nodeIAMRoleARNS = pulumi.ToStringArray([]string{"*"})
+	}
+
+	policyJSON := pulumi.All(karpenterSubnetId, args.ClusterID, ssmParameterARNs, nodeIAMRoleARNS).ApplyT(func(x []interface{}) (string, error) {
 		kId := x[0].(string)
 		cId := x[1].(string)
 		ssm := x[2].([]string)
