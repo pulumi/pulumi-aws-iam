@@ -2881,6 +2881,115 @@ func (o EKSRolePoliciesPtrOutput) VpnCni() EKSVPNCNIPolicyPtrOutput {
 	}).(EKSVPNCNIPolicyPtrOutput)
 }
 
+// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount.
+type EKSServiceAccount struct {
+	// Name of the EKS cluster.
+	Name *string `pulumi:"name"`
+	// Service accounts to pair with the cluster.
+	ServiceAccounts []string `pulumi:"serviceAccounts"`
+}
+
+// EKSServiceAccountInput is an input type that accepts EKSServiceAccountArgs and EKSServiceAccountOutput values.
+// You can construct a concrete instance of `EKSServiceAccountInput` via:
+//
+//          EKSServiceAccountArgs{...}
+type EKSServiceAccountInput interface {
+	pulumi.Input
+
+	ToEKSServiceAccountOutput() EKSServiceAccountOutput
+	ToEKSServiceAccountOutputWithContext(context.Context) EKSServiceAccountOutput
+}
+
+// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount.
+type EKSServiceAccountArgs struct {
+	// Name of the EKS cluster.
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Service accounts to pair with the cluster.
+	ServiceAccounts pulumi.StringArrayInput `pulumi:"serviceAccounts"`
+}
+
+func (EKSServiceAccountArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*EKSServiceAccount)(nil)).Elem()
+}
+
+func (i EKSServiceAccountArgs) ToEKSServiceAccountOutput() EKSServiceAccountOutput {
+	return i.ToEKSServiceAccountOutputWithContext(context.Background())
+}
+
+func (i EKSServiceAccountArgs) ToEKSServiceAccountOutputWithContext(ctx context.Context) EKSServiceAccountOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(EKSServiceAccountOutput)
+}
+
+// EKSServiceAccountArrayInput is an input type that accepts EKSServiceAccountArray and EKSServiceAccountArrayOutput values.
+// You can construct a concrete instance of `EKSServiceAccountArrayInput` via:
+//
+//          EKSServiceAccountArray{ EKSServiceAccountArgs{...} }
+type EKSServiceAccountArrayInput interface {
+	pulumi.Input
+
+	ToEKSServiceAccountArrayOutput() EKSServiceAccountArrayOutput
+	ToEKSServiceAccountArrayOutputWithContext(context.Context) EKSServiceAccountArrayOutput
+}
+
+type EKSServiceAccountArray []EKSServiceAccountInput
+
+func (EKSServiceAccountArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]EKSServiceAccount)(nil)).Elem()
+}
+
+func (i EKSServiceAccountArray) ToEKSServiceAccountArrayOutput() EKSServiceAccountArrayOutput {
+	return i.ToEKSServiceAccountArrayOutputWithContext(context.Background())
+}
+
+func (i EKSServiceAccountArray) ToEKSServiceAccountArrayOutputWithContext(ctx context.Context) EKSServiceAccountArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(EKSServiceAccountArrayOutput)
+}
+
+// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount.
+type EKSServiceAccountOutput struct{ *pulumi.OutputState }
+
+func (EKSServiceAccountOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*EKSServiceAccount)(nil)).Elem()
+}
+
+func (o EKSServiceAccountOutput) ToEKSServiceAccountOutput() EKSServiceAccountOutput {
+	return o
+}
+
+func (o EKSServiceAccountOutput) ToEKSServiceAccountOutputWithContext(ctx context.Context) EKSServiceAccountOutput {
+	return o
+}
+
+// Name of the EKS cluster.
+func (o EKSServiceAccountOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v EKSServiceAccount) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+// Service accounts to pair with the cluster.
+func (o EKSServiceAccountOutput) ServiceAccounts() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v EKSServiceAccount) []string { return v.ServiceAccounts }).(pulumi.StringArrayOutput)
+}
+
+type EKSServiceAccountArrayOutput struct{ *pulumi.OutputState }
+
+func (EKSServiceAccountArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]EKSServiceAccount)(nil)).Elem()
+}
+
+func (o EKSServiceAccountArrayOutput) ToEKSServiceAccountArrayOutput() EKSServiceAccountArrayOutput {
+	return o
+}
+
+func (o EKSServiceAccountArrayOutput) ToEKSServiceAccountArrayOutputWithContext(ctx context.Context) EKSServiceAccountArrayOutput {
+	return o
+}
+
+func (o EKSServiceAccountArrayOutput) Index(i pulumi.IntInput) EKSServiceAccountOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) EKSServiceAccount {
+		return vs[0].([]EKSServiceAccount)[vs[1].(int)]
+	}).(EKSServiceAccountOutput)
+}
+
 type EKSServiceAccountRole struct {
 	// IAM Role description.
 	Description *string `pulumi:"description"`
@@ -5520,6 +5629,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*EKSNodeTerminationHandlerPolicyPtrInput)(nil)).Elem(), EKSNodeTerminationHandlerPolicyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EKSRolePoliciesInput)(nil)).Elem(), EKSRolePoliciesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EKSRolePoliciesPtrInput)(nil)).Elem(), EKSRolePoliciesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*EKSServiceAccountInput)(nil)).Elem(), EKSServiceAccountArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*EKSServiceAccountArrayInput)(nil)).Elem(), EKSServiceAccountArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EKSServiceAccountRoleInput)(nil)).Elem(), EKSServiceAccountRoleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EKSServiceAccountRolePtrInput)(nil)).Elem(), EKSServiceAccountRoleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*EKSVPNCNIPolicyInput)(nil)).Elem(), EKSVPNCNIPolicyArgs{})
@@ -5571,6 +5682,8 @@ func init() {
 	pulumi.RegisterOutputType(EKSNodeTerminationHandlerPolicyPtrOutput{})
 	pulumi.RegisterOutputType(EKSRolePoliciesOutput{})
 	pulumi.RegisterOutputType(EKSRolePoliciesPtrOutput{})
+	pulumi.RegisterOutputType(EKSServiceAccountOutput{})
+	pulumi.RegisterOutputType(EKSServiceAccountArrayOutput{})
 	pulumi.RegisterOutputType(EKSServiceAccountRoleOutput{})
 	pulumi.RegisterOutputType(EKSServiceAccountRolePtrOutput{})
 	pulumi.RegisterOutputType(EKSVPNCNIPolicyOutput{})

@@ -123,14 +123,14 @@ namespace Pulumi.AwsIam
     public sealed class EKSRoleArgs : Pulumi.ResourceArgs
     {
         [Input("clusterServiceAccounts")]
-        private InputMap<ImmutableArray<string>>? _clusterServiceAccounts;
+        private InputList<Inputs.EKSServiceAccountArgs>? _clusterServiceAccounts;
 
         /// <summary>
         /// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
         /// </summary>
-        public InputMap<ImmutableArray<string>> ClusterServiceAccounts
+        public InputList<Inputs.EKSServiceAccountArgs> ClusterServiceAccounts
         {
-            get => _clusterServiceAccounts ?? (_clusterServiceAccounts = new InputMap<ImmutableArray<string>>());
+            get => _clusterServiceAccounts ?? (_clusterServiceAccounts = new InputList<Inputs.EKSServiceAccountArgs>());
             set => _clusterServiceAccounts = value;
         }
 

@@ -25,6 +25,7 @@ __all__ = [
     'EKSNodeTerminationHandlerPolicyArgs',
     'EKSRolePoliciesArgs',
     'EKSServiceAccountRoleArgs',
+    'EKSServiceAccountArgs',
     'EKSVPNCNIPolicyArgs',
     'EKSVeleroPolicyArgs',
     'FSxLustreCSIPolicyArgs',
@@ -1243,6 +1244,46 @@ class EKSServiceAccountRoleArgs:
     @policy_arns.setter
     def policy_arns(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "policy_arns", value)
+
+
+@pulumi.input_type
+class EKSServiceAccountArgs:
+    def __init__(__self__, *,
+                 name: Optional[pulumi.Input[str]] = None,
+                 service_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
+        """
+        EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount.
+        :param pulumi.Input[str] name: Name of the EKS cluster.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] service_accounts: Service accounts to pair with the cluster.
+        """
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if service_accounts is not None:
+            pulumi.set(__self__, "service_accounts", service_accounts)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Name of the EKS cluster.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="serviceAccounts")
+    def service_accounts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Service accounts to pair with the cluster.
+        """
+        return pulumi.get(self, "service_accounts")
+
+    @service_accounts.setter
+    def service_accounts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "service_accounts", value)
 
 
 @pulumi.input_type

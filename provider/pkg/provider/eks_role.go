@@ -27,6 +27,11 @@ import (
 
 const EKSRoleIdentifier = "aws-iam:index:EKSRole"
 
+type EKSClusterServiceAccount struct {
+	Name            pulumi.StringInput      `pulumi:"name"`
+	ServiceAccounts pulumi.StringArrayInput `pulumi:"serviceAccounts"`
+}
+
 type EKSRoleArgs struct {
 	// A map of tags to add.
 	Tags pulumi.StringMapInput `pulumi:"tags"`
@@ -41,7 +46,7 @@ type EKSRoleArgs struct {
 	ForceDetachPolicies pulumi.BoolInput `pulumi:"forceDetachPolicies"`
 
 	// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details.
-	ClusterServiceAccounts map[string][]pulumi.StringInput `pulumi:"clusterServiceAccounts"`
+	ClusterServiceAccounts []EKSClusterServiceAccount `pulumi:"clusterServiceAccounts"`
 
 	// ARNs of any policies to attach to the IAM role
 	RolePolicyARNs []pulumi.StringInput `pulumi:"rolePolicyArns"`
@@ -86,41 +91,57 @@ func NewEKSRole(ctx *pulumi.Context, name string, args *EKSRoleArgs, opts ...pul
 		return nil, err
 	}
 
-	policyDocArgs := newIAMPolicyDocumentStatementConstructor("Allow", []string{"sts:AssumeRoleWithWebIdentity"})
-
-	var eksClusters []*eks.LookupClusterResult
-	for name, accounts := range args.ClusterServiceAccounts {
-		cluster, err := eks.LookupCluster(ctx, &eks.LookupClusterArgs{
-			Name: name,
+	var policyDocStatements iam.GetPolicyDocumentStatementArray
+	for _, sAccount := range args.ClusterServiceAccounts {
+		cluster := eks.LookupClusterOutput(ctx, eks.LookupClusterOutputArgs{
+			Name: sAccount.Name,
 		})
-		if err != nil {
-			return nil, err
-		}
 
-		eksClusters = append(eksClusters, cluster)
+		issuer := cluster.Identities().ApplyT(func(identities []eks.GetClusterIdentity) string {
+			return strings.ReplaceAll(identities[0].Oidcs[0].Issuer, "https://", "")
+		}).(pulumi.StringOutput)
 
-		issuer := strings.ReplaceAll(cluster.Identities[0].Oidcs[0].Issuer, "https://", "")
+		serviceAccounts := sAccount.ServiceAccounts.ToStringArrayOutput().ApplyT(func(accts []string) []string {
+			var result []string
+			for _, acct := range accts {
+				result = append(result, fmt.Sprintf("system:serviceaccount:%s", acct))
+			}
+			return result
+		}).(pulumi.StringArrayInput)
 
-		serviceAccounts := make([]string, len(accounts))
-		for _, acct := range accounts {
-			serviceAccounts = append(serviceAccounts, fmt.Sprintf("system:serviceaccount:%s", acct))
-		}
+		principalIdentifier := pulumi.Sprintf("arn:%s:iam::%s:oidc-provider/%s", currentPartition.Partition, account.Id, issuer)
 
-		principalIdentifier := fmt.Sprintf("arn:%s:iam::%s:oidc-provider/%s", currentPartition.Partition, account.Id, issuer)
-
-		policyDocArgs.
-			AddFederatedPrincipal([]string{principalIdentifier}).
-			AddCondition("StringEquals", fmt.Sprintf("%s:sub", issuer), serviceAccounts)
+		policyDocStatements = append(policyDocStatements, iam.GetPolicyDocumentStatementArgs{
+			Effect:  pulumi.StringPtr("Allow"),
+			Actions: pulumi.ToStringArray([]string{"sts:AssumeRoleWithWebIdentity"}),
+			Principals: iam.GetPolicyDocumentStatementPrincipalArray{
+				iam.GetPolicyDocumentStatementPrincipalArgs{
+					Type:        pulumi.String("Federated"),
+					Identifiers: pulumi.ToStringArrayOutput([]pulumi.StringOutput{principalIdentifier}),
+				},
+			},
+			Conditions: iam.GetPolicyDocumentStatementConditionArray{
+				iam.GetPolicyDocumentStatementConditionArgs{
+					Test:     pulumi.String("StringEquals"),
+					Variable: pulumi.Sprintf("%s:sub", issuer),
+					Values:   serviceAccounts,
+				},
+			},
+		})
 	}
 
-	assumeRoldWithOIDC, err := iam.GetPolicyDocument(ctx, policyDocArgs.Build())
-	if err != nil {
-		return nil, err
-	}
+	assumeRoleWithOIDC := iam.GetPolicyDocumentOutput(ctx, iam.GetPolicyDocumentOutputArgs{
+		Statements: policyDocStatements,
+	})
+
+	assumeRoleWithOIDC.Json().ApplyT(func(data string) error {
+		fmt.Println(data)
+		return nil
+	})
 
 	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
 		Role:                args.Role,
-		AssumeRolePolicy:    pulumi.String(assumeRoldWithOIDC.Json),
+		AssumeRolePolicy:    assumeRoleWithOIDC.Json(),
 		ForceDetachPolicies: args.ForceDetachPolicies,
 		MaxSessionDuration:  args.MaxSessionDuration,
 		Tags:                args.Tags,

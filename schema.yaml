@@ -2,6 +2,19 @@
 ---
 name: aws-iam
 types:
+    "aws-iam:index:EKSServiceAccount":
+        description: "EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount."
+        type: object
+        properties:
+          name:
+            description: "Name of the EKS cluster."
+            type: string
+          serviceAccounts:
+            description: "Service accounts to pair with the cluster."
+            type: array
+            items:
+                type: string
+
     "aws-iam:index:AccountPasswordPolicy":
         type: object
         description: Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
@@ -1945,12 +1958,10 @@ resources:
                 default: false
 
             clusterServiceAccounts:
-                type: object
                 description: "EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details"
-                additionalProperties:
-                    type: array
-                    items:
-                        type: string
+                type: array
+                items:
+                    $ref: "#/types/aws-iam:index:EKSServiceAccount"
 
             providerUrlSaPairs:
                 type: object

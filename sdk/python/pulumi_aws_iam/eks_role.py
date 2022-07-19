@@ -14,7 +14,7 @@ __all__ = ['EKSRoleArgs', 'EKSRole']
 @pulumi.input_type
 class EKSRoleArgs:
     def __init__(__self__, *,
-                 cluster_service_accounts: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
+                 cluster_service_accounts: Optional[pulumi.Input[Sequence[pulumi.Input['EKSServiceAccountArgs']]]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  provider_url_sa_pairs: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
@@ -23,7 +23,7 @@ class EKSRoleArgs:
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a EKSRole resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] cluster_service_accounts: EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
+        :param pulumi.Input[Sequence[pulumi.Input['EKSServiceAccountArgs']]] cluster_service_accounts: EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] provider_url_sa_pairs: OIDC provider URL and k8s ServiceAccount pairs. If the assume role policy requires a mix of EKS clusters and other OIDC providers then this can be used
@@ -51,14 +51,14 @@ class EKSRoleArgs:
 
     @property
     @pulumi.getter(name="clusterServiceAccounts")
-    def cluster_service_accounts(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]]:
+    def cluster_service_accounts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['EKSServiceAccountArgs']]]]:
         """
         EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
         """
         return pulumi.get(self, "cluster_service_accounts")
 
     @cluster_service_accounts.setter
-    def cluster_service_accounts(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]]):
+    def cluster_service_accounts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['EKSServiceAccountArgs']]]]):
         pulumi.set(self, "cluster_service_accounts", value)
 
     @property
@@ -136,7 +136,7 @@ class EKSRole(pulumi.ComponentResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cluster_service_accounts: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
+                 cluster_service_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EKSServiceAccountArgs']]]]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  provider_url_sa_pairs: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
@@ -188,7 +188,7 @@ class EKSRole(pulumi.ComponentResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] cluster_service_accounts: EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EKSServiceAccountArgs']]]] cluster_service_accounts: EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
         :param pulumi.Input[bool] force_detach_policies: Whether policies should be detached from this role when destroying.
         :param pulumi.Input[int] max_session_duration: Maximum CLI/API session duration in seconds between 3600 and 43200.
         :param pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]] provider_url_sa_pairs: OIDC provider URL and k8s ServiceAccount pairs. If the assume role policy requires a mix of EKS clusters and other OIDC providers then this can be used
@@ -258,7 +258,7 @@ class EKSRole(pulumi.ComponentResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 cluster_service_accounts: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,
+                 cluster_service_accounts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EKSServiceAccountArgs']]]]] = None,
                  force_detach_policies: Optional[pulumi.Input[bool]] = None,
                  max_session_duration: Optional[pulumi.Input[int]] = None,
                  provider_url_sa_pairs: Optional[pulumi.Input[Mapping[str, pulumi.Input[Sequence[pulumi.Input[str]]]]]] = None,

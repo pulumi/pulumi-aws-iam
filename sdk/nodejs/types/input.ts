@@ -386,6 +386,20 @@ export function eksrolePoliciesArgsProvideDefaults(val: EKSRolePoliciesArgs): EK
     };
 }
 
+/**
+ * EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount.
+ */
+export interface EKSServiceAccountArgs {
+    /**
+     * Name of the EKS cluster.
+     */
+    name?: pulumi.Input<string>;
+    /**
+     * Service accounts to pair with the cluster.
+     */
+    serviceAccounts?: pulumi.Input<pulumi.Input<string>[]>;
+}
+
 export interface EKSServiceAccountRoleArgs {
     /**
      * IAM Role description.
