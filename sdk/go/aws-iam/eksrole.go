@@ -104,7 +104,7 @@ func NewEKSRole(ctx *pulumi.Context,
 
 type eksroleArgs struct {
 	// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
-	ClusterServiceAccounts map[string][]string `pulumi:"clusterServiceAccounts"`
+	ClusterServiceAccounts []EKSServiceAccount `pulumi:"clusterServiceAccounts"`
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies *bool `pulumi:"forceDetachPolicies"`
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.
@@ -121,7 +121,7 @@ type eksroleArgs struct {
 // The set of arguments for constructing a EKSRole resource.
 type EKSRoleArgs struct {
 	// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
-	ClusterServiceAccounts pulumi.StringArrayMapInput
+	ClusterServiceAccounts EKSServiceAccountArrayInput
 	// Whether policies should be detached from this role when destroying.
 	ForceDetachPolicies pulumi.BoolPtrInput
 	// Maximum CLI/API session duration in seconds between 3600 and 43200.

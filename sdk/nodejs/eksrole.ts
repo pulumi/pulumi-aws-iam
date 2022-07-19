@@ -117,7 +117,7 @@ export interface EKSRoleArgs {
     /**
      * EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount. See README for details
      */
-    clusterServiceAccounts?: pulumi.Input<{[key: string]: pulumi.Input<pulumi.Input<string>[]>}>;
+    clusterServiceAccounts?: pulumi.Input<pulumi.Input<inputs.EKSServiceAccountArgs>[]>;
     /**
      * Whether policies should be detached from this role when destroying.
      */
