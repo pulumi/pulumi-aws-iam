@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Karpenter Controller policy to the role.
     /// </summary>
-    public sealed class EKSKarpenterControllerPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSKarpenterControllerPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Karpenter Controller policy to the role.
@@ -70,5 +70,6 @@ namespace Pulumi.AwsIam.Inputs
             ClusterId = "*";
             TagKey = "karpenter.sh/discovery";
         }
+        public static new EKSKarpenterControllerPolicyArgs Empty => new EKSKarpenterControllerPolicyArgs();
     }
 }

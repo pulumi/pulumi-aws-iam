@@ -42,7 +42,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:GroupWithAssumableRolesPolicy")]
-    public partial class GroupWithAssumableRolesPolicy : Pulumi.ComponentResource
+    public partial class GroupWithAssumableRolesPolicy : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// List of IAM roles ARNs which can be assumed by the group
@@ -100,7 +100,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class GroupWithAssumableRolesPolicyArgs : Pulumi.ResourceArgs
+    public sealed class GroupWithAssumableRolesPolicyArgs : global::Pulumi.ResourceArgs
     {
         [Input("assumableRoles", required: true)]
         private InputList<string>? _assumableRoles;
@@ -147,5 +147,6 @@ namespace Pulumi.AwsIam
         public GroupWithAssumableRolesPolicyArgs()
         {
         }
+        public static new GroupWithAssumableRolesPolicyArgs Empty => new GroupWithAssumableRolesPolicyArgs();
     }
 }

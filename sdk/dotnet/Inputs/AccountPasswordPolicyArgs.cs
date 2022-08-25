@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// Options to specify complexity requirements and mandatory rotation periods for your IAM users' passwords.
     /// </summary>
-    public sealed class AccountPasswordPolicyArgs : Pulumi.ResourceArgs
+    public sealed class AccountPasswordPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Whether to allow users to change their own password.
@@ -76,5 +76,6 @@ namespace Pulumi.AwsIam.Inputs
         public AccountPasswordPolicyArgs()
         {
         }
+        public static new AccountPasswordPolicyArgs Empty => new AccountPasswordPolicyArgs();
     }
 }

@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Load Balancer policy.
     /// </summary>
-    public sealed class EKSLoadBalancerPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSLoadBalancerPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Load Balancer Controller policy to the role.
@@ -30,5 +30,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSLoadBalancerPolicyArgs()
         {
         }
+        public static new EKSLoadBalancerPolicyArgs Empty => new EKSLoadBalancerPolicyArgs();
     }
 }

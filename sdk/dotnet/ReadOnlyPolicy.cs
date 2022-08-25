@@ -44,7 +44,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:ReadOnlyPolicy")]
-    public partial class ReadOnlyPolicy : Pulumi.ComponentResource
+    public partial class ReadOnlyPolicy : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// The ARN assigned by AWS to this policy.
@@ -114,7 +114,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class ReadOnlyPolicyArgs : Pulumi.ResourceArgs
+    public sealed class ReadOnlyPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// JSON policy document if you want to add custom actions.
@@ -203,5 +203,6 @@ namespace Pulumi.AwsIam
             Description = "IAM Policy";
             Path = "/";
         }
+        public static new ReadOnlyPolicyArgs Empty => new ReadOnlyPolicyArgs();
     }
 }

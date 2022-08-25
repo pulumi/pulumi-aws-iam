@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The different policies to attach to the role.
     /// </summary>
-    public sealed class EKSRolePoliciesArgs : Pulumi.ResourceArgs
+    public sealed class EKSRolePoliciesArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// The Amazon Managed Service for Prometheus IAM policy.
@@ -102,5 +102,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSRolePoliciesArgs()
         {
         }
+        public static new EKSRolePoliciesArgs Empty => new EKSRolePoliciesArgs();
     }
 }

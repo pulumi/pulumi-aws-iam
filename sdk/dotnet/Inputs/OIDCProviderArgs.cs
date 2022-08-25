@@ -10,7 +10,7 @@ using Pulumi.Serialization;
 namespace Pulumi.AwsIam.Inputs
 {
 
-    public sealed class OIDCProviderArgs : Pulumi.ResourceArgs
+    public sealed class OIDCProviderArgs : global::Pulumi.ResourceArgs
     {
         [Input("namespaceServiceAccounts")]
         private InputList<string>? _namespaceServiceAccounts;
@@ -26,5 +26,6 @@ namespace Pulumi.AwsIam.Inputs
         public OIDCProviderArgs()
         {
         }
+        public static new OIDCProviderArgs Empty => new OIDCProviderArgs();
     }
 }

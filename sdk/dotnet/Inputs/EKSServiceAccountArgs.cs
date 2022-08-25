@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// EKS cluster and k8s ServiceAccount pairs. Each EKS cluster can have multiple k8s ServiceAccount.
     /// </summary>
-    public sealed class EKSServiceAccountArgs : Pulumi.ResourceArgs
+    public sealed class EKSServiceAccountArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Name of the EKS cluster.
@@ -36,5 +36,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSServiceAccountArgs()
         {
         }
+        public static new EKSServiceAccountArgs Empty => new EKSServiceAccountArgs();
     }
 }

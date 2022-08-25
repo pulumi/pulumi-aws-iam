@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Cluster Autoscaler IAM policy to the role.
     /// </summary>
-    public sealed class EKSClusterAutoscalerPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSClusterAutoscalerPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Cluster Autoscaler IAM policy to the role.
@@ -36,5 +36,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSClusterAutoscalerPolicyArgs()
         {
         }
+        public static new EKSClusterAutoscalerPolicyArgs Empty => new EKSClusterAutoscalerPolicyArgs();
     }
 }

@@ -49,7 +49,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRoleWithOIDC")]
-    public partial class AssumableRoleWithOIDC : Pulumi.ComponentResource
+    public partial class AssumableRoleWithOIDC : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// ARN of IAM role.
@@ -101,7 +101,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class AssumableRoleWithOIDCArgs : Pulumi.ResourceArgs
+    public sealed class AssumableRoleWithOIDCArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// The AWS account ID where the OIDC provider lives, leave empty to use the account for the AWS provider.
@@ -193,5 +193,6 @@ namespace Pulumi.AwsIam
             ForceDetachPolicies = false;
             MaxSessionDuration = 3600;
         }
+        public static new AssumableRoleWithOIDCArgs Empty => new AssumableRoleWithOIDCArgs();
     }
 }

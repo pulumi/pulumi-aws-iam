@@ -49,7 +49,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRoleWithSAML")]
-    public partial class AssumableRoleWithSAML : Pulumi.ComponentResource
+    public partial class AssumableRoleWithSAML : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// ARN of IAM role.
@@ -101,7 +101,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class AssumableRoleWithSAMLArgs : Pulumi.ResourceArgs
+    public sealed class AssumableRoleWithSAMLArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// AWS SAML Endpoint.
@@ -154,5 +154,6 @@ namespace Pulumi.AwsIam
             ForceDetachPolicies = false;
             MaxSessionDuration = 3600;
         }
+        public static new AssumableRoleWithSAMLArgs Empty => new AssumableRoleWithSAMLArgs();
     }
 }

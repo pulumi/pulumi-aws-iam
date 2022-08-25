@@ -50,7 +50,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRoles")]
-    public partial class AssumableRoles : Pulumi.ComponentResource
+    public partial class AssumableRoles : global::Pulumi.ComponentResource
     {
         [Output("admin")]
         public Output<ImmutableDictionary<string, string>> Admin { get; private set; } = null!;
@@ -87,7 +87,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class AssumableRolesArgs : Pulumi.ResourceArgs
+    public sealed class AssumableRolesArgs : global::Pulumi.ResourceArgs
     {
         [Input("admin", required: true)]
         public Input<Inputs.AdminRoleWithMFAArgs> Admin { get; set; } = null!;
@@ -146,5 +146,6 @@ namespace Pulumi.AwsIam
             MaxSessionDuration = 3600;
             MfaAge = 86400;
         }
+        public static new AssumableRolesArgs Empty => new AssumableRolesArgs();
     }
 }
