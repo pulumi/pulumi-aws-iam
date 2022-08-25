@@ -46,7 +46,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:AssumableRolesWithSAML")]
-    public partial class AssumableRolesWithSAML : Pulumi.ComponentResource
+    public partial class AssumableRolesWithSAML : global::Pulumi.ComponentResource
     {
         [Output("admin")]
         public Output<ImmutableDictionary<string, string>> Admin { get; private set; } = null!;
@@ -83,7 +83,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class AssumableRolesWithSAMLArgs : Pulumi.ResourceArgs
+    public sealed class AssumableRolesWithSAMLArgs : global::Pulumi.ResourceArgs
     {
         [Input("admin")]
         public Input<Inputs.AdminRoleArgs>? Admin { get; set; }
@@ -130,5 +130,6 @@ namespace Pulumi.AwsIam
             ForceDetachPolicies = false;
             MaxSessionDuration = 3600;
         }
+        public static new AssumableRolesWithSAMLArgs Empty => new AssumableRolesWithSAMLArgs();
     }
 }

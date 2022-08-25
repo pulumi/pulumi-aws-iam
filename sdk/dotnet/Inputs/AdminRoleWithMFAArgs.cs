@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The admin role.
     /// </summary>
-    public sealed class AdminRoleWithMFAArgs : Pulumi.ResourceArgs
+    public sealed class AdminRoleWithMFAArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM role with admin access.
@@ -67,5 +67,6 @@ namespace Pulumi.AwsIam.Inputs
         {
             PermissionsBoundaryArn = "";
         }
+        public static new AdminRoleWithMFAArgs Empty => new AdminRoleWithMFAArgs();
     }
 }

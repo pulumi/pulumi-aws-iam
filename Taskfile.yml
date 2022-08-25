@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 vars:
   VERSION: 0.0.1
@@ -9,8 +9,7 @@ vars:
   VERSION_PATH: provider/pkg/version.Version
   WORKING_DIR:
     sh: pwd
-  SCHEMA_PATH: "{{ .WORKING_DIR }}/schema.yaml"
-
+  SCHEMA_PATH: "{{ .WORKING_DIR }}/schema.json"
 
 tasks:
   build:

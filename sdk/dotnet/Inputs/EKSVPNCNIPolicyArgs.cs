@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The VPC CNI IAM policy to the role.
     /// </summary>
-    public sealed class EKSVPNCNIPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSVPNCNIPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the VPC CNI IAM policy to the role.
@@ -36,5 +36,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSVPNCNIPolicyArgs()
         {
         }
+        public static new EKSVPNCNIPolicyArgs Empty => new EKSVPNCNIPolicyArgs();
     }
 }

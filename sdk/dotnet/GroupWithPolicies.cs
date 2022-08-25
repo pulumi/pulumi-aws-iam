@@ -49,7 +49,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:GroupWithPolicies")]
-    public partial class GroupWithPolicies : Pulumi.ComponentResource
+    public partial class GroupWithPolicies : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// IAM AWS account id.
@@ -101,7 +101,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class GroupWithPoliciesArgs : Pulumi.ResourceArgs
+    public sealed class GroupWithPoliciesArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Whether to attach IAM policy which allows IAM users to manage their credentials and MFA.
@@ -182,5 +182,6 @@ namespace Pulumi.AwsIam
             IamSelfManagementPolicyNamePrefix = "IAMSelfManagement-";
             Name = "";
         }
+        public static new GroupWithPoliciesArgs Empty => new GroupWithPoliciesArgs();
     }
 }

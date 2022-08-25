@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Appmesh policies.
     /// </summary>
-    public sealed class EKSAppmeshPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSAppmeshPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Appmesh Controller policy to the role.
@@ -30,5 +30,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSAppmeshPolicyArgs()
         {
         }
+        public static new EKSAppmeshPolicyArgs Empty => new EKSAppmeshPolicyArgs();
     }
 }

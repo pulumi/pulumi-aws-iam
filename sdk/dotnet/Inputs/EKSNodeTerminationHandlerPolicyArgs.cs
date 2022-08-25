@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Node Termination Handler policy to the role.
     /// </summary>
-    public sealed class EKSNodeTerminationHandlerPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSNodeTerminationHandlerPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Node Termination Handler policy to the role.
@@ -37,5 +37,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSNodeTerminationHandlerPolicyArgs()
         {
         }
+        public static new EKSNodeTerminationHandlerPolicyArgs Empty => new EKSNodeTerminationHandlerPolicyArgs();
     }
 }

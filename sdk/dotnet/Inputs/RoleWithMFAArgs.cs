@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// An IAM role that requires MFA.
     /// </summary>
-    public sealed class RoleWithMFAArgs : Pulumi.ResourceArgs
+    public sealed class RoleWithMFAArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM role with the access.
@@ -70,5 +70,6 @@ namespace Pulumi.AwsIam.Inputs
             PermissionsBoundaryArn = "";
             RequiresMfa = true;
         }
+        public static new RoleWithMFAArgs Empty => new RoleWithMFAArgs();
     }
 }

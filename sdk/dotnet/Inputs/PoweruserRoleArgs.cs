@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The poweruser role.
     /// </summary>
-    public sealed class PoweruserRoleArgs : Pulumi.ResourceArgs
+    public sealed class PoweruserRoleArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM role with poweruser access.
@@ -63,5 +63,6 @@ namespace Pulumi.AwsIam.Inputs
             Path = "/";
             PermissionsBoundaryArn = "";
         }
+        public static new PoweruserRoleArgs Empty => new PoweruserRoleArgs();
     }
 }

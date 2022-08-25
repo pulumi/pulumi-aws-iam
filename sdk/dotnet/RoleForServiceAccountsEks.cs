@@ -78,7 +78,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:RoleForServiceAccountsEks")]
-    public partial class RoleForServiceAccountsEks : Pulumi.ComponentResource
+    public partial class RoleForServiceAccountsEks : global::Pulumi.ComponentResource
     {
         [Output("role")]
         public Output<ImmutableDictionary<string, string>> Role { get; private set; } = null!;
@@ -109,7 +109,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class RoleForServiceAccountsEksArgs : Pulumi.ResourceArgs
+    public sealed class RoleForServiceAccountsEksArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Name of the IAM condition operator to evaluate when assuming the role.
@@ -172,5 +172,6 @@ namespace Pulumi.AwsIam
             MaxSessionDuration = 3600;
             PolicyNamePrefix = "AmazonEKS_";
         }
+        public static new RoleForServiceAccountsEksArgs Empty => new RoleForServiceAccountsEksArgs();
     }
 }

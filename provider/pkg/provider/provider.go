@@ -17,12 +17,24 @@ package provider
 import (
 	"github.com/pkg/errors"
 
+	p "github.com/pulumi/pulumi-go-provider"
+	"github.com/pulumi/pulumi-go-provider/infer"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/provider"
 )
 
+func Provider() p.Provider {
+	return infer.NewProvider().WithComponents(
+		infer.Component[*Account, AccountArgs, *AccountState](),
+	)
+}
+
+type component[I any, O pulumi.ComponentResource] interface {
+	infer.ComponentResource[I, O]
+	pulumi.ComponentResource
+}
+
 var resourceConstructorMap = map[string]ResourceConstructor{
-	AccountIdentifier:                       createNewResourceConstructor(NewIAMAccount),
 	PolicyIdentifier:                        createNewResourceConstructor(NewPolicy),
 	AssumableRoleWithOIDCIdentifier:         createNewResourceConstructor(NewIAMAssumableRoleWithOIDC),
 	AssumableRoleWithSAMLIdentifier:         createNewResourceConstructor(NewAssumableRoleWithSAML),

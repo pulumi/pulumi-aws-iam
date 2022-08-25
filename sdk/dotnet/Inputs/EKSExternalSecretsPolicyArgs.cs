@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The External Secrets policy to the role.
     /// </summary>
-    public sealed class EKSExternalSecretsPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSExternalSecretsPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the External Secrets policy to the role.
@@ -49,5 +49,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSExternalSecretsPolicyArgs()
         {
         }
+        public static new EKSExternalSecretsPolicyArgs Empty => new EKSExternalSecretsPolicyArgs();
     }
 }

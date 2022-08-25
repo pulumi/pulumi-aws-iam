@@ -53,7 +53,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:Account")]
-    public partial class Account : Pulumi.ComponentResource
+    public partial class Account : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// The AWS ARN associated with the calling entity.
@@ -106,7 +106,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class AccountArgs : Pulumi.ResourceArgs
+    public sealed class AccountArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// AWS IAM account alias for this account.
@@ -124,5 +124,6 @@ namespace Pulumi.AwsIam
         public AccountArgs()
         {
         }
+        public static new AccountArgs Empty => new AccountArgs();
     }
 }
