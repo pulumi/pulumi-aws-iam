@@ -82,13 +82,11 @@ types:
         properties:
             name:
                 type: string
-                description: IAM role with the access.
-                default: admin
+                description: IAM role with the access. Defaults to 'admin'.
 
             path:
                 type: string
-                description: Path of the IAM role.
-                default: "/"
+                description: Path of the IAM role. Defaults to '/'.
 
             policyArns:
                 type: array
@@ -99,7 +97,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for the role.
-                default: ""
 
             tags:
                 type: object
@@ -110,7 +107,6 @@ types:
             requiresMfa:
                 type: boolean
                 description: Whether the role requires MFA.
-                default: true
 
     "aws-iam:index:EKSServiceAccountRole":
         type: object
@@ -118,17 +114,14 @@ types:
             name:
                 type: string
                 description: IAM role name.
-                default: ""
 
             namePrefix:
                 type: string
                 description: IAM role name prefix.
-                default: ""
 
             path:
                 type: string
                 description: Path of admin IAM role.
-                default: "/"
 
             policyArns:
                 type: array
@@ -139,7 +132,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for the role.
-                default: ""
 
             description:
                 type: string
@@ -152,17 +144,14 @@ types:
             name:
                 type: string
                 description: IAM role name.
-                default: ""
 
             namePrefix:
                 type: string
                 description: IAM role name prefix.
-                default: ""
 
             path:
                 type: string
-                description: Path of admin IAM role.
-                default: "/"
+                description: Path of admin IAM role. Defaults to '/'.
 
             policyArns:
                 type: array
@@ -173,7 +162,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for the role.
-                default: ""
 
     "aws-iam:index:AdminRole":
         type: object
@@ -186,8 +174,7 @@ types:
 
             path:
                 type: string
-                description: Path of admin IAM role.
-                default: "/"
+                description: Path of admin IAM role. Defaults to '/'
 
             policyArns:
                 type: array
@@ -198,7 +185,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for admin role.
-                default: ""
 
             tags:
                 type: object
@@ -227,7 +213,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for admin role.
-                default: ""
 
             tags:
                 type: object
@@ -246,12 +231,10 @@ types:
             name:
                 type: string
                 description: IAM role with poweruser access.
-                default: poweruser
 
             path:
                 type: string
                 description: Path of poweruser IAM role.
-                default: "/"
 
             policyArns:
                 type: array
@@ -262,7 +245,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for poweruser role.
-                default: ""
 
             tags:
                 type: object
@@ -277,12 +259,10 @@ types:
             name:
                 type: string
                 description: IAM role with poweruser access.
-                default: poweruser
 
             path:
                 type: string
                 description: Path of poweruser IAM role.
-                default: "/"
 
             policyArns:
                 type: array
@@ -293,7 +273,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for poweruser role.
-                default: ""
 
             tags:
                 type: object
@@ -304,7 +283,6 @@ types:
             requiresMfa:
                 type: boolean
                 description: Whether admin role requires MFA.
-                default: true
 
     "aws-iam:index:ReadonlyRole":
         type: object
@@ -313,12 +291,10 @@ types:
             name:
                 type: string
                 description: IAM role with readonly access.
-                default: readonly
 
             path:
                 type: string
-                description: Path of readonly IAM role.
-                default: "/"
+                description: Path of readonly IAM role. Defaults to '/'.
 
             policyArns:
                 type: array
@@ -329,7 +305,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for readonly role.
-                default: ""
 
             tags:
                 type: object
@@ -344,12 +319,10 @@ types:
             name:
                 type: string
                 description: IAM role with readonly access.
-                default: readonly
 
             path:
                 type: string
-                description: Path of readonly IAM role.
-                default: "/"
+                description: Path of readonly IAM role. Defaults to '/'.
 
             policyArns:
                 type: array
@@ -360,7 +333,6 @@ types:
             permissionsBoundaryArn:
                 type: string
                 description: Permissions boundary ARN to use for readonly role.
-                default: ""
 
             tags:
                 type: object
@@ -371,7 +343,6 @@ types:
             requiresMfa:
                 type: boolean
                 description: Whether admin role requires MFA.
-                default: true
 
     "aws-iam:index:OIDCProvider":
         type: object

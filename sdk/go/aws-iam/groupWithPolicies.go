@@ -21,33 +21,36 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         groupWithPolicies, err := iam.NewGroupWithPolicies(ctx, "group-with-policies", &iam.GroupWithPoliciesArgs{
-//             Name:                          pulumi.String("superadmins"),
-//             GroupUsers:                    pulumi.ToStringArray([]string{"user1", "user2"}),
-//             AttachIamSelfManagementPolicy: pulumi.BoolPtr(true),
-//             CustomGroupPolicyArns:         pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AdministratorAccess"}),
-//             CustomGroupPolicies: pulumi.ToStringMapArray([]map[string]string{
-//                 {
-//                     "name":   "AllowS3Listing",
-//                     "policy": "{}",
-//                 },
-//             }),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        groupWithPolicies, err := iam.NewGroupWithPolicies(ctx, "group-with-policies", &iam.GroupWithPoliciesArgs{
+//	            Name:                          pulumi.String("superadmins"),
+//	            GroupUsers:                    pulumi.ToStringArray([]string{"user1", "user2"}),
+//	            AttachIamSelfManagementPolicy: pulumi.BoolPtr(true),
+//	            CustomGroupPolicyArns:         pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AdministratorAccess"}),
+//	            CustomGroupPolicies: pulumi.ToStringMapArray([]map[string]string{
+//	                {
+//	                    "name":   "AllowS3Listing",
+//	                    "policy": "{}",
+//	                },
+//	            }),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("groupWithPolicies", groupWithPolicies)
+//	        ctx.Export("groupWithPolicies", groupWithPolicies)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type GroupWithPolicies struct {
@@ -158,7 +161,7 @@ func (i *GroupWithPolicies) ToGroupWithPoliciesOutputWithContext(ctx context.Con
 // GroupWithPoliciesArrayInput is an input type that accepts GroupWithPoliciesArray and GroupWithPoliciesArrayOutput values.
 // You can construct a concrete instance of `GroupWithPoliciesArrayInput` via:
 //
-//          GroupWithPoliciesArray{ GroupWithPoliciesArgs{...} }
+//	GroupWithPoliciesArray{ GroupWithPoliciesArgs{...} }
 type GroupWithPoliciesArrayInput interface {
 	pulumi.Input
 
@@ -183,7 +186,7 @@ func (i GroupWithPoliciesArray) ToGroupWithPoliciesArrayOutputWithContext(ctx co
 // GroupWithPoliciesMapInput is an input type that accepts GroupWithPoliciesMap and GroupWithPoliciesMapOutput values.
 // You can construct a concrete instance of `GroupWithPoliciesMapInput` via:
 //
-//          GroupWithPoliciesMap{ "key": GroupWithPoliciesArgs{...} }
+//	GroupWithPoliciesMap{ "key": GroupWithPoliciesArgs{...} }
 type GroupWithPoliciesMapInput interface {
 	pulumi.Input
 

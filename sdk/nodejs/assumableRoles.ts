@@ -62,12 +62,12 @@ export class AssumableRoles extends pulumi.ComponentResource {
             if ((!args || args.admin === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'admin'");
             }
-            resourceInputs["admin"] = args ? (args.admin ? pulumi.output(args.admin).apply(inputs.adminRoleWithMFAArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["admin"] = args ? args.admin : undefined;
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
             resourceInputs["mfaAge"] = (args ? args.mfaAge : undefined) ?? 86400;
-            resourceInputs["poweruser"] = args ? (args.poweruser ? pulumi.output(args.poweruser).apply(inputs.poweruserRoleWithMFAArgsProvideDefaults) : undefined) : undefined;
-            resourceInputs["readonly"] = args ? (args.readonly ? pulumi.output(args.readonly).apply(inputs.readonlyRoleWithMFAArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["poweruser"] = args ? args.poweruser : undefined;
+            resourceInputs["readonly"] = args ? args.readonly : undefined;
             resourceInputs["trustedRoleArns"] = args ? args.trustedRoleArns : undefined;
             resourceInputs["trustedRoleServices"] = args ? args.trustedRoleServices : undefined;
         } else {

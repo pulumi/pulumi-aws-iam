@@ -15,46 +15,21 @@
 package provider
 
 import (
-	"fmt"
-
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func transformStringArrayToStringArrayOutput(values []string) pulumi.StringArrayOutput {
-	var result []pulumi.StringOutput
-	for _, str := range values {
-		result = append(result, pulumi.Sprintf("%s", str))
+func setDefaultStringPtr(output pulumi.StringPtrInput, value string) pulumi.StringPtrOutput {
+	if output == nil {
+		output = pulumi.StringPtr("").ToStringPtrOutput()
 	}
 
-	return pulumi.ToStringArrayOutput(result)
-}
-
-func createRolePolicyAttachment(ctx *pulumi.Context, name, policyArn string, roleName pulumi.StringOutput, opts ...pulumi.ResourceOption) error {
-	_, err := iam.NewRolePolicyAttachment(ctx, name, &iam.RolePolicyAttachmentArgs{
-		Role:      roleName,
-		PolicyArn: pulumi.String(policyArn),
-	}, opts...)
-	return err
-}
-
-func createRoleWithAttachments(ctx *pulumi.Context, name, typ string, policyARNS []string,
-	args *iam.RoleArgs, opts ...pulumi.ResourceOption) (*iam.Role, error) {
-	roleName := fmt.Sprintf("%s-%s-role", name, typ)
-	role, err := iam.NewRole(ctx, roleName, args, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, policyARN := range policyARNS {
-		policyName := fmt.Sprintf("%s-policy-attachment", roleName)
-		err = createRolePolicyAttachment(ctx, policyName, policyARN, role.Name, opts...)
-		if err != nil {
-			return nil, err
+	return output.ToStringPtrOutput().ApplyT(func(v *string) *string {
+		if v == nil || *v == "" {
+			v = &value
 		}
-	}
-
-	return role, nil
+		return v
+	}).(pulumi.StringPtrOutput)
 }
 
 func createAssumableRoleOutput(role *iam.Role, requiresMFA pulumi.BoolInput) AssumableRoleOutput {
@@ -68,14 +43,10 @@ func createAssumableRoleOutput(role *iam.Role, requiresMFA pulumi.BoolInput) Ass
 }
 
 // IAM Policy Document
-
 type IAMPolicyDocumentEffect string
 type IAMPolicyDocumentPrincipalType string
 
 const (
-	iamPolicyDocumentAllowEffect IAMPolicyDocumentEffect = "Allow"
-	iamPolicyDocumentDenyEffect  IAMPolicyDocumentEffect = "Deny"
-
 	iamPolicyDocumentAWSPrincipal       IAMPolicyDocumentPrincipalType = "AWS"
 	iamPolicyDocumentFederatedPrincipal IAMPolicyDocumentPrincipalType = "Federated"
 	iamPolicyDocumentServicePrincipal   IAMPolicyDocumentPrincipalType = "Service"

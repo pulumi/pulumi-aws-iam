@@ -56,10 +56,6 @@ namespace Pulumi.AwsIam.Inputs
 
         public EKSServiceAccountRoleArgs()
         {
-            Name = "";
-            NamePrefix = "";
-            Path = "/";
-            PermissionsBoundaryArn = "";
         }
     }
 }

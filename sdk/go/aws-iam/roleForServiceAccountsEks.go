@@ -37,41 +37,44 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         roleForServiceAccountsEKS, err := iam.NewRoleForServiceAccountsEks(ctx, "role-for-service-accounts-eks", &iam.RoleForServiceAccountsEksArgs{
-//             Role: iam.EKSServiceAccountRolePtr(&iam.EKSServiceAccountRoleArgs{
-//                 Name: pulumi.String("vpc-cni"),
-//             }),
-//             Tags: pulumi.ToStringMap(map[string]string{
-//                 "Name": "vpc-cni-irsa",
-//             }),
-//             OidcProviders: iam.OIDCProviderMap{
-//                 "main": iam.OIDCProviderArgs{
-//                     ProviderArn:              pulumi.String("arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D"),
-//                     NamespaceServiceAccounts: pulumi.ToStringArray([]string{"default:my-app", "canary:my-app"}),
-//                 },
-//             },
-//             Policies: iam.EKSRolePoliciesPtr(&iam.EKSRolePoliciesArgs{
-//                 VpnCni: iam.EKSVPNCNIPolicyPtr(&iam.EKSVPNCNIPolicyArgs{
-//                     Attach:     pulumi.Bool(true),
-//                     EnableIpv4: pulumi.BoolPtr(true),
-//                 }),
-//             }),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        roleForServiceAccountsEKS, err := iam.NewRoleForServiceAccountsEks(ctx, "role-for-service-accounts-eks", &iam.RoleForServiceAccountsEksArgs{
+//	            Role: iam.EKSServiceAccountRolePtr(&iam.EKSServiceAccountRoleArgs{
+//	                Name: pulumi.String("vpc-cni"),
+//	            }),
+//	            Tags: pulumi.ToStringMap(map[string]string{
+//	                "Name": "vpc-cni-irsa",
+//	            }),
+//	            OidcProviders: iam.OIDCProviderMap{
+//	                "main": iam.OIDCProviderArgs{
+//	                    ProviderArn:              pulumi.String("arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D"),
+//	                    NamespaceServiceAccounts: pulumi.ToStringArray([]string{"default:my-app", "canary:my-app"}),
+//	                },
+//	            },
+//	            Policies: iam.EKSRolePoliciesPtr(&iam.EKSRolePoliciesArgs{
+//	                VpnCni: iam.EKSVPNCNIPolicyPtr(&iam.EKSVPNCNIPolicyArgs{
+//	                    Attach:     pulumi.Bool(true),
+//	                    EnableIpv4: pulumi.BoolPtr(true),
+//	                }),
+//	            }),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("roleForServiceAccountsEKS", roleForServiceAccountsEKS)
+//	        ctx.Export("roleForServiceAccountsEKS", roleForServiceAccountsEKS)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type RoleForServiceAccountsEks struct {
@@ -101,9 +104,6 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context,
 	}
 	if isZero(args.PolicyNamePrefix) {
 		args.PolicyNamePrefix = pulumi.StringPtr("AmazonEKS_")
-	}
-	if args.Role != nil {
-		args.Role = args.Role.ToEKSServiceAccountRolePtrOutput().ApplyT(func(v *EKSServiceAccountRole) *EKSServiceAccountRole { return v.Defaults() }).(EKSServiceAccountRolePtrOutput)
 	}
 	var resource RoleForServiceAccountsEks
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:RoleForServiceAccountsEks", name, args, &resource, opts...)
@@ -174,7 +174,7 @@ func (i *RoleForServiceAccountsEks) ToRoleForServiceAccountsEksOutputWithContext
 // RoleForServiceAccountsEksArrayInput is an input type that accepts RoleForServiceAccountsEksArray and RoleForServiceAccountsEksArrayOutput values.
 // You can construct a concrete instance of `RoleForServiceAccountsEksArrayInput` via:
 //
-//          RoleForServiceAccountsEksArray{ RoleForServiceAccountsEksArgs{...} }
+//	RoleForServiceAccountsEksArray{ RoleForServiceAccountsEksArgs{...} }
 type RoleForServiceAccountsEksArrayInput interface {
 	pulumi.Input
 
@@ -199,7 +199,7 @@ func (i RoleForServiceAccountsEksArray) ToRoleForServiceAccountsEksArrayOutputWi
 // RoleForServiceAccountsEksMapInput is an input type that accepts RoleForServiceAccountsEksMap and RoleForServiceAccountsEksMapOutput values.
 // You can construct a concrete instance of `RoleForServiceAccountsEksMapInput` via:
 //
-//          RoleForServiceAccountsEksMap{ "key": RoleForServiceAccountsEksArgs{...} }
+//	RoleForServiceAccountsEksMap{ "key": RoleForServiceAccountsEksArgs{...} }
 type RoleForServiceAccountsEksMapInput interface {
 	pulumi.Input
 

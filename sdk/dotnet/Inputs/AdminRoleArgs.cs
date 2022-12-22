@@ -22,7 +22,7 @@ namespace Pulumi.AwsIam.Inputs
         public Input<string>? Name { get; set; }
 
         /// <summary>
-        /// Path of admin IAM role.
+        /// Path of admin IAM role. Defaults to '/'
         /// </summary>
         [Input("path")]
         public Input<string>? Path { get; set; }
@@ -60,8 +60,6 @@ namespace Pulumi.AwsIam.Inputs
         public AdminRoleArgs()
         {
             Name = "admin";
-            Path = "/";
-            PermissionsBoundaryArn = "";
         }
     }
 }

@@ -23,33 +23,36 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         account, err := iam.NewAccount(ctx, "account", &iam.AccountArgs{
-//             AccountAlias: pulumi.String("cool-alias"),
-//             PasswordPolicy: iam.AccountPasswordPolicyArgs{
-//                 MinimumLength:              pulumi.IntPtr(37),
-//                 RequireNumbers:             pulumi.Bool(false),
-//                 AllowUsersToChange:         pulumi.Bool(true),
-//                 HardExpiry:                 pulumi.Bool(true),
-//                 RequireSymbols:             pulumi.Bool(true),
-//                 RequireLowercaseCharacters: pulumi.Bool(true),
-//                 RequireUppercaseCharacters: pulumi.Bool(true),
-//             },
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        account, err := iam.NewAccount(ctx, "account", &iam.AccountArgs{
+//	            AccountAlias: pulumi.String("cool-alias"),
+//	            PasswordPolicy: iam.AccountPasswordPolicyArgs{
+//	                MinimumLength:              pulumi.IntPtr(37),
+//	                RequireNumbers:             pulumi.Bool(false),
+//	                AllowUsersToChange:         pulumi.Bool(true),
+//	                HardExpiry:                 pulumi.Bool(true),
+//	                RequireSymbols:             pulumi.Bool(true),
+//	                RequireLowercaseCharacters: pulumi.Bool(true),
+//	                RequireUppercaseCharacters: pulumi.Bool(true),
+//	            },
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("account", account)
+//	        ctx.Export("account", account)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type Account struct {
@@ -130,7 +133,7 @@ func (i *Account) ToAccountOutputWithContext(ctx context.Context) AccountOutput 
 // AccountArrayInput is an input type that accepts AccountArray and AccountArrayOutput values.
 // You can construct a concrete instance of `AccountArrayInput` via:
 //
-//          AccountArray{ AccountArgs{...} }
+//	AccountArray{ AccountArgs{...} }
 type AccountArrayInput interface {
 	pulumi.Input
 
@@ -155,7 +158,7 @@ func (i AccountArray) ToAccountArrayOutputWithContext(ctx context.Context) Accou
 // AccountMapInput is an input type that accepts AccountMap and AccountMapOutput values.
 // You can construct a concrete instance of `AccountMapInput` via:
 //
-//          AccountMap{ "key": AccountArgs{...} }
+//	AccountMap{ "key": AccountArgs{...} }
 type AccountMapInput interface {
 	pulumi.Input
 

@@ -20,43 +20,46 @@ import (
 // package main
 //
 // import (
-//     "encoding/json"
 //
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"encoding/json"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         policyJSON, err := json.Marshal(map[string]interface{}{
-//             "Version": "2012-10-17",
-//             "Statement": []interface{}{
-//                 map[string]interface{}{
-//                     "Effect":   "Allow",
-//                     "Action":   []string{"ec2:Describe"},
-//                     "Resource": []string{"*"},
-//                 },
-//             },
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        policyJSON, err := json.Marshal(map[string]interface{}{
+//	            "Version": "2012-10-17",
+//	            "Statement": []interface{}{
+//	                map[string]interface{}{
+//	                    "Effect":   "Allow",
+//	                    "Action":   []string{"ec2:Describe"},
+//	                    "Resource": []string{"*"},
+//	                },
+//	            },
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         policy, err := iam.NewPolicy(ctx, "policy", &iam.PolicyArgs{
-//             Name:           pulumi.String("example"),
-//             Path:           pulumi.String("/"),
-//             Description:    pulumi.String("My example policy"),
-//             PolicyDocument: pulumi.String(string(policyJSON)),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	        policy, err := iam.NewPolicy(ctx, "policy", &iam.PolicyArgs{
+//	            Name:           pulumi.String("example"),
+//	            Path:           pulumi.String("/"),
+//	            Description:    pulumi.String("My example policy"),
+//	            PolicyDocument: pulumi.String(string(policyJSON)),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("policy", policy)
+//	        ctx.Export("policy", policy)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type Policy struct {
@@ -156,7 +159,7 @@ func (i *Policy) ToPolicyOutputWithContext(ctx context.Context) PolicyOutput {
 // PolicyArrayInput is an input type that accepts PolicyArray and PolicyArrayOutput values.
 // You can construct a concrete instance of `PolicyArrayInput` via:
 //
-//          PolicyArray{ PolicyArgs{...} }
+//	PolicyArray{ PolicyArgs{...} }
 type PolicyArrayInput interface {
 	pulumi.Input
 
@@ -181,7 +184,7 @@ func (i PolicyArray) ToPolicyArrayOutputWithContext(ctx context.Context) PolicyA
 // PolicyMapInput is an input type that accepts PolicyMap and PolicyMapOutput values.
 // You can construct a concrete instance of `PolicyMapInput` via:
 //
-//          PolicyMap{ "key": PolicyArgs{...} }
+//	PolicyMap{ "key": PolicyArgs{...} }
 type PolicyMapInput interface {
 	pulumi.Input
 

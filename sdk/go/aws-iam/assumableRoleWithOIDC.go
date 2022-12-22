@@ -20,31 +20,34 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         assumableRoleWithOIDC, err := iam.NewAssumableRoleWithOIDC(ctx, "assumable-role-with-oidc", &iam.AssumableRoleWithOIDCArgs{
-//             Role: iam.RoleArgs{
-//                 Name:       pulumi.String("oidc-role"),
-//                 PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
-//             },
-//             Tags: pulumi.ToStringMap(map[string]string{
-//                 "Role": "oidc-role",
-//             }),
-//             ProviderUrls: pulumi.ToStringArray([]string{"oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"}),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        assumableRoleWithOIDC, err := iam.NewAssumableRoleWithOIDC(ctx, "assumable-role-with-oidc", &iam.AssumableRoleWithOIDCArgs{
+//	            Role: iam.RoleArgs{
+//	                Name:       pulumi.String("oidc-role"),
+//	                PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
+//	            },
+//	            Tags: pulumi.ToStringMap(map[string]string{
+//	                "Role": "oidc-role",
+//	            }),
+//	            ProviderUrls: pulumi.ToStringArray([]string{"oidc.eks.eu-west-1.amazonaws.com/id/BA9E170D464AF7B92084EF72A69B9DC8"}),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("assumableRoleWithOIDC", assumableRoleWithOIDC)
+//	        ctx.Export("assumableRoleWithOIDC", assumableRoleWithOIDC)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type AssumableRoleWithOIDC struct {
@@ -75,9 +78,6 @@ func NewAssumableRoleWithOIDC(ctx *pulumi.Context,
 	}
 	if isZero(args.MaxSessionDuration) {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
-	}
-	if args.Role != nil {
-		args.Role = args.Role.ToRolePtrOutput().ApplyT(func(v *Role) *Role { return v.Defaults() }).(RolePtrOutput)
 	}
 	var resource AssumableRoleWithOIDC
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRoleWithOIDC", name, args, &resource, opts...)
@@ -156,7 +156,7 @@ func (i *AssumableRoleWithOIDC) ToAssumableRoleWithOIDCOutputWithContext(ctx con
 // AssumableRoleWithOIDCArrayInput is an input type that accepts AssumableRoleWithOIDCArray and AssumableRoleWithOIDCArrayOutput values.
 // You can construct a concrete instance of `AssumableRoleWithOIDCArrayInput` via:
 //
-//          AssumableRoleWithOIDCArray{ AssumableRoleWithOIDCArgs{...} }
+//	AssumableRoleWithOIDCArray{ AssumableRoleWithOIDCArgs{...} }
 type AssumableRoleWithOIDCArrayInput interface {
 	pulumi.Input
 
@@ -181,7 +181,7 @@ func (i AssumableRoleWithOIDCArray) ToAssumableRoleWithOIDCArrayOutputWithContex
 // AssumableRoleWithOIDCMapInput is an input type that accepts AssumableRoleWithOIDCMap and AssumableRoleWithOIDCMapOutput values.
 // You can construct a concrete instance of `AssumableRoleWithOIDCMapInput` via:
 //
-//          AssumableRoleWithOIDCMap{ "key": AssumableRoleWithOIDCArgs{...} }
+//	AssumableRoleWithOIDCMap{ "key": AssumableRoleWithOIDCArgs{...} }
 type AssumableRoleWithOIDCMapInput interface {
 	pulumi.Input
 

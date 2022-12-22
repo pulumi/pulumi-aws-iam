@@ -22,7 +22,7 @@ namespace Pulumi.AwsIam.Inputs
         public Input<string>? Name { get; set; }
 
         /// <summary>
-        /// Path of readonly IAM role.
+        /// Path of readonly IAM role. Defaults to '/'.
         /// </summary>
         [Input("path")]
         public Input<string>? Path { get; set; }
@@ -59,9 +59,6 @@ namespace Pulumi.AwsIam.Inputs
 
         public ReadonlyRoleArgs()
         {
-            Name = "readonly";
-            Path = "/";
-            PermissionsBoundaryArn = "";
         }
     }
 }

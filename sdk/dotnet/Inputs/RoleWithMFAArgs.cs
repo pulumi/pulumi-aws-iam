@@ -16,13 +16,13 @@ namespace Pulumi.AwsIam.Inputs
     public sealed class RoleWithMFAArgs : Pulumi.ResourceArgs
     {
         /// <summary>
-        /// IAM role with the access.
+        /// IAM role with the access. Defaults to 'admin'.
         /// </summary>
         [Input("name")]
         public Input<string>? Name { get; set; }
 
         /// <summary>
-        /// Path of the IAM role.
+        /// Path of the IAM role. Defaults to '/'.
         /// </summary>
         [Input("path")]
         public Input<string>? Path { get; set; }
@@ -65,10 +65,6 @@ namespace Pulumi.AwsIam.Inputs
 
         public RoleWithMFAArgs()
         {
-            Name = "admin";
-            Path = "/";
-            PermissionsBoundaryArn = "";
-            RequiresMfa = true;
         }
     }
 }

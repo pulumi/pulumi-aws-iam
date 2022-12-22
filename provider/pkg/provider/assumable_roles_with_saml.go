@@ -84,6 +84,10 @@ func NewAssumableRolesWithSAML(ctx *pulumi.Context, name string, args *Assumable
 		return assumeRole.Json, nil
 	}).(pulumi.StringOutput)
 
+	args.Admin.Name = setDefaultStringPtr(args.Admin.Name, "admin")
+	args.Poweruser.Name = setDefaultStringPtr(args.Poweruser.Name, "poweruser")
+	args.Readonly.Name = setDefaultStringPtr(args.Readonly.Name, "readonly")
+
 	roleOutput, err := utils.NewAssumableRoles(ctx, name, &utils.IAMAssumableRolesArgs{
 		MaxSessionDuration:  args.MaxSessionDuration,
 		ForceDetachPolicies: args.ForceDetachPolicies,

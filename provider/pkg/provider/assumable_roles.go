@@ -151,6 +151,21 @@ func NewAssumableRoles(ctx *pulumi.Context, name string, args *AssumableRolesArg
 		return assumeRoleMFA.Json, nil
 	}).(pulumi.StringOutput)
 
+	args.Admin.Name = setDefaultStringPtr(args.Admin.Name, "admin")
+	if args.Admin.RequiresMFA == nil {
+		args.Admin.RequiresMFA = pulumi.Bool(true)
+	}
+
+	args.Poweruser.Name = setDefaultStringPtr(args.Poweruser.Name, "poweruser")
+	if args.Poweruser.RequiresMFA == nil {
+		args.Poweruser.RequiresMFA = pulumi.Bool(true)
+	}
+
+	args.Readonly.Name = setDefaultStringPtr(args.Readonly.Name, "readonly")
+	if args.Readonly.RequiresMFA == nil {
+		args.Readonly.RequiresMFA = pulumi.Bool(true)
+	}
+
 	roleOutput, err := utils.NewAssumableRoles(ctx, name, &utils.IAMAssumableRolesArgs{
 		MaxSessionDuration:  args.MaxSessionDuration,
 		ForceDetachPolicies: args.ForceDetachPolicies,

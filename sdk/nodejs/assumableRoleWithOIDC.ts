@@ -78,7 +78,7 @@ export class AssumableRoleWithOIDC extends pulumi.ComponentResource {
             resourceInputs["oidcFullyQualifiedSubjects"] = args ? args.oidcFullyQualifiedSubjects : undefined;
             resourceInputs["oidcSubjectsWithWildcards"] = args ? args.oidcSubjectsWithWildcards : undefined;
             resourceInputs["providerUrls"] = args ? args.providerUrls : undefined;
-            resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.roleArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["role"] = args ? args.role : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["arn"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;

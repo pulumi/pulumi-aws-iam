@@ -100,7 +100,7 @@ type AccountPasswordPolicy struct {
 // AccountPasswordPolicyInput is an input type that accepts AccountPasswordPolicyArgs and AccountPasswordPolicyOutput values.
 // You can construct a concrete instance of `AccountPasswordPolicyInput` via:
 //
-//          AccountPasswordPolicyArgs{...}
+//	AccountPasswordPolicyArgs{...}
 type AccountPasswordPolicyInput interface {
 	pulumi.Input
 
@@ -214,7 +214,7 @@ func (o AccountPasswordPolicyOutput) ReusePrevention() pulumi.IntPtrOutput {
 type AdminRole struct {
 	// IAM role with admin access.
 	Name *string `pulumi:"name"`
-	// Path of admin IAM role.
+	// Path of admin IAM role. Defaults to '/'
 	Path *string `pulumi:"path"`
 	// Permissions boundary ARN to use for admin role.
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
@@ -234,21 +234,13 @@ func (val *AdminRole) Defaults() *AdminRole {
 		name_ := "admin"
 		tmp.Name = &name_
 	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
 	return &tmp
 }
 
 // AdminRoleInput is an input type that accepts AdminRoleArgs and AdminRoleOutput values.
 // You can construct a concrete instance of `AdminRoleInput` via:
 //
-//          AdminRoleArgs{...}
+//	AdminRoleArgs{...}
 type AdminRoleInput interface {
 	pulumi.Input
 
@@ -260,7 +252,7 @@ type AdminRoleInput interface {
 type AdminRoleArgs struct {
 	// IAM role with admin access.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Path of admin IAM role.
+	// Path of admin IAM role. Defaults to '/'
 	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Permissions boundary ARN to use for admin role.
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
@@ -278,12 +270,6 @@ func (val *AdminRoleArgs) Defaults() *AdminRoleArgs {
 	tmp := *val
 	if isZero(tmp.Name) {
 		tmp.Name = pulumi.StringPtr("admin")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
 	}
 	return &tmp
 }
@@ -310,11 +296,11 @@ func (i AdminRoleArgs) ToAdminRolePtrOutputWithContext(ctx context.Context) Admi
 // AdminRolePtrInput is an input type that accepts AdminRoleArgs, AdminRolePtr and AdminRolePtrOutput values.
 // You can construct a concrete instance of `AdminRolePtrInput` via:
 //
-//          AdminRoleArgs{...}
+//	        AdminRoleArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type AdminRolePtrInput interface {
 	pulumi.Input
 
@@ -370,7 +356,7 @@ func (o AdminRoleOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AdminRole) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// Path of admin IAM role.
+// Path of admin IAM role. Defaults to '/'
 func (o AdminRoleOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v AdminRole) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
@@ -424,7 +410,7 @@ func (o AdminRolePtrOutput) Name() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Path of admin IAM role.
+// Path of admin IAM role. Defaults to '/'
 func (o AdminRolePtrOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AdminRole) *string {
 		if v == nil {
@@ -480,23 +466,10 @@ type AdminRoleWithMFA struct {
 	Tags map[string]string `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for AdminRoleWithMFA
-func (val *AdminRoleWithMFA) Defaults() *AdminRoleWithMFA {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	return &tmp
-}
-
 // AdminRoleWithMFAInput is an input type that accepts AdminRoleWithMFAArgs and AdminRoleWithMFAOutput values.
 // You can construct a concrete instance of `AdminRoleWithMFAInput` via:
 //
-//          AdminRoleWithMFAArgs{...}
+//	AdminRoleWithMFAArgs{...}
 type AdminRoleWithMFAInput interface {
 	pulumi.Input
 
@@ -520,17 +493,6 @@ type AdminRoleWithMFAArgs struct {
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for AdminRoleWithMFAArgs
-func (val *AdminRoleWithMFAArgs) Defaults() *AdminRoleWithMFAArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	return &tmp
-}
 func (AdminRoleWithMFAArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*AdminRoleWithMFA)(nil)).Elem()
 }
@@ -600,7 +562,7 @@ type EKSAmazonManagedServicePrometheusPolicy struct {
 // EKSAmazonManagedServicePrometheusPolicyInput is an input type that accepts EKSAmazonManagedServicePrometheusPolicyArgs and EKSAmazonManagedServicePrometheusPolicyOutput values.
 // You can construct a concrete instance of `EKSAmazonManagedServicePrometheusPolicyInput` via:
 //
-//          EKSAmazonManagedServicePrometheusPolicyArgs{...}
+//	EKSAmazonManagedServicePrometheusPolicyArgs{...}
 type EKSAmazonManagedServicePrometheusPolicyInput interface {
 	pulumi.Input
 
@@ -640,11 +602,11 @@ func (i EKSAmazonManagedServicePrometheusPolicyArgs) ToEKSAmazonManagedServicePr
 // EKSAmazonManagedServicePrometheusPolicyPtrInput is an input type that accepts EKSAmazonManagedServicePrometheusPolicyArgs, EKSAmazonManagedServicePrometheusPolicyPtr and EKSAmazonManagedServicePrometheusPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSAmazonManagedServicePrometheusPolicyPtrInput` via:
 //
-//          EKSAmazonManagedServicePrometheusPolicyArgs{...}
+//	        EKSAmazonManagedServicePrometheusPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSAmazonManagedServicePrometheusPolicyPtrInput interface {
 	pulumi.Input
 
@@ -762,7 +724,7 @@ type EKSAppmeshPolicy struct {
 // EKSAppmeshPolicyInput is an input type that accepts EKSAppmeshPolicyArgs and EKSAppmeshPolicyOutput values.
 // You can construct a concrete instance of `EKSAppmeshPolicyInput` via:
 //
-//          EKSAppmeshPolicyArgs{...}
+//	EKSAppmeshPolicyArgs{...}
 type EKSAppmeshPolicyInput interface {
 	pulumi.Input
 
@@ -801,11 +763,11 @@ func (i EKSAppmeshPolicyArgs) ToEKSAppmeshPolicyPtrOutputWithContext(ctx context
 // EKSAppmeshPolicyPtrInput is an input type that accepts EKSAppmeshPolicyArgs, EKSAppmeshPolicyPtr and EKSAppmeshPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSAppmeshPolicyPtrInput` via:
 //
-//          EKSAppmeshPolicyArgs{...}
+//	        EKSAppmeshPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSAppmeshPolicyPtrInput interface {
 	pulumi.Input
 
@@ -922,7 +884,7 @@ type EKSCertManagerPolicy struct {
 // EKSCertManagerPolicyInput is an input type that accepts EKSCertManagerPolicyArgs and EKSCertManagerPolicyOutput values.
 // You can construct a concrete instance of `EKSCertManagerPolicyInput` via:
 //
-//          EKSCertManagerPolicyArgs{...}
+//	EKSCertManagerPolicyArgs{...}
 type EKSCertManagerPolicyInput interface {
 	pulumi.Input
 
@@ -962,11 +924,11 @@ func (i EKSCertManagerPolicyArgs) ToEKSCertManagerPolicyPtrOutputWithContext(ctx
 // EKSCertManagerPolicyPtrInput is an input type that accepts EKSCertManagerPolicyArgs, EKSCertManagerPolicyPtr and EKSCertManagerPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSCertManagerPolicyPtrInput` via:
 //
-//          EKSCertManagerPolicyArgs{...}
+//	        EKSCertManagerPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSCertManagerPolicyPtrInput interface {
 	pulumi.Input
 
@@ -1084,7 +1046,7 @@ type EKSClusterAutoscalerPolicy struct {
 // EKSClusterAutoscalerPolicyInput is an input type that accepts EKSClusterAutoscalerPolicyArgs and EKSClusterAutoscalerPolicyOutput values.
 // You can construct a concrete instance of `EKSClusterAutoscalerPolicyInput` via:
 //
-//          EKSClusterAutoscalerPolicyArgs{...}
+//	EKSClusterAutoscalerPolicyArgs{...}
 type EKSClusterAutoscalerPolicyInput interface {
 	pulumi.Input
 
@@ -1123,11 +1085,11 @@ func (i EKSClusterAutoscalerPolicyArgs) ToEKSClusterAutoscalerPolicyPtrOutputWit
 // EKSClusterAutoscalerPolicyPtrInput is an input type that accepts EKSClusterAutoscalerPolicyArgs, EKSClusterAutoscalerPolicyPtr and EKSClusterAutoscalerPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSClusterAutoscalerPolicyPtrInput` via:
 //
-//          EKSClusterAutoscalerPolicyArgs{...}
+//	        EKSClusterAutoscalerPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSClusterAutoscalerPolicyPtrInput interface {
 	pulumi.Input
 
@@ -1243,7 +1205,7 @@ type EKSEBSCSIPolicy struct {
 // EKSEBSCSIPolicyInput is an input type that accepts EKSEBSCSIPolicyArgs and EKSEBSCSIPolicyOutput values.
 // You can construct a concrete instance of `EKSEBSCSIPolicyInput` via:
 //
-//          EKSEBSCSIPolicyArgs{...}
+//	EKSEBSCSIPolicyArgs{...}
 type EKSEBSCSIPolicyInput interface {
 	pulumi.Input
 
@@ -1282,11 +1244,11 @@ func (i EKSEBSCSIPolicyArgs) ToEKSEBSCSIPolicyPtrOutputWithContext(ctx context.C
 // EKSEBSCSIPolicyPtrInput is an input type that accepts EKSEBSCSIPolicyArgs, EKSEBSCSIPolicyPtr and EKSEBSCSIPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSEBSCSIPolicyPtrInput` via:
 //
-//          EKSEBSCSIPolicyArgs{...}
+//	        EKSEBSCSIPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSEBSCSIPolicyPtrInput interface {
 	pulumi.Input
 
@@ -1400,7 +1362,7 @@ type EKSEFSCSIPolicy struct {
 // EKSEFSCSIPolicyInput is an input type that accepts EKSEFSCSIPolicyArgs and EKSEFSCSIPolicyOutput values.
 // You can construct a concrete instance of `EKSEFSCSIPolicyInput` via:
 //
-//          EKSEFSCSIPolicyArgs{...}
+//	EKSEFSCSIPolicyArgs{...}
 type EKSEFSCSIPolicyInput interface {
 	pulumi.Input
 
@@ -1437,11 +1399,11 @@ func (i EKSEFSCSIPolicyArgs) ToEKSEFSCSIPolicyPtrOutputWithContext(ctx context.C
 // EKSEFSCSIPolicyPtrInput is an input type that accepts EKSEFSCSIPolicyArgs, EKSEFSCSIPolicyPtr and EKSEFSCSIPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSEFSCSIPolicyPtrInput` via:
 //
-//          EKSEFSCSIPolicyArgs{...}
+//	        EKSEFSCSIPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSEFSCSIPolicyPtrInput interface {
 	pulumi.Input
 
@@ -1543,7 +1505,7 @@ type EKSExternalDNSPolicy struct {
 // EKSExternalDNSPolicyInput is an input type that accepts EKSExternalDNSPolicyArgs and EKSExternalDNSPolicyOutput values.
 // You can construct a concrete instance of `EKSExternalDNSPolicyInput` via:
 //
-//          EKSExternalDNSPolicyArgs{...}
+//	EKSExternalDNSPolicyArgs{...}
 type EKSExternalDNSPolicyInput interface {
 	pulumi.Input
 
@@ -1583,11 +1545,11 @@ func (i EKSExternalDNSPolicyArgs) ToEKSExternalDNSPolicyPtrOutputWithContext(ctx
 // EKSExternalDNSPolicyPtrInput is an input type that accepts EKSExternalDNSPolicyArgs, EKSExternalDNSPolicyPtr and EKSExternalDNSPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSExternalDNSPolicyPtrInput` via:
 //
-//          EKSExternalDNSPolicyArgs{...}
+//	        EKSExternalDNSPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSExternalDNSPolicyPtrInput interface {
 	pulumi.Input
 
@@ -1708,7 +1670,7 @@ type EKSExternalSecretsPolicy struct {
 // EKSExternalSecretsPolicyInput is an input type that accepts EKSExternalSecretsPolicyArgs and EKSExternalSecretsPolicyOutput values.
 // You can construct a concrete instance of `EKSExternalSecretsPolicyInput` via:
 //
-//          EKSExternalSecretsPolicyArgs{...}
+//	EKSExternalSecretsPolicyArgs{...}
 type EKSExternalSecretsPolicyInput interface {
 	pulumi.Input
 
@@ -1750,11 +1712,11 @@ func (i EKSExternalSecretsPolicyArgs) ToEKSExternalSecretsPolicyPtrOutputWithCon
 // EKSExternalSecretsPolicyPtrInput is an input type that accepts EKSExternalSecretsPolicyArgs, EKSExternalSecretsPolicyPtr and EKSExternalSecretsPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSExternalSecretsPolicyPtrInput` via:
 //
-//          EKSExternalSecretsPolicyArgs{...}
+//	        EKSExternalSecretsPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSExternalSecretsPolicyPtrInput interface {
 	pulumi.Input
 
@@ -1914,7 +1876,7 @@ func (val *EKSKarpenterControllerPolicy) Defaults() *EKSKarpenterControllerPolic
 // EKSKarpenterControllerPolicyInput is an input type that accepts EKSKarpenterControllerPolicyArgs and EKSKarpenterControllerPolicyOutput values.
 // You can construct a concrete instance of `EKSKarpenterControllerPolicyInput` via:
 //
-//          EKSKarpenterControllerPolicyArgs{...}
+//	EKSKarpenterControllerPolicyArgs{...}
 type EKSKarpenterControllerPolicyInput interface {
 	pulumi.Input
 
@@ -1977,11 +1939,11 @@ func (i EKSKarpenterControllerPolicyArgs) ToEKSKarpenterControllerPolicyPtrOutpu
 // EKSKarpenterControllerPolicyPtrInput is an input type that accepts EKSKarpenterControllerPolicyArgs, EKSKarpenterControllerPolicyPtr and EKSKarpenterControllerPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSKarpenterControllerPolicyPtrInput` via:
 //
-//          EKSKarpenterControllerPolicyArgs{...}
+//	        EKSKarpenterControllerPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSKarpenterControllerPolicyPtrInput interface {
 	pulumi.Input
 
@@ -2161,7 +2123,7 @@ type EKSLoadBalancerPolicy struct {
 // EKSLoadBalancerPolicyInput is an input type that accepts EKSLoadBalancerPolicyArgs and EKSLoadBalancerPolicyOutput values.
 // You can construct a concrete instance of `EKSLoadBalancerPolicyInput` via:
 //
-//          EKSLoadBalancerPolicyArgs{...}
+//	EKSLoadBalancerPolicyArgs{...}
 type EKSLoadBalancerPolicyInput interface {
 	pulumi.Input
 
@@ -2200,11 +2162,11 @@ func (i EKSLoadBalancerPolicyArgs) ToEKSLoadBalancerPolicyPtrOutputWithContext(c
 // EKSLoadBalancerPolicyPtrInput is an input type that accepts EKSLoadBalancerPolicyArgs, EKSLoadBalancerPolicyPtr and EKSLoadBalancerPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSLoadBalancerPolicyPtrInput` via:
 //
-//          EKSLoadBalancerPolicyArgs{...}
+//	        EKSLoadBalancerPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSLoadBalancerPolicyPtrInput interface {
 	pulumi.Input
 
@@ -2321,7 +2283,7 @@ type EKSNodeTerminationHandlerPolicy struct {
 // EKSNodeTerminationHandlerPolicyInput is an input type that accepts EKSNodeTerminationHandlerPolicyArgs and EKSNodeTerminationHandlerPolicyOutput values.
 // You can construct a concrete instance of `EKSNodeTerminationHandlerPolicyInput` via:
 //
-//          EKSNodeTerminationHandlerPolicyArgs{...}
+//	EKSNodeTerminationHandlerPolicyArgs{...}
 type EKSNodeTerminationHandlerPolicyInput interface {
 	pulumi.Input
 
@@ -2361,11 +2323,11 @@ func (i EKSNodeTerminationHandlerPolicyArgs) ToEKSNodeTerminationHandlerPolicyPt
 // EKSNodeTerminationHandlerPolicyPtrInput is an input type that accepts EKSNodeTerminationHandlerPolicyArgs, EKSNodeTerminationHandlerPolicyPtr and EKSNodeTerminationHandlerPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSNodeTerminationHandlerPolicyPtrInput` via:
 //
-//          EKSNodeTerminationHandlerPolicyArgs{...}
+//	        EKSNodeTerminationHandlerPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSNodeTerminationHandlerPolicyPtrInput interface {
 	pulumi.Input
 
@@ -2518,7 +2480,7 @@ func (val *EKSRolePolicies) Defaults() *EKSRolePolicies {
 // EKSRolePoliciesInput is an input type that accepts EKSRolePoliciesArgs and EKSRolePoliciesOutput values.
 // You can construct a concrete instance of `EKSRolePoliciesInput` via:
 //
-//          EKSRolePoliciesArgs{...}
+//	EKSRolePoliciesArgs{...}
 type EKSRolePoliciesInput interface {
 	pulumi.Input
 
@@ -2590,11 +2552,11 @@ func (i EKSRolePoliciesArgs) ToEKSRolePoliciesPtrOutputWithContext(ctx context.C
 // EKSRolePoliciesPtrInput is an input type that accepts EKSRolePoliciesArgs, EKSRolePoliciesPtr and EKSRolePoliciesPtrOutput values.
 // You can construct a concrete instance of `EKSRolePoliciesPtrInput` via:
 //
-//          EKSRolePoliciesArgs{...}
+//	        EKSRolePoliciesArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSRolePoliciesPtrInput interface {
 	pulumi.Input
 
@@ -2892,7 +2854,7 @@ type EKSServiceAccount struct {
 // EKSServiceAccountInput is an input type that accepts EKSServiceAccountArgs and EKSServiceAccountOutput values.
 // You can construct a concrete instance of `EKSServiceAccountInput` via:
 //
-//          EKSServiceAccountArgs{...}
+//	EKSServiceAccountArgs{...}
 type EKSServiceAccountInput interface {
 	pulumi.Input
 
@@ -2923,7 +2885,7 @@ func (i EKSServiceAccountArgs) ToEKSServiceAccountOutputWithContext(ctx context.
 // EKSServiceAccountArrayInput is an input type that accepts EKSServiceAccountArray and EKSServiceAccountArrayOutput values.
 // You can construct a concrete instance of `EKSServiceAccountArrayInput` via:
 //
-//          EKSServiceAccountArray{ EKSServiceAccountArgs{...} }
+//	EKSServiceAccountArray{ EKSServiceAccountArgs{...} }
 type EKSServiceAccountArrayInput interface {
 	pulumi.Input
 
@@ -3005,35 +2967,10 @@ type EKSServiceAccountRole struct {
 	PolicyArns []string `pulumi:"policyArns"`
 }
 
-// Defaults sets the appropriate defaults for EKSServiceAccountRole
-func (val *EKSServiceAccountRole) Defaults() *EKSServiceAccountRole {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := ""
-		tmp.Name = &name_
-	}
-	if isZero(tmp.NamePrefix) {
-		namePrefix_ := ""
-		tmp.NamePrefix = &namePrefix_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	return &tmp
-}
-
 // EKSServiceAccountRoleInput is an input type that accepts EKSServiceAccountRoleArgs and EKSServiceAccountRoleOutput values.
 // You can construct a concrete instance of `EKSServiceAccountRoleInput` via:
 //
-//          EKSServiceAccountRoleArgs{...}
+//	EKSServiceAccountRoleArgs{...}
 type EKSServiceAccountRoleInput interface {
 	pulumi.Input
 
@@ -3056,26 +2993,6 @@ type EKSServiceAccountRoleArgs struct {
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
 }
 
-// Defaults sets the appropriate defaults for EKSServiceAccountRoleArgs
-func (val *EKSServiceAccountRoleArgs) Defaults() *EKSServiceAccountRoleArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("")
-	}
-	if isZero(tmp.NamePrefix) {
-		tmp.NamePrefix = pulumi.StringPtr("")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	return &tmp
-}
 func (EKSServiceAccountRoleArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*EKSServiceAccountRole)(nil)).Elem()
 }
@@ -3099,11 +3016,11 @@ func (i EKSServiceAccountRoleArgs) ToEKSServiceAccountRolePtrOutputWithContext(c
 // EKSServiceAccountRolePtrInput is an input type that accepts EKSServiceAccountRoleArgs, EKSServiceAccountRolePtr and EKSServiceAccountRolePtrOutput values.
 // You can construct a concrete instance of `EKSServiceAccountRolePtrInput` via:
 //
-//          EKSServiceAccountRoleArgs{...}
+//	        EKSServiceAccountRoleArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSServiceAccountRolePtrInput interface {
 	pulumi.Input
 
@@ -3280,7 +3197,7 @@ type EKSVPNCNIPolicy struct {
 // EKSVPNCNIPolicyInput is an input type that accepts EKSVPNCNIPolicyArgs and EKSVPNCNIPolicyOutput values.
 // You can construct a concrete instance of `EKSVPNCNIPolicyInput` via:
 //
-//          EKSVPNCNIPolicyArgs{...}
+//	EKSVPNCNIPolicyArgs{...}
 type EKSVPNCNIPolicyInput interface {
 	pulumi.Input
 
@@ -3321,11 +3238,11 @@ func (i EKSVPNCNIPolicyArgs) ToEKSVPNCNIPolicyPtrOutputWithContext(ctx context.C
 // EKSVPNCNIPolicyPtrInput is an input type that accepts EKSVPNCNIPolicyArgs, EKSVPNCNIPolicyPtr and EKSVPNCNIPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSVPNCNIPolicyPtrInput` via:
 //
-//          EKSVPNCNIPolicyArgs{...}
+//	        EKSVPNCNIPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSVPNCNIPolicyPtrInput interface {
 	pulumi.Input
 
@@ -3457,7 +3374,7 @@ type EKSVeleroPolicy struct {
 // EKSVeleroPolicyInput is an input type that accepts EKSVeleroPolicyArgs and EKSVeleroPolicyOutput values.
 // You can construct a concrete instance of `EKSVeleroPolicyInput` via:
 //
-//          EKSVeleroPolicyArgs{...}
+//	EKSVeleroPolicyArgs{...}
 type EKSVeleroPolicyInput interface {
 	pulumi.Input
 
@@ -3497,11 +3414,11 @@ func (i EKSVeleroPolicyArgs) ToEKSVeleroPolicyPtrOutputWithContext(ctx context.C
 // EKSVeleroPolicyPtrInput is an input type that accepts EKSVeleroPolicyArgs, EKSVeleroPolicyPtr and EKSVeleroPolicyPtrOutput values.
 // You can construct a concrete instance of `EKSVeleroPolicyPtrInput` via:
 //
-//          EKSVeleroPolicyArgs{...}
+//	        EKSVeleroPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type EKSVeleroPolicyPtrInput interface {
 	pulumi.Input
 
@@ -3620,7 +3537,7 @@ type FSxLustreCSIPolicy struct {
 // FSxLustreCSIPolicyInput is an input type that accepts FSxLustreCSIPolicyArgs and FSxLustreCSIPolicyOutput values.
 // You can construct a concrete instance of `FSxLustreCSIPolicyInput` via:
 //
-//          FSxLustreCSIPolicyArgs{...}
+//	FSxLustreCSIPolicyArgs{...}
 type FSxLustreCSIPolicyInput interface {
 	pulumi.Input
 
@@ -3660,11 +3577,11 @@ func (i FSxLustreCSIPolicyArgs) ToFSxLustreCSIPolicyPtrOutputWithContext(ctx con
 // FSxLustreCSIPolicyPtrInput is an input type that accepts FSxLustreCSIPolicyArgs, FSxLustreCSIPolicyPtr and FSxLustreCSIPolicyPtrOutput values.
 // You can construct a concrete instance of `FSxLustreCSIPolicyPtrInput` via:
 //
-//          FSxLustreCSIPolicyArgs{...}
+//	        FSxLustreCSIPolicyArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type FSxLustreCSIPolicyPtrInput interface {
 	pulumi.Input
 
@@ -3824,7 +3741,7 @@ type OIDCProvider struct {
 // OIDCProviderInput is an input type that accepts OIDCProviderArgs and OIDCProviderOutput values.
 // You can construct a concrete instance of `OIDCProviderInput` via:
 //
-//          OIDCProviderArgs{...}
+//	OIDCProviderArgs{...}
 type OIDCProviderInput interface {
 	pulumi.Input
 
@@ -3852,7 +3769,7 @@ func (i OIDCProviderArgs) ToOIDCProviderOutputWithContext(ctx context.Context) O
 // OIDCProviderMapInput is an input type that accepts OIDCProviderMap and OIDCProviderMapOutput values.
 // You can construct a concrete instance of `OIDCProviderMapInput` via:
 //
-//          OIDCProviderMap{ "key": OIDCProviderArgs{...} }
+//	OIDCProviderMap{ "key": OIDCProviderArgs{...} }
 type OIDCProviderMapInput interface {
 	pulumi.Input
 
@@ -3930,31 +3847,10 @@ type PoweruserRole struct {
 	Tags map[string]string `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for PoweruserRole
-func (val *PoweruserRole) Defaults() *PoweruserRole {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := "poweruser"
-		tmp.Name = &name_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	return &tmp
-}
-
 // PoweruserRoleInput is an input type that accepts PoweruserRoleArgs and PoweruserRoleOutput values.
 // You can construct a concrete instance of `PoweruserRoleInput` via:
 //
-//          PoweruserRoleArgs{...}
+//	PoweruserRoleArgs{...}
 type PoweruserRoleInput interface {
 	pulumi.Input
 
@@ -3976,23 +3872,6 @@ type PoweruserRoleArgs struct {
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for PoweruserRoleArgs
-func (val *PoweruserRoleArgs) Defaults() *PoweruserRoleArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("poweruser")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	return &tmp
-}
 func (PoweruserRoleArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*PoweruserRole)(nil)).Elem()
 }
@@ -4016,11 +3895,11 @@ func (i PoweruserRoleArgs) ToPoweruserRolePtrOutputWithContext(ctx context.Conte
 // PoweruserRolePtrInput is an input type that accepts PoweruserRoleArgs, PoweruserRolePtr and PoweruserRolePtrOutput values.
 // You can construct a concrete instance of `PoweruserRolePtrInput` via:
 //
-//          PoweruserRoleArgs{...}
+//	        PoweruserRoleArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type PoweruserRolePtrInput interface {
 	pulumi.Input
 
@@ -4186,35 +4065,10 @@ type PoweruserRoleWithMFA struct {
 	Tags map[string]string `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for PoweruserRoleWithMFA
-func (val *PoweruserRoleWithMFA) Defaults() *PoweruserRoleWithMFA {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := "poweruser"
-		tmp.Name = &name_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	if isZero(tmp.RequiresMfa) {
-		requiresMfa_ := true
-		tmp.RequiresMfa = &requiresMfa_
-	}
-	return &tmp
-}
-
 // PoweruserRoleWithMFAInput is an input type that accepts PoweruserRoleWithMFAArgs and PoweruserRoleWithMFAOutput values.
 // You can construct a concrete instance of `PoweruserRoleWithMFAInput` via:
 //
-//          PoweruserRoleWithMFAArgs{...}
+//	PoweruserRoleWithMFAArgs{...}
 type PoweruserRoleWithMFAInput interface {
 	pulumi.Input
 
@@ -4238,26 +4092,6 @@ type PoweruserRoleWithMFAArgs struct {
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for PoweruserRoleWithMFAArgs
-func (val *PoweruserRoleWithMFAArgs) Defaults() *PoweruserRoleWithMFAArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("poweruser")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	if isZero(tmp.RequiresMfa) {
-		tmp.RequiresMfa = pulumi.BoolPtr(true)
-	}
-	return &tmp
-}
 func (PoweruserRoleWithMFAArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*PoweruserRoleWithMFA)(nil)).Elem()
 }
@@ -4281,11 +4115,11 @@ func (i PoweruserRoleWithMFAArgs) ToPoweruserRoleWithMFAPtrOutputWithContext(ctx
 // PoweruserRoleWithMFAPtrInput is an input type that accepts PoweruserRoleWithMFAArgs, PoweruserRoleWithMFAPtr and PoweruserRoleWithMFAPtrOutput values.
 // You can construct a concrete instance of `PoweruserRoleWithMFAPtrInput` via:
 //
-//          PoweruserRoleWithMFAArgs{...}
+//	        PoweruserRoleWithMFAArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type PoweruserRoleWithMFAPtrInput interface {
 	pulumi.Input
 
@@ -4454,7 +4288,7 @@ func (o PoweruserRoleWithMFAPtrOutput) Tags() pulumi.StringMapOutput {
 type ReadonlyRole struct {
 	// IAM role with readonly access.
 	Name *string `pulumi:"name"`
-	// Path of readonly IAM role.
+	// Path of readonly IAM role. Defaults to '/'.
 	Path *string `pulumi:"path"`
 	// Permissions boundary ARN to use for readonly role.
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
@@ -4464,31 +4298,10 @@ type ReadonlyRole struct {
 	Tags map[string]string `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for ReadonlyRole
-func (val *ReadonlyRole) Defaults() *ReadonlyRole {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := "readonly"
-		tmp.Name = &name_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	return &tmp
-}
-
 // ReadonlyRoleInput is an input type that accepts ReadonlyRoleArgs and ReadonlyRoleOutput values.
 // You can construct a concrete instance of `ReadonlyRoleInput` via:
 //
-//          ReadonlyRoleArgs{...}
+//	ReadonlyRoleArgs{...}
 type ReadonlyRoleInput interface {
 	pulumi.Input
 
@@ -4500,7 +4313,7 @@ type ReadonlyRoleInput interface {
 type ReadonlyRoleArgs struct {
 	// IAM role with readonly access.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Path of readonly IAM role.
+	// Path of readonly IAM role. Defaults to '/'.
 	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Permissions boundary ARN to use for readonly role.
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
@@ -4510,23 +4323,6 @@ type ReadonlyRoleArgs struct {
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for ReadonlyRoleArgs
-func (val *ReadonlyRoleArgs) Defaults() *ReadonlyRoleArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("readonly")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	return &tmp
-}
 func (ReadonlyRoleArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*ReadonlyRole)(nil)).Elem()
 }
@@ -4550,11 +4346,11 @@ func (i ReadonlyRoleArgs) ToReadonlyRolePtrOutputWithContext(ctx context.Context
 // ReadonlyRolePtrInput is an input type that accepts ReadonlyRoleArgs, ReadonlyRolePtr and ReadonlyRolePtrOutput values.
 // You can construct a concrete instance of `ReadonlyRolePtrInput` via:
 //
-//          ReadonlyRoleArgs{...}
+//	        ReadonlyRoleArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type ReadonlyRolePtrInput interface {
 	pulumi.Input
 
@@ -4610,7 +4406,7 @@ func (o ReadonlyRoleOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadonlyRole) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// Path of readonly IAM role.
+// Path of readonly IAM role. Defaults to '/'.
 func (o ReadonlyRoleOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadonlyRole) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
@@ -4664,7 +4460,7 @@ func (o ReadonlyRolePtrOutput) Name() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Path of readonly IAM role.
+// Path of readonly IAM role. Defaults to '/'.
 func (o ReadonlyRolePtrOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReadonlyRole) *string {
 		if v == nil {
@@ -4708,7 +4504,7 @@ func (o ReadonlyRolePtrOutput) Tags() pulumi.StringMapOutput {
 type ReadonlyRoleWithMFA struct {
 	// IAM role with readonly access.
 	Name *string `pulumi:"name"`
-	// Path of readonly IAM role.
+	// Path of readonly IAM role. Defaults to '/'.
 	Path *string `pulumi:"path"`
 	// Permissions boundary ARN to use for readonly role.
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
@@ -4720,35 +4516,10 @@ type ReadonlyRoleWithMFA struct {
 	Tags map[string]string `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for ReadonlyRoleWithMFA
-func (val *ReadonlyRoleWithMFA) Defaults() *ReadonlyRoleWithMFA {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := "readonly"
-		tmp.Name = &name_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	if isZero(tmp.RequiresMfa) {
-		requiresMfa_ := true
-		tmp.RequiresMfa = &requiresMfa_
-	}
-	return &tmp
-}
-
 // ReadonlyRoleWithMFAInput is an input type that accepts ReadonlyRoleWithMFAArgs and ReadonlyRoleWithMFAOutput values.
 // You can construct a concrete instance of `ReadonlyRoleWithMFAInput` via:
 //
-//          ReadonlyRoleWithMFAArgs{...}
+//	ReadonlyRoleWithMFAArgs{...}
 type ReadonlyRoleWithMFAInput interface {
 	pulumi.Input
 
@@ -4760,7 +4531,7 @@ type ReadonlyRoleWithMFAInput interface {
 type ReadonlyRoleWithMFAArgs struct {
 	// IAM role with readonly access.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Path of readonly IAM role.
+	// Path of readonly IAM role. Defaults to '/'.
 	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Permissions boundary ARN to use for readonly role.
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
@@ -4772,26 +4543,6 @@ type ReadonlyRoleWithMFAArgs struct {
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for ReadonlyRoleWithMFAArgs
-func (val *ReadonlyRoleWithMFAArgs) Defaults() *ReadonlyRoleWithMFAArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("readonly")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	if isZero(tmp.RequiresMfa) {
-		tmp.RequiresMfa = pulumi.BoolPtr(true)
-	}
-	return &tmp
-}
 func (ReadonlyRoleWithMFAArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*ReadonlyRoleWithMFA)(nil)).Elem()
 }
@@ -4815,11 +4566,11 @@ func (i ReadonlyRoleWithMFAArgs) ToReadonlyRoleWithMFAPtrOutputWithContext(ctx c
 // ReadonlyRoleWithMFAPtrInput is an input type that accepts ReadonlyRoleWithMFAArgs, ReadonlyRoleWithMFAPtr and ReadonlyRoleWithMFAPtrOutput values.
 // You can construct a concrete instance of `ReadonlyRoleWithMFAPtrInput` via:
 //
-//          ReadonlyRoleWithMFAArgs{...}
+//	        ReadonlyRoleWithMFAArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type ReadonlyRoleWithMFAPtrInput interface {
 	pulumi.Input
 
@@ -4875,7 +4626,7 @@ func (o ReadonlyRoleWithMFAOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadonlyRoleWithMFA) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// Path of readonly IAM role.
+// Path of readonly IAM role. Defaults to '/'.
 func (o ReadonlyRoleWithMFAOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadonlyRoleWithMFA) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
@@ -4934,7 +4685,7 @@ func (o ReadonlyRoleWithMFAPtrOutput) Name() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Path of readonly IAM role.
+// Path of readonly IAM role. Defaults to '/'.
 func (o ReadonlyRoleWithMFAPtrOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReadonlyRoleWithMFA) *string {
 		if v == nil {
@@ -4990,7 +4741,7 @@ type Role struct {
 	Name *string `pulumi:"name"`
 	// IAM role name prefix.
 	NamePrefix *string `pulumi:"namePrefix"`
-	// Path of admin IAM role.
+	// Path of admin IAM role. Defaults to '/'.
 	Path *string `pulumi:"path"`
 	// Permissions boundary ARN to use for the role.
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
@@ -4998,35 +4749,10 @@ type Role struct {
 	PolicyArns []string `pulumi:"policyArns"`
 }
 
-// Defaults sets the appropriate defaults for Role
-func (val *Role) Defaults() *Role {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := ""
-		tmp.Name = &name_
-	}
-	if isZero(tmp.NamePrefix) {
-		namePrefix_ := ""
-		tmp.NamePrefix = &namePrefix_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	return &tmp
-}
-
 // RoleInput is an input type that accepts RoleArgs and RoleOutput values.
 // You can construct a concrete instance of `RoleInput` via:
 //
-//          RoleArgs{...}
+//	RoleArgs{...}
 type RoleInput interface {
 	pulumi.Input
 
@@ -5040,7 +4766,7 @@ type RoleArgs struct {
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// IAM role name prefix.
 	NamePrefix pulumi.StringPtrInput `pulumi:"namePrefix"`
-	// Path of admin IAM role.
+	// Path of admin IAM role. Defaults to '/'.
 	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Permissions boundary ARN to use for the role.
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
@@ -5048,26 +4774,6 @@ type RoleArgs struct {
 	PolicyArns pulumi.StringArrayInput `pulumi:"policyArns"`
 }
 
-// Defaults sets the appropriate defaults for RoleArgs
-func (val *RoleArgs) Defaults() *RoleArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("")
-	}
-	if isZero(tmp.NamePrefix) {
-		tmp.NamePrefix = pulumi.StringPtr("")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	return &tmp
-}
 func (RoleArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*Role)(nil)).Elem()
 }
@@ -5091,11 +4797,11 @@ func (i RoleArgs) ToRolePtrOutputWithContext(ctx context.Context) RolePtrOutput 
 // RolePtrInput is an input type that accepts RoleArgs, RolePtr and RolePtrOutput values.
 // You can construct a concrete instance of `RolePtrInput` via:
 //
-//          RoleArgs{...}
+//	        RoleArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type RolePtrInput interface {
 	pulumi.Input
 
@@ -5156,7 +4862,7 @@ func (o RoleOutput) NamePrefix() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v Role) *string { return v.NamePrefix }).(pulumi.StringPtrOutput)
 }
 
-// Path of admin IAM role.
+// Path of admin IAM role. Defaults to '/'.
 func (o RoleOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v Role) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
@@ -5215,7 +4921,7 @@ func (o RolePtrOutput) NamePrefix() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Path of admin IAM role.
+// Path of admin IAM role. Defaults to '/'.
 func (o RolePtrOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Role) *string {
 		if v == nil {
@@ -5247,9 +4953,9 @@ func (o RolePtrOutput) PolicyArns() pulumi.StringArrayOutput {
 
 // An IAM role that requires MFA.
 type RoleWithMFA struct {
-	// IAM role with the access.
+	// IAM role with the access. Defaults to 'admin'.
 	Name *string `pulumi:"name"`
-	// Path of the IAM role.
+	// Path of the IAM role. Defaults to '/'.
 	Path *string `pulumi:"path"`
 	// Permissions boundary ARN to use for the role.
 	PermissionsBoundaryArn *string `pulumi:"permissionsBoundaryArn"`
@@ -5261,35 +4967,10 @@ type RoleWithMFA struct {
 	Tags map[string]string `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for RoleWithMFA
-func (val *RoleWithMFA) Defaults() *RoleWithMFA {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		name_ := "admin"
-		tmp.Name = &name_
-	}
-	if isZero(tmp.Path) {
-		path_ := "/"
-		tmp.Path = &path_
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		permissionsBoundaryArn_ := ""
-		tmp.PermissionsBoundaryArn = &permissionsBoundaryArn_
-	}
-	if isZero(tmp.RequiresMfa) {
-		requiresMfa_ := true
-		tmp.RequiresMfa = &requiresMfa_
-	}
-	return &tmp
-}
-
 // RoleWithMFAInput is an input type that accepts RoleWithMFAArgs and RoleWithMFAOutput values.
 // You can construct a concrete instance of `RoleWithMFAInput` via:
 //
-//          RoleWithMFAArgs{...}
+//	RoleWithMFAArgs{...}
 type RoleWithMFAInput interface {
 	pulumi.Input
 
@@ -5299,9 +4980,9 @@ type RoleWithMFAInput interface {
 
 // An IAM role that requires MFA.
 type RoleWithMFAArgs struct {
-	// IAM role with the access.
+	// IAM role with the access. Defaults to 'admin'.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Path of the IAM role.
+	// Path of the IAM role. Defaults to '/'.
 	Path pulumi.StringPtrInput `pulumi:"path"`
 	// Permissions boundary ARN to use for the role.
 	PermissionsBoundaryArn pulumi.StringPtrInput `pulumi:"permissionsBoundaryArn"`
@@ -5313,26 +4994,6 @@ type RoleWithMFAArgs struct {
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
-// Defaults sets the appropriate defaults for RoleWithMFAArgs
-func (val *RoleWithMFAArgs) Defaults() *RoleWithMFAArgs {
-	if val == nil {
-		return nil
-	}
-	tmp := *val
-	if isZero(tmp.Name) {
-		tmp.Name = pulumi.StringPtr("admin")
-	}
-	if isZero(tmp.Path) {
-		tmp.Path = pulumi.StringPtr("/")
-	}
-	if isZero(tmp.PermissionsBoundaryArn) {
-		tmp.PermissionsBoundaryArn = pulumi.StringPtr("")
-	}
-	if isZero(tmp.RequiresMfa) {
-		tmp.RequiresMfa = pulumi.BoolPtr(true)
-	}
-	return &tmp
-}
 func (RoleWithMFAArgs) ElementType() reflect.Type {
 	return reflect.TypeOf((*RoleWithMFA)(nil)).Elem()
 }
@@ -5356,11 +5017,11 @@ func (i RoleWithMFAArgs) ToRoleWithMFAPtrOutputWithContext(ctx context.Context) 
 // RoleWithMFAPtrInput is an input type that accepts RoleWithMFAArgs, RoleWithMFAPtr and RoleWithMFAPtrOutput values.
 // You can construct a concrete instance of `RoleWithMFAPtrInput` via:
 //
-//          RoleWithMFAArgs{...}
+//	        RoleWithMFAArgs{...}
 //
-//  or:
+//	or:
 //
-//          nil
+//	        nil
 type RoleWithMFAPtrInput interface {
 	pulumi.Input
 
@@ -5411,12 +5072,12 @@ func (o RoleWithMFAOutput) ToRoleWithMFAPtrOutputWithContext(ctx context.Context
 	}).(RoleWithMFAPtrOutput)
 }
 
-// IAM role with the access.
+// IAM role with the access. Defaults to 'admin'.
 func (o RoleWithMFAOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v RoleWithMFA) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// Path of the IAM role.
+// Path of the IAM role. Defaults to '/'.
 func (o RoleWithMFAOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v RoleWithMFA) *string { return v.Path }).(pulumi.StringPtrOutput)
 }
@@ -5465,7 +5126,7 @@ func (o RoleWithMFAPtrOutput) Elem() RoleWithMFAOutput {
 	}).(RoleWithMFAOutput)
 }
 
-// IAM role with the access.
+// IAM role with the access. Defaults to 'admin'.
 func (o RoleWithMFAPtrOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RoleWithMFA) *string {
 		if v == nil {
@@ -5475,7 +5136,7 @@ func (o RoleWithMFAPtrOutput) Name() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Path of the IAM role.
+// Path of the IAM role. Defaults to '/'.
 func (o RoleWithMFAPtrOutput) Path() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RoleWithMFA) *string {
 		if v == nil {

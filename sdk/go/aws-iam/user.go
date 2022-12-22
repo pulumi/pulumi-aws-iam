@@ -21,27 +21,30 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         user, err := iam.NewUser(ctx, "user", &iam.UserArgs{
-//             Name:                  pulumi.String("pulumipus"),
-//             ForceDestroy:          pulumi.BoolPtr(true),
-//             PgpKey:                pulumi.String("keybase:test"),
-//             PasswordResetRequired: pulumi.BoolPtr(false),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        user, err := iam.NewUser(ctx, "user", &iam.UserArgs{
+//	            Name:                  pulumi.String("pulumipus"),
+//	            ForceDestroy:          pulumi.BoolPtr(true),
+//	            PgpKey:                pulumi.String("keybase:test"),
+//	            PasswordResetRequired: pulumi.BoolPtr(false),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("user", user)
+//	        ctx.Export("user", user)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type User struct {
@@ -157,7 +160,7 @@ func (i *User) ToUserOutputWithContext(ctx context.Context) UserOutput {
 // UserArrayInput is an input type that accepts UserArray and UserArrayOutput values.
 // You can construct a concrete instance of `UserArrayInput` via:
 //
-//          UserArray{ UserArgs{...} }
+//	UserArray{ UserArgs{...} }
 type UserArrayInput interface {
 	pulumi.Input
 
@@ -182,7 +185,7 @@ func (i UserArray) ToUserArrayOutputWithContext(ctx context.Context) UserArrayOu
 // UserMapInput is an input type that accepts UserMap and UserMapOutput values.
 // You can construct a concrete instance of `UserMapInput` via:
 //
-//          UserMap{ "key": UserArgs{...} }
+//	UserMap{ "key": UserArgs{...} }
 type UserMapInput interface {
 	pulumi.Input
 
