@@ -214,8 +214,6 @@ class AdminRoleWithMFAArgs:
             pulumi.set(__self__, "name", name)
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
@@ -309,7 +307,7 @@ class AdminRoleArgs:
         """
         The admin role.
         :param pulumi.Input[str] name: IAM role with admin access.
-        :param pulumi.Input[str] path: Path of admin IAM role.
+        :param pulumi.Input[str] path: Path of admin IAM role. Defaults to '/'
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for admin role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for admin role.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
@@ -318,12 +316,8 @@ class AdminRoleArgs:
             name = 'admin'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
@@ -347,7 +341,7 @@ class AdminRoleArgs:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Path of admin IAM role.
+        Path of admin IAM role. Defaults to '/'
         """
         return pulumi.get(self, "path")
 
@@ -1154,20 +1148,12 @@ class EKSServiceAccountRoleArgs:
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
-        if name is None:
-            name = ''
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if name_prefix is None:
-            name_prefix = ''
         if name_prefix is not None:
             pulumi.set(__self__, "name_prefix", name_prefix)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
@@ -1470,22 +1456,14 @@ class PoweruserRoleWithMFAArgs:
         :param pulumi.Input[bool] requires_mfa: Whether admin role requires MFA.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
-        if name is None:
-            name = 'poweruser'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
             pulumi.set(__self__, "policy_arns", policy_arns)
-        if requires_mfa is None:
-            requires_mfa = True
         if requires_mfa is not None:
             pulumi.set(__self__, "requires_mfa", requires_mfa)
         if tags is not None:
@@ -1580,16 +1558,10 @@ class PoweruserRoleArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for poweruser role.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
-        if name is None:
-            name = 'poweruser'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
@@ -1670,28 +1642,20 @@ class ReadonlyRoleWithMFAArgs:
         """
         The readonly role.
         :param pulumi.Input[str] name: IAM role with readonly access.
-        :param pulumi.Input[str] path: Path of readonly IAM role.
+        :param pulumi.Input[str] path: Path of readonly IAM role. Defaults to '/'.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for readonly role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for readonly role.
         :param pulumi.Input[bool] requires_mfa: Whether admin role requires MFA.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
-        if name is None:
-            name = 'readonly'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
             pulumi.set(__self__, "policy_arns", policy_arns)
-        if requires_mfa is None:
-            requires_mfa = True
         if requires_mfa is not None:
             pulumi.set(__self__, "requires_mfa", requires_mfa)
         if tags is not None:
@@ -1713,7 +1677,7 @@ class ReadonlyRoleWithMFAArgs:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Path of readonly IAM role.
+        Path of readonly IAM role. Defaults to '/'.
         """
         return pulumi.get(self, "path")
 
@@ -1781,21 +1745,15 @@ class ReadonlyRoleArgs:
         """
         The readonly role.
         :param pulumi.Input[str] name: IAM role with readonly access.
-        :param pulumi.Input[str] path: Path of readonly IAM role.
+        :param pulumi.Input[str] path: Path of readonly IAM role. Defaults to '/'.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for readonly role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for readonly role.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
-        if name is None:
-            name = 'readonly'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
@@ -1819,7 +1777,7 @@ class ReadonlyRoleArgs:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Path of readonly IAM role.
+        Path of readonly IAM role. Defaults to '/'.
         """
         return pulumi.get(self, "path")
 
@@ -1875,29 +1833,21 @@ class RoleWithMFAArgs:
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         An IAM role that requires MFA.
-        :param pulumi.Input[str] name: IAM role with the access.
-        :param pulumi.Input[str] path: Path of the IAM role.
+        :param pulumi.Input[str] name: IAM role with the access. Defaults to 'admin'.
+        :param pulumi.Input[str] path: Path of the IAM role. Defaults to '/'.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for the role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for the role.
         :param pulumi.Input[bool] requires_mfa: Whether the role requires MFA.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A map of tags to add.
         """
-        if name is None:
-            name = 'admin'
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
             pulumi.set(__self__, "policy_arns", policy_arns)
-        if requires_mfa is None:
-            requires_mfa = True
         if requires_mfa is not None:
             pulumi.set(__self__, "requires_mfa", requires_mfa)
         if tags is not None:
@@ -1907,7 +1857,7 @@ class RoleWithMFAArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        IAM role with the access.
+        IAM role with the access. Defaults to 'admin'.
         """
         return pulumi.get(self, "name")
 
@@ -1919,7 +1869,7 @@ class RoleWithMFAArgs:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Path of the IAM role.
+        Path of the IAM role. Defaults to '/'.
         """
         return pulumi.get(self, "path")
 
@@ -1988,24 +1938,16 @@ class RoleArgs:
         An IAM role.
         :param pulumi.Input[str] name: IAM role name.
         :param pulumi.Input[str] name_prefix: IAM role name prefix.
-        :param pulumi.Input[str] path: Path of admin IAM role.
+        :param pulumi.Input[str] path: Path of admin IAM role. Defaults to '/'.
         :param pulumi.Input[str] permissions_boundary_arn: Permissions boundary ARN to use for the role.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] policy_arns: List of policy ARNs to use for the role.
         """
-        if name is None:
-            name = ''
         if name is not None:
             pulumi.set(__self__, "name", name)
-        if name_prefix is None:
-            name_prefix = ''
         if name_prefix is not None:
             pulumi.set(__self__, "name_prefix", name_prefix)
-        if path is None:
-            path = '/'
         if path is not None:
             pulumi.set(__self__, "path", path)
-        if permissions_boundary_arn is None:
-            permissions_boundary_arn = ''
         if permissions_boundary_arn is not None:
             pulumi.set(__self__, "permissions_boundary_arn", permissions_boundary_arn)
         if policy_arns is not None:
@@ -2039,7 +1981,7 @@ class RoleArgs:
     @pulumi.getter
     def path(self) -> Optional[pulumi.Input[str]]:
         """
-        Path of admin IAM role.
+        Path of admin IAM role. Defaults to '/'.
         """
         return pulumi.get(self, "path")
 

@@ -21,26 +21,29 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         groupWithAssumableRolesPolicy, err := iam.NewGroupWithAssumableRolesPolicy(ctx, "group-with-assumable-roles-policy", &iam.GroupWithAssumableRolesPolicyArgs{
-//             Name:           pulumi.String("production-readonly"),
-//             AssumableRoles: pulumi.ToStringArray([]string{"arn:aws:iam::835367859855:role/readonly"}),
-//             GroupUsers:     pulumi.ToStringArray([]string{"user1", "user2"}),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        groupWithAssumableRolesPolicy, err := iam.NewGroupWithAssumableRolesPolicy(ctx, "group-with-assumable-roles-policy", &iam.GroupWithAssumableRolesPolicyArgs{
+//	            Name:           pulumi.String("production-readonly"),
+//	            AssumableRoles: pulumi.ToStringArray([]string{"arn:aws:iam::835367859855:role/readonly"}),
+//	            GroupUsers:     pulumi.ToStringArray([]string{"user1", "user2"}),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("groupWithAssumableRolesPolicy", groupWithAssumableRolesPolicy)
+//	        ctx.Export("groupWithAssumableRolesPolicy", groupWithAssumableRolesPolicy)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type GroupWithAssumableRolesPolicy struct {
@@ -131,7 +134,7 @@ func (i *GroupWithAssumableRolesPolicy) ToGroupWithAssumableRolesPolicyOutputWit
 // GroupWithAssumableRolesPolicyArrayInput is an input type that accepts GroupWithAssumableRolesPolicyArray and GroupWithAssumableRolesPolicyArrayOutput values.
 // You can construct a concrete instance of `GroupWithAssumableRolesPolicyArrayInput` via:
 //
-//          GroupWithAssumableRolesPolicyArray{ GroupWithAssumableRolesPolicyArgs{...} }
+//	GroupWithAssumableRolesPolicyArray{ GroupWithAssumableRolesPolicyArgs{...} }
 type GroupWithAssumableRolesPolicyArrayInput interface {
 	pulumi.Input
 
@@ -156,7 +159,7 @@ func (i GroupWithAssumableRolesPolicyArray) ToGroupWithAssumableRolesPolicyArray
 // GroupWithAssumableRolesPolicyMapInput is an input type that accepts GroupWithAssumableRolesPolicyMap and GroupWithAssumableRolesPolicyMapOutput values.
 // You can construct a concrete instance of `GroupWithAssumableRolesPolicyMapInput` via:
 //
-//          GroupWithAssumableRolesPolicyMap{ "key": GroupWithAssumableRolesPolicyArgs{...} }
+//	GroupWithAssumableRolesPolicyMap{ "key": GroupWithAssumableRolesPolicyArgs{...} }
 type GroupWithAssumableRolesPolicyMapInput interface {
 	pulumi.Input
 

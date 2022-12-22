@@ -22,31 +22,34 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         assumableRoles, err := iam.NewAssumableRoles(ctx, "assumable-roles", &iam.AssumableRolesArgs{
-//             TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
-//             Admin:           iam.AdminRoleWithMFAArgs{},
-//             Poweruser: iam.PoweruserRoleWithMFAArgs{
-//                 Name: pulumi.String("developer"),
-//             },
-//             Readonly: iam.ReadonlyRoleWithMFAArgs{
-//                 RequiresMfa: pulumi.BoolPtr(true),
-//             },
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        assumableRoles, err := iam.NewAssumableRoles(ctx, "assumable-roles", &iam.AssumableRolesArgs{
+//	            TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
+//	            Admin:           iam.AdminRoleWithMFAArgs{},
+//	            Poweruser: iam.PoweruserRoleWithMFAArgs{
+//	                Name: pulumi.String("developer"),
+//	            },
+//	            Readonly: iam.ReadonlyRoleWithMFAArgs{
+//	                RequiresMfa: pulumi.BoolPtr(true),
+//	            },
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("assumableRoles", assumableRoles)
+//	        ctx.Export("assumableRoles", assumableRoles)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type AssumableRoles struct {
@@ -67,7 +70,6 @@ func NewAssumableRoles(ctx *pulumi.Context,
 	if args.Admin == nil {
 		return nil, errors.New("invalid value for required argument 'Admin'")
 	}
-	args.Admin = args.Admin.ToAdminRoleWithMFAOutput().ApplyT(func(v AdminRoleWithMFA) AdminRoleWithMFA { return *v.Defaults() }).(AdminRoleWithMFAOutput)
 	if isZero(args.ForceDetachPolicies) {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
@@ -76,12 +78,6 @@ func NewAssumableRoles(ctx *pulumi.Context,
 	}
 	if isZero(args.MfaAge) {
 		args.MfaAge = pulumi.IntPtr(86400)
-	}
-	if args.Poweruser != nil {
-		args.Poweruser = args.Poweruser.ToPoweruserRoleWithMFAPtrOutput().ApplyT(func(v *PoweruserRoleWithMFA) *PoweruserRoleWithMFA { return v.Defaults() }).(PoweruserRoleWithMFAPtrOutput)
-	}
-	if args.Readonly != nil {
-		args.Readonly = args.Readonly.ToReadonlyRoleWithMFAPtrOutput().ApplyT(func(v *ReadonlyRoleWithMFA) *ReadonlyRoleWithMFA { return v.Defaults() }).(ReadonlyRoleWithMFAPtrOutput)
 	}
 	var resource AssumableRoles
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRoles", name, args, &resource, opts...)
@@ -150,7 +146,7 @@ func (i *AssumableRoles) ToAssumableRolesOutputWithContext(ctx context.Context) 
 // AssumableRolesArrayInput is an input type that accepts AssumableRolesArray and AssumableRolesArrayOutput values.
 // You can construct a concrete instance of `AssumableRolesArrayInput` via:
 //
-//          AssumableRolesArray{ AssumableRolesArgs{...} }
+//	AssumableRolesArray{ AssumableRolesArgs{...} }
 type AssumableRolesArrayInput interface {
 	pulumi.Input
 
@@ -175,7 +171,7 @@ func (i AssumableRolesArray) ToAssumableRolesArrayOutputWithContext(ctx context.
 // AssumableRolesMapInput is an input type that accepts AssumableRolesMap and AssumableRolesMapOutput values.
 // You can construct a concrete instance of `AssumableRolesMapInput` via:
 //
-//          AssumableRolesMap{ "key": AssumableRolesArgs{...} }
+//	AssumableRolesMap{ "key": AssumableRolesArgs{...} }
 type AssumableRolesMapInput interface {
 	pulumi.Input
 

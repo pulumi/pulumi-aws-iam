@@ -59,9 +59,6 @@ namespace Pulumi.AwsIam.Inputs
 
         public PoweruserRoleArgs()
         {
-            Name = "poweruser";
-            Path = "/";
-            PermissionsBoundaryArn = "";
         }
     }
 }

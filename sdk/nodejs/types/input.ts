@@ -61,7 +61,7 @@ export interface AdminRoleArgs {
      */
     name?: pulumi.Input<string>;
     /**
-     * Path of admin IAM role.
+     * Path of admin IAM role. Defaults to '/'
      */
     path?: pulumi.Input<string>;
     /**
@@ -84,8 +84,6 @@ export function adminRoleArgsProvideDefaults(val: AdminRoleArgs): AdminRoleArgs 
     return {
         ...val,
         name: (val.name) ?? "admin",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
     };
 }
 
@@ -117,15 +115,6 @@ export interface AdminRoleWithMFAArgs {
      * A map of tags to add.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
-}
-/**
- * adminRoleWithMFAArgsProvideDefaults sets the appropriate defaults for AdminRoleWithMFAArgs
- */
-export function adminRoleWithMFAArgsProvideDefaults(val: AdminRoleWithMFAArgs): AdminRoleWithMFAArgs {
-    return {
-        ...val,
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-    };
 }
 
 /**
@@ -426,18 +415,6 @@ export interface EKSServiceAccountRoleArgs {
      */
     policyArns?: pulumi.Input<pulumi.Input<string>[]>;
 }
-/**
- * eksserviceAccountRoleArgsProvideDefaults sets the appropriate defaults for EKSServiceAccountRoleArgs
- */
-export function eksserviceAccountRoleArgsProvideDefaults(val: EKSServiceAccountRoleArgs): EKSServiceAccountRoleArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "",
-        namePrefix: (val.namePrefix) ?? "",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-    };
-}
 
 /**
  * The VPC CNI IAM policy to the role.
@@ -517,17 +494,6 @@ export interface PoweruserRoleArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
-/**
- * poweruserRoleArgsProvideDefaults sets the appropriate defaults for PoweruserRoleArgs
- */
-export function poweruserRoleArgsProvideDefaults(val: PoweruserRoleArgs): PoweruserRoleArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "poweruser",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-    };
-}
 
 /**
  * The poweruser role.
@@ -558,18 +524,6 @@ export interface PoweruserRoleWithMFAArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
-/**
- * poweruserRoleWithMFAArgsProvideDefaults sets the appropriate defaults for PoweruserRoleWithMFAArgs
- */
-export function poweruserRoleWithMFAArgsProvideDefaults(val: PoweruserRoleWithMFAArgs): PoweruserRoleWithMFAArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "poweruser",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-        requiresMfa: (val.requiresMfa) ?? true,
-    };
-}
 
 /**
  * The readonly role.
@@ -580,7 +534,7 @@ export interface ReadonlyRoleArgs {
      */
     name?: pulumi.Input<string>;
     /**
-     * Path of readonly IAM role.
+     * Path of readonly IAM role. Defaults to '/'.
      */
     path?: pulumi.Input<string>;
     /**
@@ -596,17 +550,6 @@ export interface ReadonlyRoleArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
-/**
- * readonlyRoleArgsProvideDefaults sets the appropriate defaults for ReadonlyRoleArgs
- */
-export function readonlyRoleArgsProvideDefaults(val: ReadonlyRoleArgs): ReadonlyRoleArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "readonly",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-    };
-}
 
 /**
  * The readonly role.
@@ -617,7 +560,7 @@ export interface ReadonlyRoleWithMFAArgs {
      */
     name?: pulumi.Input<string>;
     /**
-     * Path of readonly IAM role.
+     * Path of readonly IAM role. Defaults to '/'.
      */
     path?: pulumi.Input<string>;
     /**
@@ -637,18 +580,6 @@ export interface ReadonlyRoleWithMFAArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
-/**
- * readonlyRoleWithMFAArgsProvideDefaults sets the appropriate defaults for ReadonlyRoleWithMFAArgs
- */
-export function readonlyRoleWithMFAArgsProvideDefaults(val: ReadonlyRoleWithMFAArgs): ReadonlyRoleWithMFAArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "readonly",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-        requiresMfa: (val.requiresMfa) ?? true,
-    };
-}
 
 /**
  * An IAM role.
@@ -663,7 +594,7 @@ export interface RoleArgs {
      */
     namePrefix?: pulumi.Input<string>;
     /**
-     * Path of admin IAM role.
+     * Path of admin IAM role. Defaults to '/'.
      */
     path?: pulumi.Input<string>;
     /**
@@ -675,29 +606,17 @@ export interface RoleArgs {
      */
     policyArns?: pulumi.Input<pulumi.Input<string>[]>;
 }
-/**
- * roleArgsProvideDefaults sets the appropriate defaults for RoleArgs
- */
-export function roleArgsProvideDefaults(val: RoleArgs): RoleArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "",
-        namePrefix: (val.namePrefix) ?? "",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-    };
-}
 
 /**
  * An IAM role that requires MFA.
  */
 export interface RoleWithMFAArgs {
     /**
-     * IAM role with the access.
+     * IAM role with the access. Defaults to 'admin'.
      */
     name?: pulumi.Input<string>;
     /**
-     * Path of the IAM role.
+     * Path of the IAM role. Defaults to '/'.
      */
     path?: pulumi.Input<string>;
     /**
@@ -716,17 +635,5 @@ export interface RoleWithMFAArgs {
      * A map of tags to add.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
-}
-/**
- * roleWithMFAArgsProvideDefaults sets the appropriate defaults for RoleWithMFAArgs
- */
-export function roleWithMFAArgsProvideDefaults(val: RoleWithMFAArgs): RoleWithMFAArgs {
-    return {
-        ...val,
-        name: (val.name) ?? "admin",
-        path: (val.path) ?? "/",
-        permissionsBoundaryArn: (val.permissionsBoundaryArn) ?? "",
-        requiresMfa: (val.requiresMfa) ?? true,
-    };
 }
 

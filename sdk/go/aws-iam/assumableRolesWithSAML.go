@@ -20,29 +20,32 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         assumableRolesWithSAML, err := iam.NewAssumableRolesWithSAML(ctx, "assumable-roles-with-saml", &iam.AssumableRolesWithSAMLArgs{
-//             ProviderIds: pulumi.ToStringArray([]string{"arn:aws:iam::235367859851:saml-provider/idp_saml"}),
-//             Admin:       iam.AdminRoleArgs{},
-//             Readonly:    iam.ReadonlyRoleArgs{},
-//             Poweruser: iam.PoweruserRoleArgs{
-//                 Name: pulumi.String("developer"),
-//             },
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        assumableRolesWithSAML, err := iam.NewAssumableRolesWithSAML(ctx, "assumable-roles-with-saml", &iam.AssumableRolesWithSAMLArgs{
+//	            ProviderIds: pulumi.ToStringArray([]string{"arn:aws:iam::235367859851:saml-provider/idp_saml"}),
+//	            Admin:       iam.AdminRoleArgs{},
+//	            Readonly:    iam.ReadonlyRoleArgs{},
+//	            Poweruser: iam.PoweruserRoleArgs{
+//	                Name: pulumi.String("developer"),
+//	            },
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("assumableRolesWithSAML", assumableRolesWithSAML)
+//	        ctx.Export("assumableRolesWithSAML", assumableRolesWithSAML)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type AssumableRolesWithSAML struct {
@@ -71,12 +74,6 @@ func NewAssumableRolesWithSAML(ctx *pulumi.Context,
 	}
 	if isZero(args.MaxSessionDuration) {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
-	}
-	if args.Poweruser != nil {
-		args.Poweruser = args.Poweruser.ToPoweruserRolePtrOutput().ApplyT(func(v *PoweruserRole) *PoweruserRole { return v.Defaults() }).(PoweruserRolePtrOutput)
-	}
-	if args.Readonly != nil {
-		args.Readonly = args.Readonly.ToReadonlyRolePtrOutput().ApplyT(func(v *ReadonlyRole) *ReadonlyRole { return v.Defaults() }).(ReadonlyRolePtrOutput)
 	}
 	var resource AssumableRolesWithSAML
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRolesWithSAML", name, args, &resource, opts...)
@@ -141,7 +138,7 @@ func (i *AssumableRolesWithSAML) ToAssumableRolesWithSAMLOutputWithContext(ctx c
 // AssumableRolesWithSAMLArrayInput is an input type that accepts AssumableRolesWithSAMLArray and AssumableRolesWithSAMLArrayOutput values.
 // You can construct a concrete instance of `AssumableRolesWithSAMLArrayInput` via:
 //
-//          AssumableRolesWithSAMLArray{ AssumableRolesWithSAMLArgs{...} }
+//	AssumableRolesWithSAMLArray{ AssumableRolesWithSAMLArgs{...} }
 type AssumableRolesWithSAMLArrayInput interface {
 	pulumi.Input
 
@@ -166,7 +163,7 @@ func (i AssumableRolesWithSAMLArray) ToAssumableRolesWithSAMLArrayOutputWithCont
 // AssumableRolesWithSAMLMapInput is an input type that accepts AssumableRolesWithSAMLMap and AssumableRolesWithSAMLMapOutput values.
 // You can construct a concrete instance of `AssumableRolesWithSAMLMapInput` via:
 //
-//          AssumableRolesWithSAMLMap{ "key": AssumableRolesWithSAMLArgs{...} }
+//	AssumableRolesWithSAMLMap{ "key": AssumableRolesWithSAMLArgs{...} }
 type AssumableRolesWithSAMLMapInput interface {
 	pulumi.Input
 

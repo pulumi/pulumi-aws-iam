@@ -65,7 +65,6 @@ namespace Pulumi.AwsIam.Inputs
 
         public AdminRoleWithMFAArgs()
         {
-            PermissionsBoundaryArn = "";
         }
     }
 }

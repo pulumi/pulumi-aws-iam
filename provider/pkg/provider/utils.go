@@ -19,6 +19,19 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+func setDefaultStringPtr(output pulumi.StringPtrInput, value string) pulumi.StringPtrOutput {
+	if output == nil {
+		output = pulumi.StringPtr("").ToStringPtrOutput()
+	}
+
+	return output.ToStringPtrOutput().ApplyT(func(v *string) *string {
+		if v == nil || *v == "" {
+			v = &value
+		}
+		return v
+	}).(pulumi.StringPtrOutput)
+}
+
 func createAssumableRoleOutput(role *iam.Role, requiresMFA pulumi.BoolInput) AssumableRoleOutput {
 	return AssumableRoleOutput{
 		RoleARN:      role.Arn,

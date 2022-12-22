@@ -60,9 +60,9 @@ export class AssumableRolesWithSAML extends pulumi.ComponentResource {
             resourceInputs["awsSamlEndpoint"] = (args ? args.awsSamlEndpoint : undefined) ?? "https://signin.aws.amazon.com/saml";
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
-            resourceInputs["poweruser"] = args ? (args.poweruser ? pulumi.output(args.poweruser).apply(inputs.poweruserRoleArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["poweruser"] = args ? args.poweruser : undefined;
             resourceInputs["providerIds"] = args ? args.providerIds : undefined;
-            resourceInputs["readonly"] = args ? (args.readonly ? pulumi.output(args.readonly).apply(inputs.readonlyRoleArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["readonly"] = args ? args.readonly : undefined;
         } else {
             resourceInputs["admin"] = undefined /*out*/;
             resourceInputs["poweruser"] = undefined /*out*/;

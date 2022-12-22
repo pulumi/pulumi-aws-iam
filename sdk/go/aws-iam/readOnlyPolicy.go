@@ -22,27 +22,30 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         readOnlyPolicy, err := iam.NewReadOnlyPolicy(ctx, "read-only-policy", &iam.ReadOnlyPolicyArgs{
-//             Name:            pulumi.String("example"),
-//             Path:            pulumi.String("/"),
-//             Description:     pulumi.String("My example policy"),
-//             AllowedServices: pulumi.ToStringArray([]string{"rds", "dynamodb"}),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        readOnlyPolicy, err := iam.NewReadOnlyPolicy(ctx, "read-only-policy", &iam.ReadOnlyPolicyArgs{
+//	            Name:            pulumi.String("example"),
+//	            Path:            pulumi.String("/"),
+//	            Description:     pulumi.String("My example policy"),
+//	            AllowedServices: pulumi.ToStringArray([]string{"rds", "dynamodb"}),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("readOnlyPolicy", readOnlyPolicy)
+//	        ctx.Export("readOnlyPolicy", readOnlyPolicy)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type ReadOnlyPolicy struct {
@@ -173,7 +176,7 @@ func (i *ReadOnlyPolicy) ToReadOnlyPolicyOutputWithContext(ctx context.Context) 
 // ReadOnlyPolicyArrayInput is an input type that accepts ReadOnlyPolicyArray and ReadOnlyPolicyArrayOutput values.
 // You can construct a concrete instance of `ReadOnlyPolicyArrayInput` via:
 //
-//          ReadOnlyPolicyArray{ ReadOnlyPolicyArgs{...} }
+//	ReadOnlyPolicyArray{ ReadOnlyPolicyArgs{...} }
 type ReadOnlyPolicyArrayInput interface {
 	pulumi.Input
 
@@ -198,7 +201,7 @@ func (i ReadOnlyPolicyArray) ToReadOnlyPolicyArrayOutputWithContext(ctx context.
 // ReadOnlyPolicyMapInput is an input type that accepts ReadOnlyPolicyMap and ReadOnlyPolicyMapOutput values.
 // You can construct a concrete instance of `ReadOnlyPolicyMapInput` via:
 //
-//          ReadOnlyPolicyMap{ "key": ReadOnlyPolicyArgs{...} }
+//	ReadOnlyPolicyMap{ "key": ReadOnlyPolicyArgs{...} }
 type ReadOnlyPolicyMapInput interface {
 	pulumi.Input
 

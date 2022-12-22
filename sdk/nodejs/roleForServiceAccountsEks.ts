@@ -89,7 +89,7 @@ export class RoleForServiceAccountsEks extends pulumi.ComponentResource {
             resourceInputs["oidcProviders"] = args ? args.oidcProviders : undefined;
             resourceInputs["policies"] = args ? (args.policies ? pulumi.output(args.policies).apply(inputs.eksrolePoliciesArgsProvideDefaults) : undefined) : undefined;
             resourceInputs["policyNamePrefix"] = (args ? args.policyNamePrefix : undefined) ?? "AmazonEKS_";
-            resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.eksserviceAccountRoleArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["role"] = args ? args.role : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
         } else {
             resourceInputs["role"] = undefined /*out*/;

@@ -75,7 +75,7 @@ export class AssumableRoleWithSAML extends pulumi.ComponentResource {
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
             resourceInputs["providerIds"] = args ? args.providerIds : undefined;
-            resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.roleArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["role"] = args ? args.role : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["roleArn"] = undefined /*out*/;
             resourceInputs["roleName"] = undefined /*out*/;

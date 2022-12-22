@@ -34,35 +34,38 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         eksRole, err := iam.NewEKSRole(ctx, "eks-role", &iam.EKSRoleArgs{
-//             Role: iam.RoleArgs{
-//                 Name:       pulumi.String("eks-role"),
-//                 PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
-//             },
-//             Tags: pulumi.ToStringMap(map[string]string{
-//                 "Role": "eks-role",
-//             }),
-//             Uncomment the below and replace actual cluster values.
-//             ClusterServiceAccounts: pulumi.ToStringArrayMap(map[string][]string{
-//                 "staging-main-1": {"default:my-app-staging"},
-//                 "staging-backup-1": {"default:my-app-staging"},
-//             }),
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        eksRole, err := iam.NewEKSRole(ctx, "eks-role", &iam.EKSRoleArgs{
+//	            Role: iam.RoleArgs{
+//	                Name:       pulumi.String("eks-role"),
+//	                PolicyArns: pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"}),
+//	            },
+//	            Tags: pulumi.ToStringMap(map[string]string{
+//	                "Role": "eks-role",
+//	            }),
+//	            Uncomment the below and replace actual cluster values.
+//	            ClusterServiceAccounts: pulumi.ToStringArrayMap(map[string][]string{
+//	                "staging-main-1": {"default:my-app-staging"},
+//	                "staging-backup-1": {"default:my-app-staging"},
+//	            }),
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("eksRole", eksRole)
+//	        ctx.Export("eksRole", eksRole)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type EKSRole struct {
@@ -90,9 +93,6 @@ func NewEKSRole(ctx *pulumi.Context,
 	}
 	if isZero(args.MaxSessionDuration) {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
-	}
-	if args.Role != nil {
-		args.Role = args.Role.ToRolePtrOutput().ApplyT(func(v *Role) *Role { return v.Defaults() }).(RolePtrOutput)
 	}
 	var resource EKSRole
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:EKSRole", name, args, &resource, opts...)
@@ -161,7 +161,7 @@ func (i *EKSRole) ToEKSRoleOutputWithContext(ctx context.Context) EKSRoleOutput 
 // EKSRoleArrayInput is an input type that accepts EKSRoleArray and EKSRoleArrayOutput values.
 // You can construct a concrete instance of `EKSRoleArrayInput` via:
 //
-//          EKSRoleArray{ EKSRoleArgs{...} }
+//	EKSRoleArray{ EKSRoleArgs{...} }
 type EKSRoleArrayInput interface {
 	pulumi.Input
 
@@ -186,7 +186,7 @@ func (i EKSRoleArray) ToEKSRoleArrayOutputWithContext(ctx context.Context) EKSRo
 // EKSRoleMapInput is an input type that accepts EKSRoleMap and EKSRoleMapOutput values.
 // You can construct a concrete instance of `EKSRoleMapInput` via:
 //
-//          EKSRoleMap{ "key": EKSRoleArgs{...} }
+//	EKSRoleMap{ "key": EKSRoleArgs{...} }
 type EKSRoleMapInput interface {
 	pulumi.Input
 

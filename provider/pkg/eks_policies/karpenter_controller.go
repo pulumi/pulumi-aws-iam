@@ -37,7 +37,7 @@ type KarpenterControllerPolicyArgs struct {
 	ClusterID pulumi.StringInput `pulumi:"clusterId"`
 
 	// Tag key (`{key = value}`) applied to resources launched by Karpenter through the Karpenter provisioner.
-	TagKey string `pulumi:"tagKey"`
+	TagKey pulumi.StringInput `pulumi:"tagKey"`
 
 	// List of SSM Parameter ARNs that contain AMI IDs launched by Karpenter.
 	SSMParameterARNs pulumi.StringArrayInput `pulumi:"ssmParameterArns"`
@@ -50,6 +50,14 @@ type KarpenterControllerPolicyArgs struct {
 }
 
 func AttachKarpenterControllerPolicy(ctx *pulumi.Context, policyBuilder *EKSRoleBuilder, partition, awsAccountID string, args KarpenterControllerPolicyArgs) error {
+	if args.ClusterID == nil {
+		args.ClusterID = pulumi.String("*")
+	}
+
+	if args.TagKey == nil {
+		args.TagKey = pulumi.String("karpenter.sh/discovery")
+	}
+
 	karpenterSubnetId := args.SubnetAccountID
 	if karpenterSubnetId == nil {
 		karpenterSubnetId = pulumi.String(awsAccountID)

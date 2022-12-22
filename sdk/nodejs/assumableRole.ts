@@ -62,7 +62,7 @@ export class AssumableRole extends pulumi.ComponentResource {
             resourceInputs["forceDetachPolicies"] = (args ? args.forceDetachPolicies : undefined) ?? false;
             resourceInputs["maxSessionDuration"] = (args ? args.maxSessionDuration : undefined) ?? 3600;
             resourceInputs["mfaAge"] = (args ? args.mfaAge : undefined) ?? 86400;
-            resourceInputs["role"] = args ? (args.role ? pulumi.output(args.role).apply(inputs.roleWithMFAArgsProvideDefaults) : undefined) : undefined;
+            resourceInputs["role"] = args ? args.role : undefined;
             resourceInputs["roleStsExternalIds"] = args ? args.roleStsExternalIds : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["trustedRoleActions"] = args ? args.trustedRoleActions : undefined;

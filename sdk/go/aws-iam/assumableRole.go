@@ -20,29 +20,32 @@ import (
 // package main
 //
 // import (
-//     iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
-//     "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+//	iam "github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
 // )
 //
-// func main() {
-//     pulumi.Run(func(ctx *pulumi.Context) error {
-//         assumableRole, err := iam.NewAssumableRole(ctx, "assumable-role", &iam.AssumableRoleArgs{
-//             TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
-//             Role: &iam.RoleWithMFAArgs{
-//                 Name:        pulumi.String("custom"),
-//                 RequiresMfa: pulumi.BoolPtr(true),
-//                 PolicyArns:  pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonCognitoReadOnly", "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"}),
-//             },
-//         })
-//         if err != nil {
-//             return err
-//         }
+//	func main() {
+//	    pulumi.Run(func(ctx *pulumi.Context) error {
+//	        assumableRole, err := iam.NewAssumableRole(ctx, "assumable-role", &iam.AssumableRoleArgs{
+//	            TrustedRoleArns: pulumi.ToStringArray([]string{"arn:aws:iam::307990089504:root", "arn:aws:iam::835367859851:user/pulumipus"}),
+//	            Role: &iam.RoleWithMFAArgs{
+//	                Name:        pulumi.String("custom"),
+//	                RequiresMfa: pulumi.BoolPtr(true),
+//	                PolicyArns:  pulumi.ToStringArray([]string{"arn:aws:iam::aws:policy/AmazonCognitoReadOnly", "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess"}),
+//	            },
+//	        })
+//	        if err != nil {
+//	            return err
+//	        }
 //
-//         ctx.Export("assumableRole", assumableRole)
+//	        ctx.Export("assumableRole", assumableRole)
 //
-//         return nil
-//     })
-// }
+//	        return nil
+//	    })
+//	}
+//
 // ```
 // {{ /example }}
 type AssumableRole struct {
@@ -79,9 +82,6 @@ func NewAssumableRole(ctx *pulumi.Context,
 	}
 	if isZero(args.MfaAge) {
 		args.MfaAge = pulumi.IntPtr(86400)
-	}
-	if args.Role != nil {
-		args.Role = args.Role.ToRoleWithMFAPtrOutput().ApplyT(func(v *RoleWithMFA) *RoleWithMFA { return v.Defaults() }).(RoleWithMFAPtrOutput)
 	}
 	var resource AssumableRole
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRole", name, args, &resource, opts...)
@@ -176,7 +176,7 @@ func (i *AssumableRole) ToAssumableRoleOutputWithContext(ctx context.Context) As
 // AssumableRoleArrayInput is an input type that accepts AssumableRoleArray and AssumableRoleArrayOutput values.
 // You can construct a concrete instance of `AssumableRoleArrayInput` via:
 //
-//          AssumableRoleArray{ AssumableRoleArgs{...} }
+//	AssumableRoleArray{ AssumableRoleArgs{...} }
 type AssumableRoleArrayInput interface {
 	pulumi.Input
 
@@ -201,7 +201,7 @@ func (i AssumableRoleArray) ToAssumableRoleArrayOutputWithContext(ctx context.Co
 // AssumableRoleMapInput is an input type that accepts AssumableRoleMap and AssumableRoleMapOutput values.
 // You can construct a concrete instance of `AssumableRoleMapInput` via:
 //
-//          AssumableRoleMap{ "key": AssumableRoleArgs{...} }
+//	AssumableRoleMap{ "key": AssumableRoleArgs{...} }
 type AssumableRoleMapInput interface {
 	pulumi.Input
 
