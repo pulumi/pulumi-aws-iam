@@ -145,7 +145,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context, name string, args *RoleFo
 
 	var oidcProviderOutputs []interface{}
 	for _, provider := range args.OIDCProviders {
-		providerOutput := pulumi.All(provider.NamespaceServiceAccounts, provider.ProviderARN).ApplyT(func(x []interface{}) iam.GetPolicyDocumentStatement {
+		providerOutput := pulumi.All(provider.NamespaceServiceAccounts.ToStringArrayOutput(), provider.ProviderARN).ApplyT(func(x []interface{}) iam.GetPolicyDocumentStatement {
 			namespaceServiceAccounts := x[0].([]string)
 			providerARN := x[1].(string)
 
