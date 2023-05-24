@@ -68,7 +68,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:EKSRole")]
-    public partial class EKSRole : Pulumi.ComponentResource
+    public partial class EKSRole : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// ARN of IAM role.
@@ -120,7 +120,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class EKSRoleArgs : Pulumi.ResourceArgs
+    public sealed class EKSRoleArgs : global::Pulumi.ResourceArgs
     {
         [Input("clusterServiceAccounts")]
         private InputList<Inputs.EKSServiceAccountArgs>? _clusterServiceAccounts;
@@ -190,5 +190,6 @@ namespace Pulumi.AwsIam
             ForceDetachPolicies = false;
             MaxSessionDuration = 3600;
         }
+        public static new EKSRoleArgs Empty => new EKSRoleArgs();
     }
 }

@@ -52,7 +52,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:Policy")]
-    public partial class Policy : Pulumi.ComponentResource
+    public partial class Policy : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// The ARN assigned by AWS to this policy.
@@ -116,7 +116,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class PolicyArgs : Pulumi.ResourceArgs
+    public sealed class PolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// The description of the policy.
@@ -159,5 +159,6 @@ namespace Pulumi.AwsIam
             Description = "IAM Policy";
             Path = "/";
         }
+        public static new PolicyArgs Empty => new PolicyArgs();
     }
 }

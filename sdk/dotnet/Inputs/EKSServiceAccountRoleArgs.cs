@@ -10,7 +10,7 @@ using Pulumi.Serialization;
 namespace Pulumi.AwsIam.Inputs
 {
 
-    public sealed class EKSServiceAccountRoleArgs : Pulumi.ResourceArgs
+    public sealed class EKSServiceAccountRoleArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM Role description.
@@ -57,5 +57,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSServiceAccountRoleArgs()
         {
         }
+        public static new EKSServiceAccountRoleArgs Empty => new EKSServiceAccountRoleArgs();
     }
 }

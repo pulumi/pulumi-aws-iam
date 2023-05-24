@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Cert Manager IAM policy to attach to the role.
     /// </summary>
-    public sealed class EKSCertManagerPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSCertManagerPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Cert Manager IAM policy to the role.
@@ -37,5 +37,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSCertManagerPolicyArgs()
         {
         }
+        public static new EKSCertManagerPolicyArgs Empty => new EKSCertManagerPolicyArgs();
     }
 }

@@ -1,2 +1,2 @@
-// Package aws-iam exports types, functions, subpackages for provisioning aws-iam resources.
+// Package awsiam exports types, functions, subpackages for provisioning awsiam resources.
 package awsiam

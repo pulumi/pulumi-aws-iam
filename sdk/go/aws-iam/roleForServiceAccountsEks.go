@@ -90,19 +90,19 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context,
 		args = &RoleForServiceAccountsEksArgs{}
 	}
 
-	if isZero(args.AssumeRoleConditionTest) {
+	if args.AssumeRoleConditionTest == nil {
 		args.AssumeRoleConditionTest = pulumi.StringPtr("StringEquals")
 	}
-	if isZero(args.ForceDetachPolicies) {
+	if args.ForceDetachPolicies == nil {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
-	if isZero(args.MaxSessionDuration) {
+	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
 	if args.Policies != nil {
 		args.Policies = args.Policies.ToEKSRolePoliciesPtrOutput().ApplyT(func(v *EKSRolePolicies) *EKSRolePolicies { return v.Defaults() }).(EKSRolePoliciesPtrOutput)
 	}
-	if isZero(args.PolicyNamePrefix) {
+	if args.PolicyNamePrefix == nil {
 		args.PolicyNamePrefix = pulumi.StringPtr("AmazonEKS_")
 	}
 	var resource RoleForServiceAccountsEks

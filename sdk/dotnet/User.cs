@@ -43,7 +43,7 @@ namespace Pulumi.AwsIam
     /// {{ /example }}
     /// </summary>
     [AwsIamResourceType("aws-iam:index:User")]
-    public partial class User : Pulumi.ComponentResource
+    public partial class User : global::Pulumi.ComponentResource
     {
         /// <summary>
         /// The IAM access key.
@@ -92,7 +92,7 @@ namespace Pulumi.AwsIam
         }
     }
 
-    public sealed class UserArgs : Pulumi.ResourceArgs
+    public sealed class UserArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// When destroying this user, destroy even if it has non-Pulumi-managed IAM access keys, login profile or MFA devices. Without forceDestroy a user with non-Pulumi-managed access keys and login profile will fail to be destroyed.
@@ -171,5 +171,6 @@ namespace Pulumi.AwsIam
             Path = "/";
             SshKeyEncoding = "SSH";
         }
+        public static new UserArgs Empty => new UserArgs();
     }
 }

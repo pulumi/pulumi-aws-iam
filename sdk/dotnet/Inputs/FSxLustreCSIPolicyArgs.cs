@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The FSx for Lustre CSI Driver IAM policy to the role.
     /// </summary>
-    public sealed class FSxLustreCSIPolicyArgs : Pulumi.ResourceArgs
+    public sealed class FSxLustreCSIPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the FSx for Lustre CSI Driver IAM policy to the role.
@@ -37,5 +37,6 @@ namespace Pulumi.AwsIam.Inputs
         public FSxLustreCSIPolicyArgs()
         {
         }
+        public static new FSxLustreCSIPolicyArgs Empty => new FSxLustreCSIPolicyArgs();
     }
 }

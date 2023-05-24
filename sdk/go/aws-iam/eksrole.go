@@ -88,10 +88,10 @@ func NewEKSRole(ctx *pulumi.Context,
 		args = &EKSRoleArgs{}
 	}
 
-	if isZero(args.ForceDetachPolicies) {
+	if args.ForceDetachPolicies == nil {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
-	if isZero(args.MaxSessionDuration) {
+	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
 	var resource EKSRole

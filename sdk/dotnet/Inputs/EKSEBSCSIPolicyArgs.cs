@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The EBS CSI IAM policy to the role.
     /// </summary>
-    public sealed class EKSEBSCSIPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSEBSCSIPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the EBS CSI IAM policy to the role.
@@ -36,5 +36,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSEBSCSIPolicyArgs()
         {
         }
+        public static new EKSEBSCSIPolicyArgs Empty => new EKSEBSCSIPolicyArgs();
     }
 }

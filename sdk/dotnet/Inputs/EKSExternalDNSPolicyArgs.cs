@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The External DNS IAM policy to the role.
     /// </summary>
-    public sealed class EKSExternalDNSPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSExternalDNSPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the External DNS IAM policy to the role.
@@ -37,5 +37,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSExternalDNSPolicyArgs()
         {
         }
+        public static new EKSExternalDNSPolicyArgs Empty => new EKSExternalDNSPolicyArgs();
     }
 }

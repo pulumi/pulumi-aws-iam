@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The Velero IAM policy to the role.
     /// </summary>
-    public sealed class EKSVeleroPolicyArgs : Pulumi.ResourceArgs
+    public sealed class EKSVeleroPolicyArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// Determines whether to attach the Velero IAM policy to the role.
@@ -37,5 +37,6 @@ namespace Pulumi.AwsIam.Inputs
         public EKSVeleroPolicyArgs()
         {
         }
+        public static new EKSVeleroPolicyArgs Empty => new EKSVeleroPolicyArgs();
     }
 }

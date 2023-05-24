@@ -62,25 +62,25 @@ func NewAssumableRole(ctx *pulumi.Context,
 		args = &AssumableRoleArgs{}
 	}
 
-	if isZero(args.AttachAdminPolicy) {
+	if args.AttachAdminPolicy == nil {
 		args.AttachAdminPolicy = pulumi.BoolPtr(false)
 	}
-	if isZero(args.AttachPoweruserPolicy) {
+	if args.AttachPoweruserPolicy == nil {
 		args.AttachPoweruserPolicy = pulumi.BoolPtr(false)
 	}
-	if isZero(args.AttachReadonlyPolicy) {
+	if args.AttachReadonlyPolicy == nil {
 		args.AttachReadonlyPolicy = pulumi.BoolPtr(false)
 	}
-	if isZero(args.CustomRoleTrustPolicy) {
+	if args.CustomRoleTrustPolicy == nil {
 		args.CustomRoleTrustPolicy = pulumi.StringPtr("")
 	}
-	if isZero(args.ForceDetachPolicies) {
+	if args.ForceDetachPolicies == nil {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
-	if isZero(args.MaxSessionDuration) {
+	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
-	if isZero(args.MfaAge) {
+	if args.MfaAge == nil {
 		args.MfaAge = pulumi.IntPtr(86400)
 	}
 	var resource AssumableRole

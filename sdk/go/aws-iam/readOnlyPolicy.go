@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -77,22 +77,22 @@ func NewReadOnlyPolicy(ctx *pulumi.Context,
 	if args.Name == nil {
 		return nil, errors.New("invalid value for required argument 'Name'")
 	}
-	if isZero(args.AdditionalPolicyJson) {
+	if args.AdditionalPolicyJson == nil {
 		args.AdditionalPolicyJson = pulumi.StringPtr("{}")
 	}
-	if isZero(args.AllowCloudwatchLogsQuery) {
+	if args.AllowCloudwatchLogsQuery == nil {
 		args.AllowCloudwatchLogsQuery = pulumi.BoolPtr(true)
 	}
-	if isZero(args.AllowPredefinedStsActions) {
+	if args.AllowPredefinedStsActions == nil {
 		args.AllowPredefinedStsActions = pulumi.BoolPtr(true)
 	}
-	if isZero(args.AllowWebConsoleServices) {
+	if args.AllowWebConsoleServices == nil {
 		args.AllowWebConsoleServices = pulumi.BoolPtr(true)
 	}
-	if isZero(args.Description) {
+	if args.Description == nil {
 		args.Description = pulumi.StringPtr("IAM Policy")
 	}
-	if isZero(args.Path) {
+	if args.Path == nil {
 		args.Path = pulumi.StringPtr("/")
 	}
 	var resource ReadOnlyPolicy

@@ -70,13 +70,13 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context,
 		args = &AssumableRoleWithSAMLArgs{}
 	}
 
-	if isZero(args.AwsSamlEndpoint) {
+	if args.AwsSamlEndpoint == nil {
 		args.AwsSamlEndpoint = pulumi.StringPtr("https://signin.aws.amazon.com/saml")
 	}
-	if isZero(args.ForceDetachPolicies) {
+	if args.ForceDetachPolicies == nil {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
-	if isZero(args.MaxSessionDuration) {
+	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
 	var resource AssumableRoleWithSAML

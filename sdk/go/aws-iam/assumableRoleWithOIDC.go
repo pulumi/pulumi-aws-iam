@@ -70,13 +70,13 @@ func NewAssumableRoleWithOIDC(ctx *pulumi.Context,
 		args = &AssumableRoleWithOIDCArgs{}
 	}
 
-	if isZero(args.AwsAccountId) {
+	if args.AwsAccountId == nil {
 		args.AwsAccountId = pulumi.StringPtr("")
 	}
-	if isZero(args.ForceDetachPolicies) {
+	if args.ForceDetachPolicies == nil {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
-	if isZero(args.MaxSessionDuration) {
+	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
 	var resource AssumableRoleWithOIDC

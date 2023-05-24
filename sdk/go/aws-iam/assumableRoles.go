@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -70,13 +70,13 @@ func NewAssumableRoles(ctx *pulumi.Context,
 	if args.Admin == nil {
 		return nil, errors.New("invalid value for required argument 'Admin'")
 	}
-	if isZero(args.ForceDetachPolicies) {
+	if args.ForceDetachPolicies == nil {
 		args.ForceDetachPolicies = pulumi.BoolPtr(false)
 	}
-	if isZero(args.MaxSessionDuration) {
+	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
-	if isZero(args.MfaAge) {
+	if args.MfaAge == nil {
 		args.MfaAge = pulumi.IntPtr(86400)
 	}
 	var resource AssumableRoles

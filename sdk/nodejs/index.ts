@@ -5,20 +5,76 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
 // Export members:
-export * from "./account";
-export * from "./assumableRole";
-export * from "./assumableRoleWithOIDC";
-export * from "./assumableRoleWithSAML";
-export * from "./assumableRoles";
-export * from "./assumableRolesWithSAML";
-export * from "./eksrole";
-export * from "./groupWithAssumableRolesPolicy";
-export * from "./groupWithPolicies";
-export * from "./policy";
-export * from "./provider";
-export * from "./readOnlyPolicy";
-export * from "./roleForServiceAccountsEks";
-export * from "./user";
+export { AccountArgs } from "./account";
+export type Account = import("./account").Account;
+export const Account: typeof import("./account").Account = null as any;
+utilities.lazyLoad(exports, ["Account"], () => require("./account"));
+
+export { AssumableRoleArgs } from "./assumableRole";
+export type AssumableRole = import("./assumableRole").AssumableRole;
+export const AssumableRole: typeof import("./assumableRole").AssumableRole = null as any;
+utilities.lazyLoad(exports, ["AssumableRole"], () => require("./assumableRole"));
+
+export { AssumableRoleWithOIDCArgs } from "./assumableRoleWithOIDC";
+export type AssumableRoleWithOIDC = import("./assumableRoleWithOIDC").AssumableRoleWithOIDC;
+export const AssumableRoleWithOIDC: typeof import("./assumableRoleWithOIDC").AssumableRoleWithOIDC = null as any;
+utilities.lazyLoad(exports, ["AssumableRoleWithOIDC"], () => require("./assumableRoleWithOIDC"));
+
+export { AssumableRoleWithSAMLArgs } from "./assumableRoleWithSAML";
+export type AssumableRoleWithSAML = import("./assumableRoleWithSAML").AssumableRoleWithSAML;
+export const AssumableRoleWithSAML: typeof import("./assumableRoleWithSAML").AssumableRoleWithSAML = null as any;
+utilities.lazyLoad(exports, ["AssumableRoleWithSAML"], () => require("./assumableRoleWithSAML"));
+
+export { AssumableRolesArgs } from "./assumableRoles";
+export type AssumableRoles = import("./assumableRoles").AssumableRoles;
+export const AssumableRoles: typeof import("./assumableRoles").AssumableRoles = null as any;
+utilities.lazyLoad(exports, ["AssumableRoles"], () => require("./assumableRoles"));
+
+export { AssumableRolesWithSAMLArgs } from "./assumableRolesWithSAML";
+export type AssumableRolesWithSAML = import("./assumableRolesWithSAML").AssumableRolesWithSAML;
+export const AssumableRolesWithSAML: typeof import("./assumableRolesWithSAML").AssumableRolesWithSAML = null as any;
+utilities.lazyLoad(exports, ["AssumableRolesWithSAML"], () => require("./assumableRolesWithSAML"));
+
+export { EKSRoleArgs } from "./eksrole";
+export type EKSRole = import("./eksrole").EKSRole;
+export const EKSRole: typeof import("./eksrole").EKSRole = null as any;
+utilities.lazyLoad(exports, ["EKSRole"], () => require("./eksrole"));
+
+export { GroupWithAssumableRolesPolicyArgs } from "./groupWithAssumableRolesPolicy";
+export type GroupWithAssumableRolesPolicy = import("./groupWithAssumableRolesPolicy").GroupWithAssumableRolesPolicy;
+export const GroupWithAssumableRolesPolicy: typeof import("./groupWithAssumableRolesPolicy").GroupWithAssumableRolesPolicy = null as any;
+utilities.lazyLoad(exports, ["GroupWithAssumableRolesPolicy"], () => require("./groupWithAssumableRolesPolicy"));
+
+export { GroupWithPoliciesArgs } from "./groupWithPolicies";
+export type GroupWithPolicies = import("./groupWithPolicies").GroupWithPolicies;
+export const GroupWithPolicies: typeof import("./groupWithPolicies").GroupWithPolicies = null as any;
+utilities.lazyLoad(exports, ["GroupWithPolicies"], () => require("./groupWithPolicies"));
+
+export { PolicyArgs } from "./policy";
+export type Policy = import("./policy").Policy;
+export const Policy: typeof import("./policy").Policy = null as any;
+utilities.lazyLoad(exports, ["Policy"], () => require("./policy"));
+
+export { ProviderArgs } from "./provider";
+export type Provider = import("./provider").Provider;
+export const Provider: typeof import("./provider").Provider = null as any;
+utilities.lazyLoad(exports, ["Provider"], () => require("./provider"));
+
+export { ReadOnlyPolicyArgs } from "./readOnlyPolicy";
+export type ReadOnlyPolicy = import("./readOnlyPolicy").ReadOnlyPolicy;
+export const ReadOnlyPolicy: typeof import("./readOnlyPolicy").ReadOnlyPolicy = null as any;
+utilities.lazyLoad(exports, ["ReadOnlyPolicy"], () => require("./readOnlyPolicy"));
+
+export { RoleForServiceAccountsEksArgs } from "./roleForServiceAccountsEks";
+export type RoleForServiceAccountsEks = import("./roleForServiceAccountsEks").RoleForServiceAccountsEks;
+export const RoleForServiceAccountsEks: typeof import("./roleForServiceAccountsEks").RoleForServiceAccountsEks = null as any;
+utilities.lazyLoad(exports, ["RoleForServiceAccountsEks"], () => require("./roleForServiceAccountsEks"));
+
+export { UserArgs } from "./user";
+export type User = import("./user").User;
+export const User: typeof import("./user").User = null as any;
+utilities.lazyLoad(exports, ["User"], () => require("./user"));
+
 
 // Export sub-modules:
 import * as types from "./types";
@@ -26,21 +82,6 @@ import * as types from "./types";
 export {
     types,
 };
-
-// Import resources to register:
-import { Account } from "./account";
-import { AssumableRole } from "./assumableRole";
-import { AssumableRoleWithOIDC } from "./assumableRoleWithOIDC";
-import { AssumableRoleWithSAML } from "./assumableRoleWithSAML";
-import { AssumableRoles } from "./assumableRoles";
-import { AssumableRolesWithSAML } from "./assumableRolesWithSAML";
-import { EKSRole } from "./eksrole";
-import { GroupWithAssumableRolesPolicy } from "./groupWithAssumableRolesPolicy";
-import { GroupWithPolicies } from "./groupWithPolicies";
-import { Policy } from "./policy";
-import { ReadOnlyPolicy } from "./readOnlyPolicy";
-import { RoleForServiceAccountsEks } from "./roleForServiceAccountsEks";
-import { User } from "./user";
 
 const _module = {
     version: utilities.getVersion(),
@@ -78,9 +119,6 @@ const _module = {
     },
 };
 pulumi.runtime.registerResourceModule("aws-iam", "index", _module)
-
-import { Provider } from "./provider";
-
 pulumi.runtime.registerResourcePackage("aws-iam", {
     version: utilities.getVersion(),
     constructProvider: (name: string, type: string, urn: string): pulumi.ProviderResource => {

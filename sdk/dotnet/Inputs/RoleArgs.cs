@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// An IAM role.
     /// </summary>
-    public sealed class RoleArgs : Pulumi.ResourceArgs
+    public sealed class RoleArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM role name.
@@ -54,5 +54,6 @@ namespace Pulumi.AwsIam.Inputs
         public RoleArgs()
         {
         }
+        public static new RoleArgs Empty => new RoleArgs();
     }
 }

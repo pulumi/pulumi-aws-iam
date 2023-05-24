@@ -230,7 +230,7 @@ func (val *AdminRole) Defaults() *AdminRole {
 		return nil
 	}
 	tmp := *val
-	if isZero(tmp.Name) {
+	if tmp.Name == nil {
 		name_ := "admin"
 		tmp.Name = &name_
 	}
@@ -268,7 +268,7 @@ func (val *AdminRoleArgs) Defaults() *AdminRoleArgs {
 		return nil
 	}
 	tmp := *val
-	if isZero(tmp.Name) {
+	if tmp.Name == nil {
 		tmp.Name = pulumi.StringPtr("admin")
 	}
 	return &tmp
@@ -1862,11 +1862,11 @@ func (val *EKSKarpenterControllerPolicy) Defaults() *EKSKarpenterControllerPolic
 		return nil
 	}
 	tmp := *val
-	if isZero(tmp.ClusterId) {
+	if tmp.ClusterId == nil {
 		clusterId_ := "*"
 		tmp.ClusterId = &clusterId_
 	}
-	if isZero(tmp.TagKey) {
+	if tmp.TagKey == nil {
 		tagKey_ := "karpenter.sh/discovery"
 		tmp.TagKey = &tagKey_
 	}
@@ -1908,10 +1908,10 @@ func (val *EKSKarpenterControllerPolicyArgs) Defaults() *EKSKarpenterControllerP
 		return nil
 	}
 	tmp := *val
-	if isZero(tmp.ClusterId) {
+	if tmp.ClusterId == nil {
 		tmp.ClusterId = pulumi.StringPtr("*")
 	}
-	if isZero(tmp.TagKey) {
+	if tmp.TagKey == nil {
 		tmp.TagKey = pulumi.StringPtr("karpenter.sh/discovery")
 	}
 	return &tmp

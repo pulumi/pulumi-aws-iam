@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The readonly role.
     /// </summary>
-    public sealed class ReadonlyRoleArgs : Pulumi.ResourceArgs
+    public sealed class ReadonlyRoleArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM role with readonly access.
@@ -60,5 +60,6 @@ namespace Pulumi.AwsIam.Inputs
         public ReadonlyRoleArgs()
         {
         }
+        public static new ReadonlyRoleArgs Empty => new ReadonlyRoleArgs();
     }
 }

@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -69,10 +69,10 @@ func NewUser(ctx *pulumi.Context,
 	if args.Name == nil {
 		return nil, errors.New("invalid value for required argument 'Name'")
 	}
-	if isZero(args.Path) {
+	if args.Path == nil {
 		args.Path = pulumi.StringPtr("/")
 	}
-	if isZero(args.SshKeyEncoding) {
+	if args.SshKeyEncoding == nil {
 		args.SshKeyEncoding = pulumi.StringPtr("SSH")
 	}
 	var resource User

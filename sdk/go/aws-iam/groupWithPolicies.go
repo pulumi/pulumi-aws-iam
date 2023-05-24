@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -76,16 +76,16 @@ func NewGroupWithPolicies(ctx *pulumi.Context,
 	if args.GroupUsers == nil {
 		return nil, errors.New("invalid value for required argument 'GroupUsers'")
 	}
-	if isZero(args.AttachIamSelfManagementPolicy) {
+	if args.AttachIamSelfManagementPolicy == nil {
 		args.AttachIamSelfManagementPolicy = pulumi.BoolPtr(true)
 	}
-	if isZero(args.AwsAccountId) {
+	if args.AwsAccountId == nil {
 		args.AwsAccountId = pulumi.StringPtr("")
 	}
-	if isZero(args.IamSelfManagementPolicyNamePrefix) {
+	if args.IamSelfManagementPolicyNamePrefix == nil {
 		args.IamSelfManagementPolicyNamePrefix = pulumi.StringPtr("IAMSelfManagement-")
 	}
-	if isZero(args.Name) {
+	if args.Name == nil {
 		args.Name = pulumi.String("")
 	}
 	var resource GroupWithPolicies

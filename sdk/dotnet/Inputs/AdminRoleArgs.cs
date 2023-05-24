@@ -13,7 +13,7 @@ namespace Pulumi.AwsIam.Inputs
     /// <summary>
     /// The admin role.
     /// </summary>
-    public sealed class AdminRoleArgs : Pulumi.ResourceArgs
+    public sealed class AdminRoleArgs : global::Pulumi.ResourceArgs
     {
         /// <summary>
         /// IAM role with admin access.
@@ -61,5 +61,6 @@ namespace Pulumi.AwsIam.Inputs
         {
             Name = "admin";
         }
+        public static new AdminRoleArgs Empty => new AdminRoleArgs();
     }
 }

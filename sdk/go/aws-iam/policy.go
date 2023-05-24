@@ -7,7 +7,7 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -92,10 +92,10 @@ func NewPolicy(ctx *pulumi.Context,
 	if args.PolicyDocument == nil {
 		return nil, errors.New("invalid value for required argument 'PolicyDocument'")
 	}
-	if isZero(args.Description) {
+	if args.Description == nil {
 		args.Description = pulumi.StringPtr("IAM Policy")
 	}
-	if isZero(args.Path) {
+	if args.Path == nil {
 		args.Path = pulumi.StringPtr("/")
 	}
 	var resource Policy
