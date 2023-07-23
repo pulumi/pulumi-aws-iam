@@ -2,13 +2,13 @@
 
 import json
 import pulumi
-import pulumi_aws_iam as iam
+import pulumi_aws as aws
 
 # Account
-account = iam.Account(
+account = aws.iam.Account(
     'account',
     account_alias='cool-alias',
-    password_policy=iam.AccountPasswordPolicyArgs(
+    password_policy=aws.iam.AccountPasswordPolicyArgs(
         minimum_length=37,
         require_numbers=False,
         allow_users_to_change=True,
@@ -22,7 +22,7 @@ account = iam.Account(
 pulumi.export('account', account)
 
 # Assumable Role
-assumable_role = iam.AssumableRole(
+assumable_role = aws.iam.AssumableRole(
     'assumable_role',
     trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/pulumipus'],
     role=iam.RoleWithMFAArgs(
@@ -35,9 +35,9 @@ assumable_role = iam.AssumableRole(
 pulumi.export('assumable_role', assumable_role)
 
 # Assumable Role With OIDC
-assumable_role_with_oidc = iam.AssumableRoleWithOIDC(
+assumable_role_with_oidc = aws.iam.AssumableRoleWithOIDC(
     'assumable_role_with_oidc',
-    role=iam.RoleArgs(
+    role=aws.iam.RoleArgs(
         name='oidc-role',
         policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy']
     ),
@@ -50,7 +50,7 @@ assumable_role_with_oidc = iam.AssumableRoleWithOIDC(
 pulumi.export('assumable_role_with_oidc', assumable_role_with_oidc)
 
 # Assumable Role With SAML
-assumable_role_with_saml = iam.AssumableRoleWithSAML(
+assumable_role_with_saml = aws.iam.AssumableRoleWithSAML(
     'assumable_role_with_saml',
     role=iam.RoleArgs(
         name='saml-role',
@@ -65,14 +65,14 @@ assumable_role_with_saml = iam.AssumableRoleWithSAML(
 pulumi.export('assumable_role_with_saml', assumable_role_with_saml)
 
 # Assumable Roles
-assumable_roles = iam.AssumableRoles(
+assumable_roles = aws.iam.AssumableRoles(
     'assumable_roles',
     trusted_role_arns=['arn:aws:iam::307990089504:root','arn:aws:iam::835367859851:user/anton'],
-    admin=iam.AdminRoleArgs(),
+    admin=aws.iam.AdminRoleArgs(),
     poweruser=iam.PoweruserRoleArgs(
         name='developer',
     ),
-    readonly=iam.ReadonlyRoleWithMFAArgs(
+    readonly=aws.iam.ReadonlyRoleWithMFAArgs(
         requires_mfa=True,
     ),
 )
@@ -80,12 +80,12 @@ assumable_roles = iam.AssumableRoles(
 pulumi.export('assumable_roles', assumable_roles)
 
 # Assumable Roles With SAML
-assumable_roles_with_saml = iam.AssumableRolesWithSAML(
+assumable_roles_with_saml = aws.iam.AssumableRolesWithSAML(
     'assumable_roles_with_saml',
     provider_ids=['arn:aws:iam::235367859851:saml-provider/idp_saml'],
-    admin=iam.AdminRoleArgs(),
-    readonly=iam.ReadonlyRoleArgs(),
-    poweruser=iam.PoweruserRoleArgs(
+    admin=aws.iam.AdminRoleArgs(),
+    readonly=aws.iam.ReadonlyRoleArgs(),
+    poweruser=aws.iam.PoweruserRoleArgs(
         name='developer',
     ),
 )
@@ -93,9 +93,9 @@ assumable_roles_with_saml = iam.AssumableRolesWithSAML(
 pulumi.export('assumable_roles_with_saml', assumable_roles_with_saml)
 
 # EKS Role
-eks_role = iam.EKSRole(
+eks_role = aws.iam.EKSRole(
     'eks_role',
-    role=iam.RoleArgs(
+    role=aws.iam.RoleArgs(
         name='eks-role',
         policy_arns=['arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy'],
     ),
@@ -111,7 +111,7 @@ eks_role = iam.EKSRole(
 pulumi.export('eks_role', eks_role)
 
 # Group With Assumable Roles Policy
-group_with_assume_roles_policy = iam.GroupWithAssumableRolesPolicy(
+group_with_assume_roles_policy = aws.iam.GroupWithAssumableRolesPolicy(
     'group_with_assume_roles_policy',
     name='production-readonly',
     assumable_roles=['arn:aws:iam::835367859855:role/readonly'],
@@ -121,7 +121,7 @@ group_with_assume_roles_policy = iam.GroupWithAssumableRolesPolicy(
 pulumi.export('group_with_assume_roles_policy', group_with_assume_roles_policy)
 
 # Group With Policies
-group_with_policies = iam.GroupWithPolicies(
+group_with_policies = aws.iam.GroupWithPolicies(
     'group_with_policies',
     name='superadmins',
     group_users=['user1','user2'],
@@ -158,7 +158,7 @@ policy = iam.Policy(
 pulumi.export('policy', policy)
 
 # Read Only Policy
-read_only_policy = iam.ReadOnlyPolicy(
+read_only_policy = aws.iam.ReadOnlyPolicy(
     'read_only_policy',
     name='example',
     path='/',
@@ -169,22 +169,22 @@ read_only_policy = iam.ReadOnlyPolicy(
 pulumi.export('read_only_policy', read_only_policy)
 
 # Role For Service Accounts EKS
-role_for_service_account_eks = iam.RoleForServiceAccountsEks(
+role_for_service_account_eks = aws.iam.RoleForServiceAccountsEks(
     'role_for_service_account_eks',
-    role=iam.RoleArgs(
+    role=aws.iam.RoleArgs(
         name='vpc-cni'
     ),
     tags={
         'Name': 'vpc-cni-irsa',
     },
     oidc_providers={
-        'main': iam.OIDCProviderArgs(
+        'main': aws.iam.OIDCProviderArgs(
             provider_arn='arn:aws:iam::012345678901:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/5C54DDF35ER19312844C7333374CC09D',
             namespace_service_accounts=['default:my-app', 'canary:my-app'],
         ),
     },
-    policies=iam.EKSRolePoliciesArgs(
-        vpn_cni=iam.EKSVPNCNIPolicyArgs(
+    policies=aws.iam.EKSRolePoliciesArgs(
+        vpn_cni=aws.iam.EKSVPNCNIPolicyArgs(
             attach=True,
             enable_ipv4=True,
         ),
@@ -194,12 +194,10 @@ role_for_service_account_eks = iam.RoleForServiceAccountsEks(
 pulumi.export('role_for_service_account_eks', role_for_service_account_eks)
 
 # User
-user = iam.User(
+user = aws.iam.User(
     'user',
     name='pulumipus',
     force_destroy=True,
-    pgp_key='keybase:test',
-    password_reset_required=False,
 )
 
 pulumi.export('user', user)
