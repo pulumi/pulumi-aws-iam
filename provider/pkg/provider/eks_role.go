@@ -134,11 +134,6 @@ func NewEKSRole(ctx *pulumi.Context, name string, args *EKSRoleArgs, opts ...pul
 		Statements: policyDocStatements,
 	})
 
-	assumeRoleWithOIDC.Json().ApplyT(func(data string) error {
-		fmt.Println(data)
-		return nil
-	})
-
 	role, err := utils.NewIAMRole(ctx, name, &utils.IAMRoleArgs{
 		Role:                args.Role,
 		AssumeRolePolicy:    assumeRoleWithOIDC.Json(),
