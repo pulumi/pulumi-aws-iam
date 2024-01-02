@@ -75,7 +75,7 @@ type Account struct {
 	pulumi.ResourceState
 
 	// The AWS Account ID number of the account that owns or contains the calling entity.
-	Id string `pulumi:"accountId"`
+	Id string `pulumi:"id"`
 
 	// The AWS ARN associated with the calling entity.
 	Arn string `pulumi:"arn"`

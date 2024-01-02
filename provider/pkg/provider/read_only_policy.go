@@ -66,7 +66,7 @@ type ReadOnlyPolicy struct {
 	PolicyJSON pulumi.StringOutput `pulumi:"policyJson"`
 
 	// The policy's ID.
-	ID pulumi.StringOutput `pulumi:"policyId"`
+	ID pulumi.StringOutput `pulumi:"id"`
 
 	// The name of the policy.
 	Name pulumi.StringOutput `pulumi:"name"`
