@@ -99,7 +99,7 @@ type AssumableRoleInstanceProfileOutput struct {
 	Name pulumi.StringOutput `pulumi:"name"`
 
 	// IAM Instance profile's ID.
-	ID pulumi.StringOutput `pulumi:"id"`
+	ID pulumi.StringOutput `pulumi:"profileId"`
 
 	// Path of IAM instance profile.
 	Path pulumi.StringPtrOutput `pulumi:"path"`
