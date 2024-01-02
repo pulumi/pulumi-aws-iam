@@ -2,8 +2,7 @@
     "name": "@pulumi/aws-iam",
     "version": "${VERSION}",
     "scripts": {
-        "build": "tsc",
-        "install": "node scripts/install-pulumi-plugin.js resource aws-iam ${VERSION}"
+        "build": "tsc"
     },
     "dependencies": {
         "@pulumi/aws": "^5.0.0",

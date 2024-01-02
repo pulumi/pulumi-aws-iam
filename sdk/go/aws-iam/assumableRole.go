@@ -7,6 +7,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -83,6 +84,7 @@ func NewAssumableRole(ctx *pulumi.Context,
 	if args.MfaAge == nil {
 		args.MfaAge = pulumi.IntPtr(86400)
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource AssumableRole
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRole", name, args, &resource, opts...)
 	if err != nil {

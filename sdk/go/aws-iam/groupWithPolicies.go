@@ -8,6 +8,7 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -88,6 +89,7 @@ func NewGroupWithPolicies(ctx *pulumi.Context,
 	if args.Name == nil {
 		args.Name = pulumi.String("")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource GroupWithPolicies
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:GroupWithPolicies", name, args, &resource, opts...)
 	if err != nil {
