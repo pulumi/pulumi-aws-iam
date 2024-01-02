@@ -7,6 +7,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -105,6 +106,7 @@ func NewRoleForServiceAccountsEks(ctx *pulumi.Context,
 	if args.PolicyNamePrefix == nil {
 		args.PolicyNamePrefix = pulumi.StringPtr("AmazonEKS_")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource RoleForServiceAccountsEks
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:RoleForServiceAccountsEks", name, args, &resource, opts...)
 	if err != nil {

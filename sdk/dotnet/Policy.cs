@@ -67,12 +67,6 @@ namespace Pulumi.AwsIam
         public Output<string> Description { get; private set; } = null!;
 
         /// <summary>
-        /// The policy's ID.
-        /// </summary>
-        [Output("id")]
-        public Output<string> Id { get; private set; } = null!;
-
-        /// <summary>
         /// The name of the policy.
         /// </summary>
         [Output("name")]
@@ -89,6 +83,12 @@ namespace Pulumi.AwsIam
         /// </summary>
         [Output("policyDocument")]
         public Output<string> PolicyDocument { get; private set; } = null!;
+
+        /// <summary>
+        /// The policy's ID.
+        /// </summary>
+        [Output("policyId")]
+        public Output<string> PolicyId { get; private set; } = null!;
 
 
         /// <summary>

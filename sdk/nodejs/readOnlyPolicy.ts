@@ -48,10 +48,6 @@ export class ReadOnlyPolicy extends pulumi.ComponentResource {
      */
     public readonly description!: pulumi.Output<string>;
     /**
-     * The policy's ID.
-     */
-    public /*out*/ readonly id!: pulumi.Output<string>;
-    /**
      * The name of the policy.
      */
     public readonly name!: pulumi.Output<string>;
@@ -63,6 +59,10 @@ export class ReadOnlyPolicy extends pulumi.ComponentResource {
      * The policy document.
      */
     public /*out*/ readonly policy!: pulumi.Output<string>;
+    /**
+     * The policy's ID.
+     */
+    public /*out*/ readonly policyId!: pulumi.Output<string>;
     /**
      * Policy document as json. Useful if you need document but do not want to create IAM policy itself. For example for SSO Permission Set inline policies.
      */
@@ -93,16 +93,16 @@ export class ReadOnlyPolicy extends pulumi.ComponentResource {
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["webConsoleServices"] = args ? args.webConsoleServices : undefined;
             resourceInputs["arn"] = undefined /*out*/;
-            resourceInputs["id"] = undefined /*out*/;
             resourceInputs["policy"] = undefined /*out*/;
+            resourceInputs["policyId"] = undefined /*out*/;
             resourceInputs["policyJson"] = undefined /*out*/;
         } else {
             resourceInputs["arn"] = undefined /*out*/;
             resourceInputs["description"] = undefined /*out*/;
-            resourceInputs["id"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;
             resourceInputs["path"] = undefined /*out*/;
             resourceInputs["policy"] = undefined /*out*/;
+            resourceInputs["policyId"] = undefined /*out*/;
             resourceInputs["policyJson"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);

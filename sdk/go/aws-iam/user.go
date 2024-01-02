@@ -8,6 +8,7 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -75,6 +76,7 @@ func NewUser(ctx *pulumi.Context,
 	if args.SshKeyEncoding == nil {
 		args.SshKeyEncoding = pulumi.StringPtr("SSH")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource User
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:User", name, args, &resource, opts...)
 	if err != nil {

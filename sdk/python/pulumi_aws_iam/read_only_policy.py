@@ -334,8 +334,8 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
             __props__.__dict__["tags"] = tags
             __props__.__dict__["web_console_services"] = web_console_services
             __props__.__dict__["arn"] = None
-            __props__.__dict__["id"] = None
             __props__.__dict__["policy"] = None
+            __props__.__dict__["policy_id"] = None
             __props__.__dict__["policy_json"] = None
         super(ReadOnlyPolicy, __self__).__init__(
             'aws-iam:index:ReadOnlyPolicy',
@@ -362,14 +362,6 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
 
     @property
     @pulumi.getter
-    def id(self) -> pulumi.Output[str]:
-        """
-        The policy's ID.
-        """
-        return pulumi.get(self, "id")
-
-    @property
-    @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
         The name of the policy.
@@ -391,6 +383,14 @@ class ReadOnlyPolicy(pulumi.ComponentResource):
         The policy document.
         """
         return pulumi.get(self, "policy")
+
+    @property
+    @pulumi.getter(name="policyId")
+    def policy_id(self) -> pulumi.Output[str]:
+        """
+        The policy's ID.
+        """
+        return pulumi.get(self, "policy_id")
 
     @property
     @pulumi.getter(name="policyJson")
