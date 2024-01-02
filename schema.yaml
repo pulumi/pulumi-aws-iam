@@ -1337,7 +1337,7 @@ resources:
                 type: string
                 description: Policy document as json. Useful if you need document but do not want to create IAM policy itself. For example for SSO Permission Set inline policies.
 
-            id:
+            policyId:
                 type: string
                 description: The policy's ID.
 
@@ -3212,7 +3212,7 @@ resources:
             - passwordPolicy
 
         properties:
-            id:
+            accountId:
                 type: string
                 description: |
                     The AWS Account ID number of the account that owns or contains the calling entity.
@@ -3234,7 +3234,7 @@ resources:
                     age contains a value greater than 0. Returns false if it is 0 or not present.
 
         required:
-            - id
+            - accountId
             - arn
             - userId
             - passwordPolicyExpirePasswords
@@ -3434,7 +3434,7 @@ resources:
             - policyDocument
 
         properties:
-            id:
+            policyId:
                 type: string
                 description: The policy's ID.
 
@@ -3459,7 +3459,7 @@ resources:
                 description: The policy document.
 
         required:
-            - id
+            - policyId
             - arn
             - description
             - name
