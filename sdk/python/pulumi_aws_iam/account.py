@@ -168,8 +168,8 @@ class Account(pulumi.ComponentResource):
             if password_policy is None and not opts.urn:
                 raise TypeError("Missing required property 'password_policy'")
             __props__.__dict__["password_policy"] = password_policy
+            __props__.__dict__["account_id"] = None
             __props__.__dict__["arn"] = None
-            __props__.__dict__["id"] = None
             __props__.__dict__["password_policy_expire_passwords"] = None
             __props__.__dict__["user_id"] = None
         super(Account, __self__).__init__(
@@ -180,20 +180,20 @@ class Account(pulumi.ComponentResource):
             remote=True)
 
     @property
+    @pulumi.getter(name="accountId")
+    def account_id(self) -> pulumi.Output[str]:
+        """
+        The AWS Account ID number of the account that owns or contains the calling entity.
+        """
+        return pulumi.get(self, "account_id")
+
+    @property
     @pulumi.getter
     def arn(self) -> pulumi.Output[str]:
         """
         The AWS ARN associated with the calling entity.
         """
         return pulumi.get(self, "arn")
-
-    @property
-    @pulumi.getter
-    def id(self) -> pulumi.Output[str]:
-        """
-        The AWS Account ID number of the account that owns or contains the calling entity.
-        """
-        return pulumi.get(self, "id")
 
     @property
     @pulumi.getter(name="passwordPolicyExpirePasswords")

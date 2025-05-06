@@ -8,6 +8,7 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -69,14 +70,14 @@ type Policy struct {
 	Arn pulumi.StringOutput `pulumi:"arn"`
 	// The description of the policy.
 	Description pulumi.StringOutput `pulumi:"description"`
-	// The policy's ID.
-	Id pulumi.StringOutput `pulumi:"id"`
 	// The name of the policy.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The path of the policy in IAM.
 	Path pulumi.StringOutput `pulumi:"path"`
 	// The policy document.
 	PolicyDocument pulumi.StringOutput `pulumi:"policyDocument"`
+	// The policy's ID.
+	PolicyId pulumi.StringOutput `pulumi:"policyId"`
 }
 
 // NewPolicy registers a new resource with the given unique name, arguments, and options.
@@ -98,6 +99,7 @@ func NewPolicy(ctx *pulumi.Context,
 	if args.Path == nil {
 		args.Path = pulumi.StringPtr("/")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource Policy
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:Policy", name, args, &resource, opts...)
 	if err != nil {
@@ -230,11 +232,6 @@ func (o PolicyOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
-// The policy's ID.
-func (o PolicyOutput) Id() pulumi.StringOutput {
-	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Id }).(pulumi.StringOutput)
-}
-
 // The name of the policy.
 func (o PolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -248,6 +245,11 @@ func (o PolicyOutput) Path() pulumi.StringOutput {
 // The policy document.
 func (o PolicyOutput) PolicyDocument() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.PolicyDocument }).(pulumi.StringOutput)
+}
+
+// The policy's ID.
+func (o PolicyOutput) PolicyId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
 type PolicyArrayOutput struct{ *pulumi.OutputState }

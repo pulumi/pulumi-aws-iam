@@ -45,7 +45,7 @@ type Policy struct {
 	pulumi.ResourceState
 
 	// The policy's ID.
-	ID pulumi.IDOutput `pulumi:"id"`
+	ID pulumi.IDOutput `pulumi:"policyId"`
 
 	// The ARN assigned by AWS to this policy.
 	Arn pulumi.StringOutput `pulumi:"arn"`

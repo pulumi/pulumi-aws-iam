@@ -57,10 +57,6 @@ export class Policy extends pulumi.ComponentResource {
      */
     public readonly description!: pulumi.Output<string>;
     /**
-     * The policy's ID.
-     */
-    public /*out*/ readonly id!: pulumi.Output<string>;
-    /**
      * The name of the policy.
      */
     public readonly name!: pulumi.Output<string>;
@@ -72,6 +68,10 @@ export class Policy extends pulumi.ComponentResource {
      * The policy document.
      */
     public readonly policyDocument!: pulumi.Output<string>;
+    /**
+     * The policy's ID.
+     */
+    public /*out*/ readonly policyId!: pulumi.Output<string>;
 
     /**
      * Create a Policy resource with the given unique name, arguments, and options.
@@ -96,14 +96,14 @@ export class Policy extends pulumi.ComponentResource {
             resourceInputs["policyDocument"] = args ? args.policyDocument : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["arn"] = undefined /*out*/;
-            resourceInputs["id"] = undefined /*out*/;
+            resourceInputs["policyId"] = undefined /*out*/;
         } else {
             resourceInputs["arn"] = undefined /*out*/;
             resourceInputs["description"] = undefined /*out*/;
-            resourceInputs["id"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;
             resourceInputs["path"] = undefined /*out*/;
             resourceInputs["policyDocument"] = undefined /*out*/;
+            resourceInputs["policyId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Policy.__pulumiType, name, resourceInputs, opts, true /*remote*/);

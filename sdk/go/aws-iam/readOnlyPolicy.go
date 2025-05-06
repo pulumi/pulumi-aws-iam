@@ -8,6 +8,7 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -55,14 +56,14 @@ type ReadOnlyPolicy struct {
 	Arn pulumi.StringOutput `pulumi:"arn"`
 	// The description of the policy.
 	Description pulumi.StringOutput `pulumi:"description"`
-	// The policy's ID.
-	Id pulumi.StringOutput `pulumi:"id"`
 	// The name of the policy.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The path of the policy in IAM.
 	Path pulumi.StringOutput `pulumi:"path"`
 	// The policy document.
 	Policy pulumi.StringOutput `pulumi:"policy"`
+	// The policy's ID.
+	PolicyId pulumi.StringOutput `pulumi:"policyId"`
 	// Policy document as json. Useful if you need document but do not want to create IAM policy itself. For example for SSO Permission Set inline policies.
 	PolicyJson pulumi.StringOutput `pulumi:"policyJson"`
 }
@@ -95,6 +96,7 @@ func NewReadOnlyPolicy(ctx *pulumi.Context,
 	if args.Path == nil {
 		args.Path = pulumi.StringPtr("/")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource ReadOnlyPolicy
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:ReadOnlyPolicy", name, args, &resource, opts...)
 	if err != nil {
@@ -247,11 +249,6 @@ func (o ReadOnlyPolicyOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadOnlyPolicy) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
-// The policy's ID.
-func (o ReadOnlyPolicyOutput) Id() pulumi.StringOutput {
-	return o.ApplyT(func(v *ReadOnlyPolicy) pulumi.StringOutput { return v.Id }).(pulumi.StringOutput)
-}
-
 // The name of the policy.
 func (o ReadOnlyPolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadOnlyPolicy) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -265,6 +262,11 @@ func (o ReadOnlyPolicyOutput) Path() pulumi.StringOutput {
 // The policy document.
 func (o ReadOnlyPolicyOutput) Policy() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadOnlyPolicy) pulumi.StringOutput { return v.Policy }).(pulumi.StringOutput)
+}
+
+// The policy's ID.
+func (o ReadOnlyPolicyOutput) PolicyId() pulumi.StringOutput {
+	return o.ApplyT(func(v *ReadOnlyPolicy) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
 // Policy document as json. Useful if you need document but do not want to create IAM policy itself. For example for SSO Permission Set inline policies.

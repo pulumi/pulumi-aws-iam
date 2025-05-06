@@ -7,6 +7,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -94,6 +95,7 @@ func NewEKSRole(ctx *pulumi.Context,
 	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource EKSRole
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:EKSRole", name, args, &resource, opts...)
 	if err != nil {

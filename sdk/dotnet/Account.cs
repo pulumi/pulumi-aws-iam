@@ -56,16 +56,16 @@ namespace Pulumi.AwsIam
     public partial class Account : global::Pulumi.ComponentResource
     {
         /// <summary>
+        /// The AWS Account ID number of the account that owns or contains the calling entity.
+        /// </summary>
+        [Output("accountId")]
+        public Output<string> AccountId { get; private set; } = null!;
+
+        /// <summary>
         /// The AWS ARN associated with the calling entity.
         /// </summary>
         [Output("arn")]
         public Output<string> Arn { get; private set; } = null!;
-
-        /// <summary>
-        /// The AWS Account ID number of the account that owns or contains the calling entity.
-        /// </summary>
-        [Output("id")]
-        public Output<string> Id { get; private set; } = null!;
 
         /// <summary>
         /// Indicates whether passwords in the account expire. Returns true if max password

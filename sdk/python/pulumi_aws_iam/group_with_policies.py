@@ -15,7 +15,7 @@ __all__ = ['GroupWithPoliciesArgs', 'GroupWithPolicies']
 class GroupWithPoliciesArgs:
     def __init__(__self__, *,
                  group_users: pulumi.Input[Sequence[pulumi.Input[str]]],
-                 name: pulumi.Input[str],
+                 name: Optional[pulumi.Input[str]] = None,
                  attach_iam_self_management_policy: Optional[pulumi.Input[bool]] = None,
                  aws_account_id: Optional[pulumi.Input[str]] = None,
                  custom_group_policies: Optional[pulumi.Input[Sequence[pulumi.Input[Mapping[str, pulumi.Input[str]]]]]] = None,

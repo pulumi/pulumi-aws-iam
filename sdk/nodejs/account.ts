@@ -49,13 +49,13 @@ export class Account extends pulumi.ComponentResource {
     }
 
     /**
+     * The AWS Account ID number of the account that owns or contains the calling entity.
+     */
+    public /*out*/ readonly accountId!: pulumi.Output<string>;
+    /**
      * The AWS ARN associated with the calling entity.
      */
     public /*out*/ readonly arn!: pulumi.Output<string>;
-    /**
-     * The AWS Account ID number of the account that owns or contains the calling entity.
-     */
-    public /*out*/ readonly id!: pulumi.Output<string>;
     /**
      * Indicates whether passwords in the account expire. Returns true if max password
      * age contains a value greater than 0. Returns false if it is 0 or not present.
@@ -85,13 +85,13 @@ export class Account extends pulumi.ComponentResource {
             }
             resourceInputs["accountAlias"] = args ? args.accountAlias : undefined;
             resourceInputs["passwordPolicy"] = args ? args.passwordPolicy : undefined;
+            resourceInputs["accountId"] = undefined /*out*/;
             resourceInputs["arn"] = undefined /*out*/;
-            resourceInputs["id"] = undefined /*out*/;
             resourceInputs["passwordPolicyExpirePasswords"] = undefined /*out*/;
             resourceInputs["userId"] = undefined /*out*/;
         } else {
+            resourceInputs["accountId"] = undefined /*out*/;
             resourceInputs["arn"] = undefined /*out*/;
-            resourceInputs["id"] = undefined /*out*/;
             resourceInputs["passwordPolicyExpirePasswords"] = undefined /*out*/;
             resourceInputs["userId"] = undefined /*out*/;
         }

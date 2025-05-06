@@ -8,6 +8,7 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -58,10 +59,10 @@ import (
 type Account struct {
 	pulumi.ResourceState
 
+	// The AWS Account ID number of the account that owns or contains the calling entity.
+	AccountId pulumi.StringOutput `pulumi:"accountId"`
 	// The AWS ARN associated with the calling entity.
 	Arn pulumi.StringOutput `pulumi:"arn"`
-	// The AWS Account ID number of the account that owns or contains the calling entity.
-	Id pulumi.StringOutput `pulumi:"id"`
 	// Indicates whether passwords in the account expire. Returns true if max password
 	// age contains a value greater than 0. Returns false if it is 0 or not present.
 	PasswordPolicyExpirePasswords pulumi.BoolOutput `pulumi:"passwordPolicyExpirePasswords"`
@@ -82,6 +83,7 @@ func NewAccount(ctx *pulumi.Context,
 	if args.PasswordPolicy == nil {
 		return nil, errors.New("invalid value for required argument 'PasswordPolicy'")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource Account
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:Account", name, args, &resource, opts...)
 	if err != nil {
@@ -194,14 +196,14 @@ func (o AccountOutput) ToAccountOutputWithContext(ctx context.Context) AccountOu
 	return o
 }
 
+// The AWS Account ID number of the account that owns or contains the calling entity.
+func (o AccountOutput) AccountId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.AccountId }).(pulumi.StringOutput)
+}
+
 // The AWS ARN associated with the calling entity.
 func (o AccountOutput) Arn() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Arn }).(pulumi.StringOutput)
-}
-
-// The AWS Account ID number of the account that owns or contains the calling entity.
-func (o AccountOutput) Id() pulumi.StringOutput {
-	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Id }).(pulumi.StringOutput)
 }
 
 // Indicates whether passwords in the account expire. Returns true if max password

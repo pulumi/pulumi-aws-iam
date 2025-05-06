@@ -8,6 +8,7 @@ import (
 	"reflect"
 
 	"errors"
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -77,6 +78,7 @@ func NewGroupWithAssumableRolesPolicy(ctx *pulumi.Context,
 	if args.Name == nil {
 		return nil, errors.New("invalid value for required argument 'Name'")
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource GroupWithAssumableRolesPolicy
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:GroupWithAssumableRolesPolicy", name, args, &resource, opts...)
 	if err != nil {

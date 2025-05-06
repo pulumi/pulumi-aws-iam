@@ -7,6 +7,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/pulumi/pulumi-aws-iam/sdk/go/aws-iam/internal"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -79,6 +80,7 @@ func NewAssumableRoleWithSAML(ctx *pulumi.Context,
 	if args.MaxSessionDuration == nil {
 		args.MaxSessionDuration = pulumi.IntPtr(3600)
 	}
+	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource AssumableRoleWithSAML
 	err := ctx.RegisterRemoteComponentResource("aws-iam:index:AssumableRoleWithSAML", name, args, &resource, opts...)
 	if err != nil {
